@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name" translatable="false">OmegaTracker</string>
+    <string name="unknown_host_msg">Проверьте подключение к интернету.</string>
+    <string name="http_exception_msg">Проверьте правильность введённого токена или Url сервера</string>
+    <string name="illegal_arg_msg">Использован недопустимый символ.</string>
+    <string name="default_exception_msg">Произошла ошибка. Попробуйте снова.</string>
+    <string name="successful_auth">Авторизация успешна.</string>
+    <string name="issues_title">Задачи</string>
+    <string name="welcome_msg">Добро пожаловать </string>
+    <string name="issues_list_show_current">Сегодня</string>
+    <string name="issues_list_stat_show_all">Смотреть всё</string>
+    <string name="issues_list_stat_all">Все задания</string>
+    <string name="issues_list_stat_current">Смотреть на сегодня</string>
+    <string name="bottom_sheet_auth_text">Как получить токен</string>
+    <string name="auth_token_tint">Введите токен</string>
+    <string name="auth_button_text">Войти</string>
+    <string name="auth_server_tint">Введите URL сервера</string>
+    <string name="auth_default_url" translatable="false">https://example.youtrack.cloud</string>
+
+    <string name="auth_helper_content_step_1">Шаг 1. Войдите в свой аккаунт YouTrack из любого браузера. После входа нажмите на изображение своего профиля</string>
+    <string name="auth_helper_content_step_2">Шаг 2. В выпадающем меню нажмите на пункт \"Профиль\"</string>
+    <string name="auth_helper_content_step_3">Шаг 3. После перехода в профиль нажмите на пункт \"Безопасность аккаунта\"</string>
+    <string name="auth_helper_content_step_4">Шаг 4. В нижней части открывшейся страницы нажмите на кнопку \"Новый пароль\"</string>
+    <string name="auth_helper_content_step_5">Шаг 5. Введите любое название для данного токена и нажмите \"Сгенерировать пароль\"</string>
+    <string name="auth_helper_content_step_6">Шаг 6. Скопируйте и ОБЯЗАТЕЛЬНО сохраните данный токен, поскольку после генерации токен отображается лишь единожды. </string>
+    <string name="auth_helper_content_step_7">Шаг 7. Введите сохранённый токен в поле \"Введите токен\"</string>
+
+    <string name="state_finished">Завершена</string>
+    <string name="state_open">Открыта</string>
+    <string name="state_on_pause">На паузе</string>
+    <string name="state_on_stop">Остановлена</string>
+    <string name="state_on_work">В работе</string>
+    <string name="issue_summary_filler">Название задачи</string>
+    <string name="issue_status_filler">Статус задачи</string>
+    <string name="issue_desc_filler">Описание задачи</string>
+    <string name="issue_timer_start_text">Запустить</string>
+    <string name="issue_timer_pause_text">Пауза</string>
+    <string name="issue_timer_stop_text">Остановить</string>
+
+    <string name="profile_header_text">Профиль</string>
+    <string name="profile_name">Имя пользователя</string>
+    <string name="profile_email">Почта пользователя</string>
+    <string name="profile_exit_btn_text">Выйти из аккаунта</string>
+    <string name="zero_timer">00:00:00</string>
+</resources>

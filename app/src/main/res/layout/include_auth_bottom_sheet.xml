@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/authBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    app:behavior_peekHeight="@dimen/auth_bottom_sheet_header_peek_height"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/bottomSheetToolbar"
+        android:gravity="center"
+        android:layout_height="@dimen/auth_bottom_sheet_header_height"
+        android:background="@drawable/auth_button_shape"
+        android:layout_width="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bottom_sheet_auth_text"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:fontFamily="@font/rubik_regular" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_marginRight="@dimen/content_margin"
+        android:layout_marginLeft="@dimen/content_margin"
+        app:behavior_hideable="false"
+        android:clipToPadding="true"
+        app:behavior_skipCollapsed="true">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_helper_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

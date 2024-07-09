@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadiusRatio="2.5"
+    android:thickness="0dp"
+    android:shape="oval">
+    <solid android:color="@color/issue_timer_btn_color"/>
+    <corners android:radius="360dp"/>
+    <size android:width="60dp" android:height="60dp"/>
+</shape>

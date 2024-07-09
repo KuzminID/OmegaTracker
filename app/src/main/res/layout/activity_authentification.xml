@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.activities.auth.AuthActivity">
+
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/authContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="start"
+        android:background="@color/white"
+        android:layout_margin="@dimen/content_margin"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/auth_header_height"
+            android:layout_marginBottom="@dimen/auth_header_margin"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_omega_tracker" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="fill_parent"
+            style="@style/LoginTextInputLayoutStyle"
+            android:layout_gravity="center_horizontal"
+            android:textColorHint="@color/black"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/serverEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="@string/auth_default_url"
+                android:hint="@string/auth_server_tint"
+                android:autofillHints="https://example.youtrack.cloud"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
+                android:inputType="textUri" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="fill_parent"
+            style="@style/LoginTextInputLayoutStyle"
+            android:layout_gravity="center_horizontal"
+            android:textColorHint="@color/black"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/authorizationTokenEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textSize="20sp"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                android:hint="@string/auth_token_tint"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/authorizationButton"
+                android:layout_width="@dimen/auth_btn_width"
+                android:layout_height="@dimen/auth_btn_height"
+                android:layout_marginTop="20dp"
+                android:textSize="20sp"
+                style="@style/button_style"
+                android:textColor="@color/white"
+                android:layout_margin="20dp"
+                android:background="@drawable/auth_button_shape"
+                android:text="@string/auth_button_text" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include
+        android:id="@+id/bottomSheetToolbar"
+        layout="@layout/include_auth_bottom_sheet" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
