@@ -29,6 +29,8 @@ interface IssuesServiceBinder {
     fun stopTask(issueEntity: Issue)
     fun pauseTask(issueEntity: Issue)
     fun getResults(issueEntity: Issue): Flow<Issue>
+
+    fun stopRunningTasks()
 }
 
 @Singleton
@@ -53,6 +55,10 @@ class IssuesService : Service() {
             Log.d("Service", "Flow is $flow")
             collectIssueUpdates(flow)
             return flow
+        }
+
+        override fun stopRunningTasks() {
+            taskManager.stopRunningTasks()
         }
     }
 

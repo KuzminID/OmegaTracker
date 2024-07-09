@@ -16,6 +16,7 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     fun getIssuesList() {
         launch {
             userRepositoryImpl.getIssuesList().collect {
+                println("Collected data")
                 checkActiveIssues(it)
                 val sortedIssues = sortIssues(it)
                 viewState.setIssuesToRV(sortedIssues)

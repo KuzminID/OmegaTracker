@@ -36,4 +36,7 @@ interface IssuesDao {
 
     @Query("DELETE FROM issues")
     suspend fun deleteAll()
+
+    @Query("UPDATE issues SET isActive = 0")
+    suspend fun deactivateAllIssues()
 }

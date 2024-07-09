@@ -34,15 +34,21 @@ class UserRepositoryImpl : UserRepository {
     override suspend fun getIssuesList(): Flow<List<Issue>> = flow {
         //Getting tasks from the database has not yet received a response to the request
         val dbIssues = getAllIssuesFromDB()
-        emit(dbIssues)
-
+        if (dbIssues.isNotEmpty()) {
+            emit(dbIssues)
+        }
         val issuesFromServer = youTrackApiService.getIssuesRequest(userManager.getToken())
 
         val parsedIssues = parseIssue(issuesFromServer)
+            compareIssues(dbIssues, parsedIssues)
 
-        compareIssues(dbIssues,parsedIssues)
+        var updatedData = getAllIssuesFromDB()
+        while (updatedData.isEmpty()) {
+            kotlinx.coroutines.delay(1000)
+            updatedData = getAllIssuesFromDB()
+        }
+        emit(updatedData)
 
-        emit(getAllIssuesFromDB())
     }.flowOn(Dispatchers.IO)
 
     override fun getHelperData(): List<HelperContent> {
@@ -107,7 +113,7 @@ class UserRepositoryImpl : UserRepository {
 
     override fun compareIssues(dbIssues: List<Issue>?, serverIssues: List<Issue>) {
         CoroutineScope(Dispatchers.IO).launch {
-            if (dbIssues != null) {
+            if (!dbIssues.isNullOrEmpty()) {
                 val updatedIssues = mutableListOf<Issue>()
                 serverIssues.forEach { serverIssue ->
                     val curIssue: Issue? = dbIssues.find { it.id == serverIssue.id }
@@ -180,6 +186,14 @@ class UserRepositoryImpl : UserRepository {
 
     override suspend fun deactivateIssue(issue: Issue) {
         issuesDao.deactivateIssue(issue.id)
+    }
+
+    override suspend fun clearDB() {
+        issuesDao.deleteAll()
+    }
+
+    override suspend fun deactivateAllTasks() {
+        issuesDao.deactivateAllIssues()
     }
 
     override fun convertFromEntityToIssue(entity: IssueEntity?): Issue? {

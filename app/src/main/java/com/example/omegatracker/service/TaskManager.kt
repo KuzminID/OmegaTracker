@@ -34,6 +34,13 @@ class TaskManager {
         }
     }
 
+    fun stopRunningTasks() {
+        runningTasks.forEach {
+            it.value.issue.isActive = false
+            runningTasks.remove(it.key)
+        }
+    }
+
     fun getIssuesUpdates(issue: Issue): Flow<Issue> {
         return runningTasks.getOrPut(issue) {TaskRunner(issue)}
             .run()

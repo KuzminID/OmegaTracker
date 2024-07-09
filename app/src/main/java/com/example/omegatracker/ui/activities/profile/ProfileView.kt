@@ -5,4 +5,5 @@ import com.example.omegatracker.ui.activities.base.BaseView
 
 interface ProfileView : BaseView {
     fun setUserData(data : User)
+    fun bindService()
 }

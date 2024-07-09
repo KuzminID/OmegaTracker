@@ -16,5 +16,9 @@ interface UserRepository {
     suspend fun deleteIssueFromDB(issue:Issue)
     suspend fun activateIssue(issue: Issue)
     suspend fun deactivateIssue(issue: Issue)
+
+    suspend fun clearDB()
+
+    suspend fun deactivateAllTasks()
     fun convertFromEntityToIssue(entity: IssueEntity?) : Issue?
 }
