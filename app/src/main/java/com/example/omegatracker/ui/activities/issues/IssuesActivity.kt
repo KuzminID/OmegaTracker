@@ -24,6 +24,7 @@ import com.example.omegatracker.service.IssuesService
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.auth.AuthActivity
 import com.example.omegatracker.ui.activities.base.BaseActivity
+import com.example.omegatracker.ui.activities.profile.ProfileActivity
 import com.example.omegatracker.ui.activities.start.StartScreenActivity
 import com.example.omegatracker.ui.activities.timer.IssueTimerActivity
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
@@ -164,7 +165,8 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         popup.setOnMenuItemClickListener {
             when (it!!.itemId) {
                 R.id.profileBtn -> {
-                    showMessage(R.string.app_name)
+                    val intent = Intent(this,ProfileActivity::class.java)
+                    startActivity(intent)
                 }
 
                 R.id.logoutBtn -> {
