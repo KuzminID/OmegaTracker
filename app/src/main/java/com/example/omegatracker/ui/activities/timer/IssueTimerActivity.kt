@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.databinding.ActivityIssueTimerBinding
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.service.IssuesService
@@ -92,10 +93,15 @@ class IssueTimerActivity : BaseActivity(),IssueTimerView {
         binding.issueTimerDescription.text = issue.description
         binding.issueTimerStatus.text = getString(issue.state.stateName)
         binding.issueTimerSummary.text = issue.summary
+        updateTimer(issue)
     }
 
     override fun updateTimer(issue: Issue) {
-        //binding.issueTimerProgressbarTimerTv.text =
+        val curTime = issue.estimatedTime - issue.spentTime
+        val hours = curTime.inWholeHours
+        val minutes = curTime.inWholeMinutes.toInt() % 60
+        val seconds = curTime.inWholeSeconds.toInt() % 60
+        binding.issueTimerProgressbarTimerTv.text = "$hours:$minutes:$seconds"
     }
 
     override fun bindService() {

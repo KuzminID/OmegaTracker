@@ -20,6 +20,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
     fun observeIssueTimer() {
         launch {
             controller.getResults(issue).collect {
+                viewState.updateTimer(it)
             }
         }
     }
@@ -33,6 +34,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         }
         issue.state = IssueState.OnWork
         viewState.setIssuesInfo(issue)
+        observeIssueTimer()
     }
 
     fun stopIssue() {
@@ -62,6 +64,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
                 viewState.hideStartBtn()
                 viewState.showStopBtn()
                 viewState.showPauseBtn()
+                observeIssueTimer()
             }
             viewState.setIssuesInfo(issue)
         }
