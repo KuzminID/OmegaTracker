@@ -13,7 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.Target
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.R
@@ -95,41 +97,50 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
     }
 
     override fun setAvatar(url: String?) {
-        val uri = url?.toUri()
-        Glide
-            .with(this)
-            .load(uri)
-            .placeholder(R.drawable.ic_launcher_omega_tracker)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    try {
-                        GlideToVectorYou
-                            .init()
-                            .with(this@IssuesActivity)
-                            .load(uri, binding.userAvatar)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                    return true
+        Glide.with(this)
+            .asDrawable()
+            .load(url)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(object : ImageViewTarget<Drawable>(binding.userAvatar) {
+                override fun setResource(resource: Drawable?) {
+                    binding.userAvatar.setImageDrawable(resource)
                 }
-
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return false
-                }
-
             })
-            .into(binding.userAvatar)
+//        val uri = url?.toUri()
+//        Glide
+//            .with(this)
+//            .load(uri)
+//            .placeholder(R.drawable.ic_launcher_omega_tracker)
+//            .listener(object : RequestListener<Drawable> {
+//                override fun onLoadFailed(
+//                    e: GlideException?,
+//                    model: Any?,
+//                    target: Target<Drawable>,
+//                    isFirstResource: Boolean
+//                ): Boolean {
+//                    try {
+//                        GlideToVectorYou
+//                            .init()
+//                            .with(this@IssuesActivity)
+//                            .load(uri, binding.userAvatar)
+//                    } catch (e: Exception) {
+//                        e.printStackTrace()
+//                    }
+//                    return true
+//                }
+//
+//                override fun onResourceReady(
+//                    resource: Drawable,
+//                    model: Any,
+//                    target: Target<Drawable>?,
+//                    dataSource: DataSource,
+//                    isFirstResource: Boolean
+//                ): Boolean {
+//                    return false
+//                }
+//
+//            })
+//            .into(binding.userAvatar)
     }
 
     override fun setIssuesToRV(issueEntities: List<Issue>) {
