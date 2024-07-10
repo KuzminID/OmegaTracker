@@ -9,6 +9,6 @@ interface RequestsApi {
     @GET("/api/users/me?fields=name,avatarUrl,email,login")
     suspend fun getUserProfile(@Header("Authorization") authToken: String?): User
 
-    @GET("/api/issues?fields=id,summary,description,project(name,shortName),customFields(value(minutes,name,isResolved),minutes,name,id)")
+    @GET("/api/issues?fields=id,summary,description,project(name,shortName),customFields(value(minutes,name,isResolved),minutes,name,id),updated")
     suspend fun getIssuesList(@Header("Authorization") authToken: String?): List<IssueFromJson>
 }

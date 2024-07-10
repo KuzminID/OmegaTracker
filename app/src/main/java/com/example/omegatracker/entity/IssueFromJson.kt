@@ -19,7 +19,8 @@ data class IssueFromJson(
     val summary: String?,
     val description: String?,
     val project: Project,
-    val customFields: List<CustomField>
+    val customFields: List<CustomField>,
+    val updated : Long
 )
 
 @JsonClass(generateAdapter = true)

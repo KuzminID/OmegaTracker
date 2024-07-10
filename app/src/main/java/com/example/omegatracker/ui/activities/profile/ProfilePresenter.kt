@@ -22,7 +22,7 @@ class ProfilePresenter : BasePresenter<ProfileView>() {
     fun testExit() {
         controller.stopRunningTasks()
         launch {
-            delay(10000)
+            delay(1000)
             repository.clearDB() }
     }
 

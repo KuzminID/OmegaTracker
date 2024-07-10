@@ -59,7 +59,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
 
     fun getIssueData(issueId : String) {
         launch {
-            issue = repository.getIssueByIDFromDB(issueId) ?: Issue("0-0","","" , 0.minutes,0.minutes,"","",false,IssueState.Open,)
+            issue = repository.getIssueByIDFromDB(issueId) ?: Issue("0-0","","" , 0.minutes,0.minutes,"","",false,IssueState.Open,0,0)
             if (issue.isActive) {
                 viewState.hideStartBtn()
                 viewState.showStopBtn()

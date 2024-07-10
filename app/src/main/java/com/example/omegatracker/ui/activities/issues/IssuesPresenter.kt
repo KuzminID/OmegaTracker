@@ -6,6 +6,8 @@ import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BasePresenter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class IssuesPresenter : BasePresenter<IssuesView>() {
     private var userRepositoryImpl = appComponent.getUserRepositoryImpl()
@@ -16,7 +18,6 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     fun getIssuesList() {
         launch {
             userRepositoryImpl.getIssuesList().collect {
-                println("Collected data")
                 checkActiveIssues(it)
                 val sortedIssues = sortIssues(it)
                 viewState.setIssuesToRV(sortedIssues)

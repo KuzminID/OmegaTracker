@@ -23,5 +23,6 @@ data class Issue(
     val projectName: String?,
     var isActive: Boolean = false,
     var state: IssueState,
-    var startTime: Long = 0L
+    var startTime: Long = 0L,
+    val lastUpdatedTime : Long
 )

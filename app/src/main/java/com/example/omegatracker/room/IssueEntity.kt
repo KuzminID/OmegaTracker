@@ -15,7 +15,8 @@ data class IssueEntity(
     val projectName: String,
     val state: Int,
     val isActive: Boolean,
-    val startTime: Long
+    val startTime: Long,
+    val updateTime : Long
 ) {
     constructor(issue: Issue) : this(
         issue.id,
@@ -27,6 +28,7 @@ data class IssueEntity(
         issue.projectName ?: "",
         issue.state.stateName,
         issue.isActive,
-        issue.startTime
+        issue.startTime,
+        issue.lastUpdatedTime
     )
 }

@@ -40,7 +40,8 @@ class UserRepositoryImpl : UserRepository {
         val issuesFromServer = youTrackApiService.getIssuesRequest(userManager.getToken())
 
         val parsedIssues = parseIssue(issuesFromServer)
-            compareIssues(dbIssues, parsedIssues)
+
+        compareIssues(dbIssues, parsedIssues)
 
         var updatedData = getAllIssuesFromDB()
         while (updatedData.isEmpty()) {
@@ -104,13 +105,15 @@ class UserRepositoryImpl : UserRepository {
                 estimatedTime = estimatedTime,
                 projectShortName = it.project.shortName,
                 projectName = it.project.name,
-                state = state
+                state = state,
+                lastUpdatedTime = it.updated
             )
         }
         data = data.filter { it.state.stateName != IssueState.Finished.stateName }
         return data
     }
 
+    //Comparing local issues from server issues using last update time
     override fun compareIssues(dbIssues: List<Issue>?, serverIssues: List<Issue>) {
         CoroutineScope(Dispatchers.IO).launch {
             if (!dbIssues.isNullOrEmpty()) {
@@ -118,26 +121,11 @@ class UserRepositoryImpl : UserRepository {
                 serverIssues.forEach { serverIssue ->
                     val curIssue: Issue? = dbIssues.find { it.id == serverIssue.id }
                     if (curIssue != null) {
-                        if (curIssue.spentTime > serverIssue.spentTime) {
-                            serverIssue.spentTime = curIssue.spentTime
+                        if (curIssue.lastUpdatedTime > serverIssue.lastUpdatedTime) {
+                            updatedIssues.add(curIssue)
+                        } else {
+                            updatedIssues.add(serverIssue)
                         }
-                        updatedIssues.add(
-                            Issue(
-                                /*Переделать логику spent time*/
-                                id = serverIssue.id,
-                                summary = serverIssue.summary,
-                                description = serverIssue.description,
-                                spentTime = serverIssue.spentTime,
-                                estimatedTime = serverIssue.estimatedTime,
-                                projectShortName = serverIssue.projectShortName,
-                                projectName = serverIssue.projectName,
-                                isActive = curIssue.isActive,
-                                state = curIssue.state,
-                                startTime = curIssue.startTime
-                            )
-                        )
-                    } else {
-                        updatedIssues.add(serverIssue)
                     }
                 }
                 updatedIssues.forEach {
@@ -145,7 +133,7 @@ class UserRepositoryImpl : UserRepository {
                 }
             } else {
                 serverIssues.forEach {
-                        upsertIssueToDB(it)
+                    upsertIssueToDB(it)
                 }
             }
         }
@@ -210,7 +198,8 @@ class UserRepositoryImpl : UserRepository {
                 IssueState.entries.find {
                     it.stateName == entity.state
                 } ?: IssueState.Open,
-                entity.startTime
+                entity.startTime,
+                entity.updateTime
             )
         } else {
             return null
