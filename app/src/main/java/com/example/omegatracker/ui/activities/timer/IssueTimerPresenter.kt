@@ -42,6 +42,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         issue.state = IssueState.OnStop
         viewState.setIssuesInfo(issue)
         launch {
+            issue.updateTime = repository.getServerTime().unixtime *1000L
             repository.upsertIssueToDB(issue)
         }
         controller.stopIssue(issue)

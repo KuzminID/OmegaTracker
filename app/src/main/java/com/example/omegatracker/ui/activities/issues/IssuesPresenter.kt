@@ -51,10 +51,16 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     }
 
     fun startIssue(issue: Issue) {
-        issue.startTime = System.currentTimeMillis()
-        launch { userRepositoryImpl.upsertIssueToDB(issue) }
-        controller.startIssue(issue)
-        observeActiveIssueUpdate(issue)
+        val job = launch {
+            issue.startTime = userRepositoryImpl.getServerTime().unixtime * 1000L
+        }.invokeOnCompletion {
+            launch {
+                userRepositoryImpl.upsertIssueToDB(issue)
+            }
+            controller.startIssue(issue)
+            observeActiveIssueUpdate(issue)
+        }
+
     }
 
     fun stopTask(issue: Issue) {
