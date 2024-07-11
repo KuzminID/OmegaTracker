@@ -1,5 +1,6 @@
 package com.example.omegatracker.ui.activities.issues
 
+import android.util.Log
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.service.IssuesServiceBinder
@@ -12,6 +13,14 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     private var customUserManager = appComponent.getUserManager()
     private lateinit var controller: IssuesServiceBinder
     private val observableIssues = mutableMapOf<String, Job>()
+
+    init {
+        launch {
+            val unixTime : Long = userRepositoryImpl.getServerTime().unixtime
+            val longTime = unixTime * 1000L
+            Log.d("ServerTime","$longTime")
+        }
+    }
 
     fun getIssuesList() {
         launch {

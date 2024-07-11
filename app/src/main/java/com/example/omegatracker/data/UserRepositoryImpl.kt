@@ -6,6 +6,7 @@ import com.example.omegatracker.entity.HelperContent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssueFromJson
 import com.example.omegatracker.entity.IssueState
+import com.example.omegatracker.entity.ServerTime
 import com.example.omegatracker.entity.User
 import com.example.omegatracker.entity.UserRepository
 import com.example.omegatracker.entity.Value
@@ -29,6 +30,10 @@ class UserRepositoryImpl : UserRepository {
     override suspend fun authenticate(token: String, url: String): User {
         OmegaTrackerApplication.setBaseUrl(url)
         return youTrackApiService.sendAuthorizationRequest(token)
+    }
+
+    suspend fun getServerTime() : ServerTime {
+        return  youTrackApiService.getServerTime()
     }
 
     override suspend fun getIssuesList(): Flow<List<Issue>> = flow {

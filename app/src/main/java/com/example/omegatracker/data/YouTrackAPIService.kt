@@ -2,6 +2,7 @@ package com.example.omegatracker.data
 
 import com.example.omegatracker.OmegaTrackerApplication.Companion.retrofitComponent
 import com.example.omegatracker.entity.IssueFromJson
+import com.example.omegatracker.entity.ServerTime
 import com.example.omegatracker.entity.User
 
 class YouTrackAPIService {
@@ -21,5 +22,12 @@ class YouTrackAPIService {
             requestAPI = retrofitComponent.getRequestApi()
         }
         return requestAPI.getIssuesList("Bearer $token")
+    }
+
+    suspend fun getServerTime() : ServerTime {
+        if (!isRequestApiInitialized()) {
+            requestAPI = retrofitComponent.getRequestApi()
+        }
+        return requestAPI.getServerTime()
     }
 }
