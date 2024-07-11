@@ -8,15 +8,10 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import android.widget.PopupMenu
-import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.ImageViewTarget
-import com.bumptech.glide.request.target.Target
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.R
 import com.example.omegatracker.databinding.ActivityIssuesBinding
@@ -29,7 +24,6 @@ import com.example.omegatracker.ui.activities.base.BaseActivity
 import com.example.omegatracker.ui.activities.profile.ProfileActivity
 import com.example.omegatracker.ui.activities.start.StartScreenActivity
 import com.example.omegatracker.ui.activities.timer.IssueTimerActivity
-import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -190,14 +184,14 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         popup.show()
     }
 
-    override fun startIssue(issueEntities: List<Issue>, position: Int) {
-        issuesPresenter.sortIssues(issueEntities, position)
-        issuesPresenter.startIssue(issueEntities[position])
+    override fun startIssue(issues: List<Issue>, position: Int) {
+        issuesPresenter.sortIssues(issues, position)
+        issuesPresenter.startIssue(issues[position])
     }
 
-    override fun showIssueInfoActivity(issueEntity: Issue) {
+    override fun showIssueInfoActivity(issue: Issue) {
         val intent = Intent(this, IssueTimerActivity::class.java)
-        intent.putExtra("issue_id",issueEntity.id)
+        intent.putExtra("issue_id",issue.id)
         startActivity(intent)
     }
 }

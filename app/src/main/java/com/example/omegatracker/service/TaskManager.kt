@@ -34,7 +34,7 @@ class TaskManager {
         }
     }
 
-    fun stopRunningTasks() {
+    fun stopRunningIssues() {
         runningTasks.forEach {
             it.value.issue.isActive = false
             runningTasks.remove(it.key)

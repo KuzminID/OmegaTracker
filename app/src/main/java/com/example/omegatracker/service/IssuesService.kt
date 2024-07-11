@@ -25,10 +25,10 @@ import javax.inject.Singleton
 import kotlin.time.Duration.Companion.milliseconds
 
 interface IssuesServiceBinder {
-    fun startTask(issueEntity: Issue)
-    fun stopTask(issueEntity: Issue)
-    fun pauseTask(issueEntity: Issue)
-    fun getResults(issueEntity: Issue): Flow<Issue>
+    fun startIssue(issue: Issue)
+    fun stopIssue(issue: Issue)
+    fun pauseIssue(issue: Issue)
+    fun getResults(issue: Issue): Flow<Issue>
 
     fun stopRunningTasks()
 }
@@ -37,28 +37,28 @@ interface IssuesServiceBinder {
 class IssuesService : Service() {
 
     private val serviceBinder = object : IssuesServiceBinder, Binder() {
-        override fun startTask(issueEntity: Issue) {
-            taskManager.addIssue(issueEntity)
-            createNotificationForIssue(issueEntity)
+        override fun startIssue(issue: Issue) {
+            taskManager.addIssue(issue)
+            createNotificationForIssue(issue)
         }
 
-        override fun stopTask(issueEntity: Issue) {
-            taskManager.stopIssue(issueEntity)
+        override fun stopIssue(issue: Issue) {
+            taskManager.stopIssue(issue)
         }
 
-        override fun pauseTask(issueEntity: Issue) {
-            taskManager.stopIssue(issueEntity)
+        override fun pauseIssue(issue: Issue) {
+            taskManager.stopIssue(issue)
         }
 
-        override fun getResults(issueEntity: Issue): Flow<Issue> {
-            val flow = taskManager.getIssuesUpdates(issueEntity)
+        override fun getResults(issue: Issue): Flow<Issue> {
+            val flow = taskManager.getIssuesUpdates(issue)
             Log.d("Service", "Flow is $flow")
             collectIssueUpdates(flow)
             return flow
         }
 
         override fun stopRunningTasks() {
-            taskManager.stopRunningTasks()
+            taskManager.stopRunningIssues()
         }
     }
 
@@ -100,15 +100,15 @@ class IssuesService : Service() {
         }
     }
 
-    private fun createNotificationForIssue(issueEntity: Issue) {
-        val id = issueEntity.id.hashCode()
+    private fun createNotificationForIssue(issue: Issue) {
+        val id = issue.id.hashCode()
         val builder = NotificationCompat.Builder(appComponent.getContext(), CHANNEL_ID)
             .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_LIGHTS)
             .setVibrate(LongArray(2) { 0 })
-            .setContentTitle(issueEntity.summary)
+            .setContentTitle(issue.summary)
             .setContentText(
                 "Remaining Time : ${
-                    (issueEntity.estimatedTime - issueEntity.spentTime).componentsToString(
+                    (issue.estimatedTime - issue.spentTime).componentsToString(
                         'ч',
                         'м',
                         'с'
@@ -131,14 +131,14 @@ class IssuesService : Service() {
         }
     }
 
-    private fun updateNotifications(updatedIssueEntity: Issue) {
-        val id = updatedIssueEntity.id.hashCode()
+    private fun updateNotifications(updatedIssue: Issue) {
+        val id = updatedIssue.id.hashCode()
         val notificationBuilder = notificationBuilderList[id]
         serviceScope.launch {
             notificationBuilder
                 ?.setContentText(
                     "Remaining Time : ${
-                        (updatedIssueEntity.estimatedTime - updatedIssueEntity.spentTime).componentsToString(
+                        (updatedIssue.estimatedTime - updatedIssue.spentTime).componentsToString(
                             'ч', 'м', 'с'
                         )
                     }"

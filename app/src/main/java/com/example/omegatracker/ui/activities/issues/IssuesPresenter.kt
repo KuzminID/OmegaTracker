@@ -6,8 +6,6 @@ import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BasePresenter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class IssuesPresenter : BasePresenter<IssuesView>() {
     private var userRepositoryImpl = appComponent.getUserRepositoryImpl()
@@ -38,7 +36,7 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
 
     private fun restartIssues(issues: List<Issue>) {
         issues.forEach {
-            controller.startTask(it)
+            controller.startIssue(it)
             observeActiveIssueUpdate(it)
         }
     }
@@ -46,12 +44,12 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     fun startIssue(issue: Issue) {
         issue.startTime = System.currentTimeMillis()
         launch { userRepositoryImpl.upsertIssueToDB(issue) }
-        controller.startTask(issue)
+        controller.startIssue(issue)
         observeActiveIssueUpdate(issue)
     }
 
     fun stopTask(issue: Issue) {
-        controller.stopTask(issue)
+        controller.stopIssue(issue)
         observableIssues[issue.id]?.cancel()
         observableIssues.remove(issue.id)
     }

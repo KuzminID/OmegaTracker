@@ -29,6 +29,6 @@ data class IssueEntity(
         issue.state.stateName,
         issue.isActive,
         issue.startTime,
-        issue.lastUpdatedTime
+        issue.updateTime
     )
 }

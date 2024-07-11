@@ -106,7 +106,7 @@ class UserRepositoryImpl : UserRepository {
                 projectShortName = it.project.shortName,
                 projectName = it.project.name,
                 state = state,
-                lastUpdatedTime = it.updated
+                updateTime = it.updated
             )
         }
         data = data.filter { it.state.stateName != IssueState.Finished.stateName }
@@ -121,7 +121,7 @@ class UserRepositoryImpl : UserRepository {
                 serverIssues.forEach { serverIssue ->
                     val curIssue: Issue? = dbIssues.find { it.id == serverIssue.id }
                     if (curIssue != null) {
-                        if (curIssue.lastUpdatedTime > serverIssue.lastUpdatedTime) {
+                        if (curIssue.updateTime > serverIssue.updateTime) {
                             updatedIssues.add(curIssue)
                         } else {
                             updatedIssues.add(serverIssue)
@@ -180,7 +180,7 @@ class UserRepositoryImpl : UserRepository {
         issuesDao.deleteAll()
     }
 
-    override suspend fun deactivateAllTasks() {
+    override suspend fun deactivateAllIssues() {
         issuesDao.deactivateAllIssues()
     }
 

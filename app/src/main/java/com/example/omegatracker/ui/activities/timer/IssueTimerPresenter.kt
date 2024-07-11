@@ -28,7 +28,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
     fun startIssue() {
         issue.isActive = true
         issue.startTime = System.currentTimeMillis()
-        controller.startTask(issue)
+        controller.startIssue(issue)
         launch {
             repository.upsertIssueToDB(issue)
         }
@@ -44,7 +44,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         launch {
             repository.upsertIssueToDB(issue)
         }
-        controller.stopTask(issue)
+        controller.stopIssue(issue)
     }
 
     fun pauseIssue() {
@@ -54,7 +54,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         launch {
             repository.upsertIssueToDB(issue)
         }
-        controller.pauseTask(issue)
+        controller.pauseIssue(issue)
     }
 
     fun getIssueData(issueId : String) {

@@ -122,33 +122,32 @@ class IssueTimerActivity : BaseActivity(),IssueTimerView {
     }
 
     override fun showStartBtn() {
-        binding.issueTimerStartBtn.visibility = View.VISIBLE
-        binding.issueTimerStartText.visibility = View.VISIBLE
         binding.issueTimerStartText.isVisible = true
+        binding.issueTimerStartBtn.isVisible = true
     }
 
     override fun showStopBtn() {
-        binding.issueTimerStopBtn.visibility = View.VISIBLE
-        binding.issueTimerStopText.visibility = View.VISIBLE
+        binding.issueTimerStopBtn.isVisible = true
+        binding.issueTimerStopText.isVisible = true
     }
 
     override fun showPauseBtn() {
-        binding.issueTimerPauseBtn.visibility = View.VISIBLE
-        binding.issueTimerPauseText.visibility = View.VISIBLE
+        binding.issueTimerPauseBtn.isVisible = true
+        binding.issueTimerPauseText.isVisible = true
     }
 
     override fun hideStartBtn() {
-        binding.issueTimerStartBtn.visibility = View.GONE
-        binding.issueTimerStartText.visibility = View.GONE
+        binding.issueTimerStartBtn.isVisible = false
+        binding.issueTimerStartText.isVisible = false
     }
 
     override fun hideStopBtn() {
-        binding.issueTimerStopBtn.visibility = View.GONE
-        binding.issueTimerStopText.visibility = View.GONE
+        binding.issueTimerStopBtn.isVisible = false
+        binding.issueTimerStopText.isVisible = false
     }
 
     override fun hidePauseBtn() {
-        binding.issueTimerPauseBtn.visibility = View.GONE
-        binding.issueTimerPauseText.visibility = View.GONE
+        binding.issueTimerPauseBtn.isVisible = false
+        binding.issueTimerPauseText.isVisible = false
     }
 }
