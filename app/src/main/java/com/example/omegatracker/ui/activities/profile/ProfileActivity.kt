@@ -53,9 +53,10 @@ class ProfileActivity : BaseActivity(), ProfileView {
         }
     }
 
-    override fun setUserData(data: User) {
-        binding.profileNameTv.text = data.name
-        binding.profileEmailTv.text = data.email
+    override fun setUserData(data: User?) {
+        binding.profileNameTv.text = data?.name
+        binding.profileEmailTv.text = data?.email
+        setAvatar(data?.avatarUrl, binding.profileAvatarIv)
     }
 
     override fun bindService() {

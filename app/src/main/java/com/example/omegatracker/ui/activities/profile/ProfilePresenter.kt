@@ -12,7 +12,8 @@ class ProfilePresenter : BasePresenter<ProfileView>() {
     private lateinit var controller : IssuesServiceBinder
     fun setData() {
         val data = userManager.getUser()
-        println(data)
+        viewState.setUserData(data)
+
     }
 
     fun setController(controller : IssuesServiceBinder) {

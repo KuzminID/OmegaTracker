@@ -3,17 +3,10 @@ package com.example.omegatracker.ui.activities.issues
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.IBinder
-import android.view.View
-import android.widget.PopupMenu
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.target.ImageViewTarget
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
-import com.example.omegatracker.R
 import com.example.omegatracker.databinding.ActivityIssuesBinding
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.Screens
@@ -63,8 +56,8 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
 
     override fun initialization() {
         serviceIntent = Intent(this, IssuesService::class.java)
-        initPopUpMenu()
-        setAvatar("${userManager.getUrl()}${userManager.getUser()!!.avatarUrl}")
+        showProfileScreen()
+        setAvatar(userManager.getUser()?.avatarUrl, binding.userAvatar)
         binding.rvIssuesList.adapter = adapter
         issuesPresenter.getIssuesList()
         bindService()
@@ -90,16 +83,16 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         adapter.onIssueTimerUpdated(issueEntity)
     }
 
-    override fun setAvatar(url: String?) {
-        Glide.with(this)
-            .asDrawable()
-            .load(url)
-            .transition(DrawableTransitionOptions.withCrossFade())
-            .into(object : ImageViewTarget<Drawable>(binding.userAvatar) {
-                override fun setResource(resource: Drawable?) {
-                    binding.userAvatar.setImageDrawable(resource)
-                }
-            })
+//    override fun setAvatar(url: String?) {
+//        Glide.with(this)
+//            .asDrawable()
+//            .load(url)
+//            .transition(DrawableTransitionOptions.withCrossFade())
+//            .into(object : ImageViewTarget<Drawable>(binding.userAvatar) {
+//                override fun setResource(resource: Drawable?) {
+//                    binding.userAvatar.setImageDrawable(resource)
+//                }
+//            })
 //        val uri = url?.toUri()
 //        Glide
 //            .with(this)
@@ -135,16 +128,17 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
 //
 //            })
 //            .into(binding.userAvatar)
-    }
+//    }
 
     override fun setIssuesToRV(issueEntities: List<Issue>) {
         adapter.issuesList = issueEntities
         adapter.setCallback(this)
     }
 
-    override fun initPopUpMenu() {
+    override fun showProfileScreen() {
         binding.userAvatar.setOnClickListener {
-            showPopUpMenu(binding.userAvatar)
+            val intent = Intent(this,ProfileActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -163,26 +157,26 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         finish()
     }
 
-    override fun showPopUpMenu(view: View) {
-        val popup = PopupMenu(this, view)
-        popup.inflate(R.menu.menu_issues)
-
-        popup.setOnMenuItemClickListener {
-            when (it!!.itemId) {
-                R.id.profileBtn -> {
-                    val intent = Intent(this,ProfileActivity::class.java)
-                    startActivity(intent)
-                }
-
-                R.id.logoutBtn -> {
-                    userManager.deleteUser()
-                    showScreen(Screens.AuthenticationScreens)
-                }
-            }
-            true
-        }
-        popup.show()
-    }
+//    override fun showPopUpMenu(view: View) {
+//        val popup = PopupMenu(this, view)
+//        popup.inflate(R.menu.menu_issues)
+//
+//        popup.setOnMenuItemClickListener {
+//            when (it!!.itemId) {
+//                R.id.profileBtn -> {
+//                    val intent = Intent(this,ProfileActivity::class.java)
+//                    startActivity(intent)
+//                }
+//
+//                R.id.logoutBtn -> {
+//                    userManager.deleteUser()
+//                    showScreen(Screens.AuthenticationScreens)
+//                }
+//            }
+//            true
+//        }
+//        popup.show()
+//    }
 
     override fun startIssue(issues: List<Issue>, position: Int) {
         issuesPresenter.sortIssues(issues, position)

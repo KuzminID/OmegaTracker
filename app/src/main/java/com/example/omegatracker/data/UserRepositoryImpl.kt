@@ -29,7 +29,10 @@ class UserRepositoryImpl : UserRepository {
 
     override suspend fun authenticate(token: String, url: String): User {
         OmegaTrackerApplication.setBaseUrl(url)
-        return youTrackApiService.sendAuthorizationRequest(token)
+        val user = youTrackApiService.sendAuthorizationRequest(token)
+        val avatarUrl = user.avatarUrl
+        user.avatarUrl = url + avatarUrl
+        return user
     }
 
     suspend fun getServerTime() : ServerTime {
