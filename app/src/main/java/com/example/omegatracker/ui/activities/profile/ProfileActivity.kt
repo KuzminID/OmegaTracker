@@ -12,12 +12,13 @@ import com.example.omegatracker.service.IssuesService
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.auth.AuthActivity
 import com.example.omegatracker.ui.activities.base.BaseActivity
+import com.example.omegatracker.ui.activities.issues.IssuesActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class ProfileActivity : BaseActivity(), ProfileView {
-    private lateinit var binding : ActivityProfileBinding
-    private val profilePresenter : ProfilePresenter by providePresenter {
+    private lateinit var binding: ActivityProfileBinding
+    private val profilePresenter: ProfilePresenter by providePresenter {
         ProfilePresenter()
     }
 
@@ -41,13 +42,15 @@ class ProfileActivity : BaseActivity(), ProfileView {
         bindService()
         profilePresenter.setData()
 
+        showIssueScreen()
+
         binding.profileTestBtn.setOnClickListener {
             profilePresenter.testExit()
         }
 
         binding.profileExitBtn.setOnClickListener {
             profilePresenter.exitFromAccount()
-            val intent = Intent(this,AuthActivity::class.java)
+            val intent = Intent(this, AuthActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -73,6 +76,14 @@ class ProfileActivity : BaseActivity(), ProfileView {
                     profilePresenter.setController(controller)
                 }
             }
+        }
+    }
+
+    override fun showIssueScreen() {
+        binding.profileBackBtn.setOnClickListener {
+            val intent = Intent(this, IssuesActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }

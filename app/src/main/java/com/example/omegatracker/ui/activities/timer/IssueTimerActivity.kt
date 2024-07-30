@@ -6,10 +6,8 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
-import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.databinding.ActivityIssueTimerBinding
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.service.IssuesService
@@ -19,15 +17,15 @@ import com.example.omegatracker.ui.activities.issues.IssuesActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class IssueTimerActivity : BaseActivity(),IssueTimerView {
+class IssueTimerActivity : BaseActivity(), IssueTimerView {
 
-    private lateinit var binding : ActivityIssueTimerBinding
+    private lateinit var binding: ActivityIssueTimerBinding
 
-    private val timerPresenter : IssueTimerPresenter by providePresenter {
+    private val timerPresenter: IssueTimerPresenter by providePresenter {
         IssueTimerPresenter()
     }
 
-    private lateinit var issueId : String
+    private lateinit var issueId: String
 
     private val _serviceControllerState = MutableStateFlow<IssuesServiceBinder?>(null)
 
@@ -85,7 +83,7 @@ class IssueTimerActivity : BaseActivity(),IssueTimerView {
         }
     }
 
-    override fun getIssuesInfo(issueId : String) {
+    override fun getIssuesInfo(issueId: String) {
         val data = timerPresenter.getIssueData(issueId)
     }
 

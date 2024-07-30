@@ -1,12 +1,17 @@
 package com.example.omegatracker.data
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.telephony.TelephonyManager
+import android.util.Log
+import androidx.core.app.ActivityCompat
 import com.example.omegatracker.OmegaTrackerApplication
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.HelperContent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssueFromJson
 import com.example.omegatracker.entity.IssueState
-import com.example.omegatracker.entity.ServerTime
 import com.example.omegatracker.entity.User
 import com.example.omegatracker.entity.UserRepository
 import com.example.omegatracker.entity.Value
@@ -17,6 +22,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
+import kotlin.properties.Delegates
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -26,6 +34,7 @@ class UserRepositoryImpl : UserRepository {
     private val youTrackApiService = appComponent.getYouTrackApiService()
     private val userManager = appComponent.getUserManager()
     private val issuesDao = appComponent.getIssuesDao()
+    private var appStartTime by Delegates.notNull<Long>()
 
     override suspend fun authenticate(token: String, url: String): User {
         OmegaTrackerApplication.setBaseUrl(url)
@@ -35,20 +44,34 @@ class UserRepositoryImpl : UserRepository {
         return user
     }
 
-    suspend fun getServerTime() : ServerTime {
-        return  youTrackApiService.getServerTime()
+    override fun convertStringDateToMilliseconds(date: String?): Long {
+        val format = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
+        val newDate = format.parse(date)
+        return newDate?.time ?: 0L
     }
 
     override suspend fun getIssuesList(): Flow<List<Issue>> = flow {
+        //Defining variables for current date in milliseconds and parsed issues from server
+        var dateMillis : Long = 0L
+        var parsedIssues : List<Issue> = emptyList()
+
         //Getting tasks from the database has not yet received a response to the request
         val dbIssues = getAllIssuesFromDB()
         if (dbIssues.isNotEmpty()) {
             emit(dbIssues)
         }
-        val issuesFromServer = youTrackApiService.getIssuesRequest(userManager.getToken())
+        try {
+            val (issuesFromServer, date) = youTrackApiService.getIssuesRequest(userManager.getToken())
+            dateMillis = convertStringDateToMilliseconds(date)
+            parsedIssues = parseIssue(issuesFromServer)
+        } catch (e : Exception) {
+            Log.d("getIssuesList",e.toString())
+            dateMillis = System.currentTimeMillis()
+        }
 
-        val parsedIssues = parseIssue(issuesFromServer)
-
+        appStartTime=dateMillis
+        //TODO определить, что делать если время не пришло (способы проверки)
+        //TODO SystemClock
         compareIssues(dbIssues, parsedIssues)
 
         var updatedData = getAllIssuesFromDB()
@@ -74,7 +97,6 @@ class UserRepositoryImpl : UserRepository {
                                 field.value.minutes?.toDuration(DurationUnit.MINUTES)
                                     ?: Duration.ZERO
                             }
-
                             else -> {
                                 Duration.ZERO
                             }
@@ -88,13 +110,12 @@ class UserRepositoryImpl : UserRepository {
                                 field.value.minutes?.toDuration(DurationUnit.MINUTES)
                                     ?: Duration.ZERO
                             }
-
                             else -> {
                                 Duration.ZERO
                             }
                         }
                     }
-            var isResolved = false
+            var isResolved: Boolean
             val state = it.customFields.find { it.type == "StateIssueCustomField" }
                 .let { field ->
                     field?.value as Value.State
@@ -121,7 +142,7 @@ class UserRepositoryImpl : UserRepository {
         return data
     }
 
-    //Comparing local issues from server issues using last update time
+    //TODO переделать сравнение
     override fun compareIssues(dbIssues: List<Issue>?, serverIssues: List<Issue>) {
         CoroutineScope(Dispatchers.IO).launch {
             if (!dbIssues.isNullOrEmpty()) {
@@ -156,7 +177,7 @@ class UserRepositoryImpl : UserRepository {
         val issuesList = mutableListOf<Issue>()
         entitiesList.forEach {
             val issue = convertFromEntityToIssue(it)
-            if (issue!=null) {
+            if (issue != null) {
                 issuesList.add(issue)
             }
         }
@@ -165,7 +186,7 @@ class UserRepositoryImpl : UserRepository {
 
     override suspend fun getIssueByIDFromDB(id: String): Issue? {
         val entity = issuesDao.getIssueById(id)
-        return if (entity!=null) {
+        return if (entity != null) {
             convertFromEntityToIssue(entity)
         } else {
             null
@@ -193,7 +214,7 @@ class UserRepositoryImpl : UserRepository {
     }
 
     override fun convertFromEntityToIssue(entity: IssueEntity?): Issue? {
-        if (entity!=null) {
+        if (entity != null) {
             return Issue(
                 entity.id,
                 entity.summary,

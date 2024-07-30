@@ -46,7 +46,7 @@
         android:background="@drawable/issues_item_desc_shape"
         android:textColor="@color/red"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/issue_timer_description"
@@ -75,7 +75,7 @@
         app:layout_constraintHeight_percent="0.5"
         app:layout_constraintTop_toBottomOf="@id/issue_timer_description"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/issue_timer_progressbar_timer_tv"
@@ -86,7 +86,7 @@
         app:layout_constraintTop_toTopOf="@id/issue_timer_progressbar"
         app:layout_constraintBottom_toBottomOf="@id/issue_timer_progressbar"
         app:layout_constraintLeft_toLeftOf="@id/issue_timer_progressbar"
-        app:layout_constraintRight_toRightOf="@id/issue_timer_progressbar"/>
+        app:layout_constraintRight_toRightOf="@id/issue_timer_progressbar" />
 
     <ImageButton
         android:id="@+id/issue_timer_pause_btn"
@@ -98,7 +98,7 @@
         android:src="@drawable/pause_icon"
         android:background="@drawable/issue_timer_btn_shape"
         app:layout_constraintRight_toLeftOf="@id/issue_timer_start_btn"
-        app:layout_constraintTop_toBottomOf="@id/issue_timer_progressbar"/>
+        app:layout_constraintTop_toBottomOf="@id/issue_timer_progressbar" />
 
     <TextView
         android:id="@+id/issue_timer_pause_text"
@@ -110,7 +110,7 @@
         android:layout_marginTop="15dp"
         app:layout_constraintTop_toBottomOf="@id/issue_timer_pause_btn"
         app:layout_constraintStart_toStartOf="@id/issue_timer_pause_btn"
-        app:layout_constraintEnd_toEndOf="@id/issue_timer_pause_btn"/>
+        app:layout_constraintEnd_toEndOf="@id/issue_timer_pause_btn" />
 
     <ImageButton
         android:id="@+id/issue_timer_start_btn"
@@ -122,7 +122,7 @@
         android:background="@drawable/issue_timer_btn_shape"
         app:layout_constraintTop_toBottomOf="@id/issue_timer_progressbar"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/issue_timer_start_text"
@@ -132,7 +132,7 @@
         android:layout_marginTop="15dp"
         app:layout_constraintTop_toBottomOf="@id/issue_timer_start_btn"
         app:layout_constraintStart_toStartOf="@id/issue_timer_start_btn"
-        app:layout_constraintEnd_toEndOf="@id/issue_timer_start_btn"/>
+        app:layout_constraintEnd_toEndOf="@id/issue_timer_start_btn" />
 
     <ImageButton
         android:id="@+id/issue_timer_stop_btn"
@@ -144,7 +144,7 @@
         android:layout_marginHorizontal="25dp"
         android:background="@drawable/issue_timer_btn_shape"
         app:layout_constraintTop_toBottomOf="@id/issue_timer_progressbar"
-        app:layout_constraintLeft_toRightOf="@id/issue_timer_start_btn"/>
+        app:layout_constraintLeft_toRightOf="@id/issue_timer_start_btn" />
 
     <TextView
         android:id="@+id/issue_timer_stop_text"
@@ -155,6 +155,6 @@
         android:text="@string/issue_timer_stop_text"
         app:layout_constraintTop_toBottomOf="@id/issue_timer_stop_btn"
         app:layout_constraintStart_toStartOf="@id/issue_timer_stop_btn"
-        app:layout_constraintEnd_toEndOf="@id/issue_timer_stop_btn"/>
+        app:layout_constraintEnd_toEndOf="@id/issue_timer_stop_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

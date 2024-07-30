@@ -9,27 +9,30 @@ import kotlinx.coroutines.launch
 class ProfilePresenter : BasePresenter<ProfileView>() {
     private val userManager = appComponent.getUserManager()
     private val repository = appComponent.getUserRepositoryImpl()
-    private lateinit var controller : IssuesServiceBinder
+    private lateinit var controller: IssuesServiceBinder
     fun setData() {
         val data = userManager.getUser()
         viewState.setUserData(data)
 
     }
 
-    fun setController(controller : IssuesServiceBinder) {
+    fun setController(controller: IssuesServiceBinder) {
         this.controller = controller
     }
 
     fun testExit() {
-        controller.stopRunningTasks()
+        controller.stopRunningIssues()
+
         launch {
             delay(1000)
-            repository.clearDB() }
+            repository.clearDB()
+        }
     }
 
+    //TODO добавить запрос на отправку перед выходом
     fun exitFromAccount() {
         userManager.deleteUser()
-        controller.stopRunningTasks()
+        controller.stopRunningIssues()
         launch {
             repository.clearDB()
         }

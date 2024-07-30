@@ -30,13 +30,14 @@ interface IssuesServiceBinder {
     fun pauseIssue(issue: Issue)
     fun getResults(issue: Issue): Flow<Issue>
 
-    fun stopRunningTasks()
+    fun stopRunningIssues()
 }
 
 @Singleton
 class IssuesService : Service() {
 
     private val serviceBinder = object : IssuesServiceBinder, Binder() {
+
         override fun startIssue(issue: Issue) {
             taskManager.addIssue(issue)
             createNotificationForIssue(issue)
@@ -57,7 +58,7 @@ class IssuesService : Service() {
             return flow
         }
 
-        override fun stopRunningTasks() {
+        override fun stopRunningIssues() {
             taskManager.stopRunningIssues()
         }
     }

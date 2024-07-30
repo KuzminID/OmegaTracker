@@ -85,14 +85,7 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:<$roomVersion>")
-//    //Lifecycle
-//    implementation("android.arch.lifecycle:extensions:1.1.1")
-//    ksp("android.arch.lifecycle:compiler:1.1.1")
-    //Rxjava2
-    //implementation("android.arch.persistence.room:rxjava2:1.1.1")
     //Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     ksp("com.github.bumptech.glide:compiler:4.16.0")
-
-    implementation("com.github.2coffees1team:GlideToVectorYou:v2.0.0")
 }

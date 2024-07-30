@@ -1,5 +1,7 @@
 package com.example.omegatracker.ui.activities.issues
 
+import android.os.SystemClock
+import android.text.format.Time
 import android.util.Log
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
@@ -7,6 +9,9 @@ import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BasePresenter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
+import java.util.Date
 
 class IssuesPresenter : BasePresenter<IssuesView>() {
     private var userRepositoryImpl = appComponent.getUserRepositoryImpl()
@@ -14,25 +19,17 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     private lateinit var controller: IssuesServiceBinder
     private val observableIssues = mutableMapOf<String, Job>()
 
-    init {
-        launch {
-            val unixTime : Long = userRepositoryImpl.getServerTime().unixtime
-            val longTime = unixTime * 1000L
-            Log.d("ServerTime","$longTime")
-        }
-    }
-
     fun getIssuesList() {
         launch {
-            userRepositoryImpl.getIssuesList().collect {
-                checkActiveIssues(it)
-                val sortedIssues = sortIssues(it)
-                viewState.setIssuesToRV(sortedIssues)
+                userRepositoryImpl.getIssuesList().collect {
+                    checkActiveIssues(it)
+                    val sortedIssues = sortIssues(it)
+                    viewState.setIssuesToRV(sortedIssues)
+                }
             }
-        }
     }
 
-    private fun checkActiveIssues(issues : List<Issue>) {
+    private fun checkActiveIssues(issues: List<Issue>) {
         val activeIssues = issues.filter { it.isActive }
         if (activeIssues.isNotEmpty()) {
             restartIssues(activeIssues)
@@ -52,7 +49,8 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
 
     fun startIssue(issue: Issue) {
         val job = launch {
-            issue.startTime = userRepositoryImpl.getServerTime().unixtime * 1000L
+            //TODO исправлено
+            issue.startTime = SystemClock.elapsedRealtime()
         }.invokeOnCompletion {
             launch {
                 userRepositoryImpl.upsertIssueToDB(issue)
@@ -60,7 +58,6 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
             controller.startIssue(issue)
             observeActiveIssueUpdate(issue)
         }
-
     }
 
     fun stopTask(issue: Issue) {
@@ -83,7 +80,7 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
         viewState.setIssuesToRV(sortedIssuesList)
     }
 
-    private fun sortIssues(issues: List<Issue>) : List<Issue> {
+    private fun sortIssues(issues: List<Issue>): List<Issue> {
         return issues.sortedByDescending { it.isActive }
     }
 }

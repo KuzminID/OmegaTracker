@@ -4,7 +4,7 @@ import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.ui.activities.base.BaseView
 
 interface IssueTimerView : BaseView {
-    fun getIssuesInfo(issueId : String)
+    fun getIssuesInfo(issueId: String)
     fun setIssuesInfo(issue: Issue)
     fun updateTimer(issue: Issue)
     fun bindService()

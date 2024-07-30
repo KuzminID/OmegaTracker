@@ -41,7 +41,6 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
             service as IssuesServiceBinder
             _serviceControllerState.value = service
         }
-
         override fun onServiceDisconnected(name: ComponentName?) {
             _serviceControllerState.value = null
         }
@@ -56,7 +55,8 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
 
     override fun initialization() {
         serviceIntent = Intent(this, IssuesService::class.java)
-        showProfileScreen()
+        startService(serviceIntent)
+        setProfileListener()
         setAvatar(userManager.getUser()?.avatarUrl, binding.userAvatar)
         binding.rvIssuesList.adapter = adapter
         issuesPresenter.getIssuesList()
@@ -69,7 +69,6 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
             connection,
             BIND_AUTO_CREATE
         )
-
         lifecycleScope.launch {
             _serviceControllerState.collect { controller ->
                 if (controller != null) {
@@ -83,61 +82,14 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         adapter.onIssueTimerUpdated(issueEntity)
     }
 
-//    override fun setAvatar(url: String?) {
-//        Glide.with(this)
-//            .asDrawable()
-//            .load(url)
-//            .transition(DrawableTransitionOptions.withCrossFade())
-//            .into(object : ImageViewTarget<Drawable>(binding.userAvatar) {
-//                override fun setResource(resource: Drawable?) {
-//                    binding.userAvatar.setImageDrawable(resource)
-//                }
-//            })
-//        val uri = url?.toUri()
-//        Glide
-//            .with(this)
-//            .load(uri)
-//            .placeholder(R.drawable.ic_launcher_omega_tracker)
-//            .listener(object : RequestListener<Drawable> {
-//                override fun onLoadFailed(
-//                    e: GlideException?,
-//                    model: Any?,
-//                    target: Target<Drawable>,
-//                    isFirstResource: Boolean
-//                ): Boolean {
-//                    try {
-//                        GlideToVectorYou
-//                            .init()
-//                            .with(this@IssuesActivity)
-//                            .load(uri, binding.userAvatar)
-//                    } catch (e: Exception) {
-//                        e.printStackTrace()
-//                    }
-//                    return true
-//                }
-//
-//                override fun onResourceReady(
-//                    resource: Drawable,
-//                    model: Any,
-//                    target: Target<Drawable>?,
-//                    dataSource: DataSource,
-//                    isFirstResource: Boolean
-//                ): Boolean {
-//                    return false
-//                }
-//
-//            })
-//            .into(binding.userAvatar)
-//    }
-
     override fun setIssuesToRV(issueEntities: List<Issue>) {
         adapter.issuesList = issueEntities
         adapter.setCallback(this)
     }
 
-    override fun showProfileScreen() {
+    override fun setProfileListener() {
         binding.userAvatar.setOnClickListener {
-            val intent = Intent(this,ProfileActivity::class.java)
+            val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }
     }
@@ -157,27 +109,6 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         finish()
     }
 
-//    override fun showPopUpMenu(view: View) {
-//        val popup = PopupMenu(this, view)
-//        popup.inflate(R.menu.menu_issues)
-//
-//        popup.setOnMenuItemClickListener {
-//            when (it!!.itemId) {
-//                R.id.profileBtn -> {
-//                    val intent = Intent(this,ProfileActivity::class.java)
-//                    startActivity(intent)
-//                }
-//
-//                R.id.logoutBtn -> {
-//                    userManager.deleteUser()
-//                    showScreen(Screens.AuthenticationScreens)
-//                }
-//            }
-//            true
-//        }
-//        popup.show()
-//    }
-
     override fun startIssue(issues: List<Issue>, position: Int) {
         issuesPresenter.sortIssues(issues, position)
         issuesPresenter.startIssue(issues[position])
@@ -185,7 +116,7 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
 
     override fun showIssueInfoActivity(issue: Issue) {
         val intent = Intent(this, IssueTimerActivity::class.java)
-        intent.putExtra("issue_id",issue.id)
+        intent.putExtra("issue_id", issue.id)
         startActivity(intent)
     }
 }

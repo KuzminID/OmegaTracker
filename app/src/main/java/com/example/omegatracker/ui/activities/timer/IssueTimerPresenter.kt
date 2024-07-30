@@ -1,5 +1,6 @@
 package com.example.omegatracker.ui.activities.timer
 
+import android.os.SystemClock
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssueState
@@ -11,13 +12,13 @@ import kotlin.time.Duration.Companion.minutes
 class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
     private val repository = appComponent.getUserRepositoryImpl()
     private lateinit var controller: IssuesServiceBinder
-    private lateinit var issue : Issue
+    private lateinit var issue: Issue
 
-    fun setController(controller : IssuesServiceBinder) {
+    fun setController(controller: IssuesServiceBinder) {
         this.controller = controller
     }
 
-    fun observeIssueTimer() {
+    private fun observeIssueTimer() {
         launch {
             controller.getResults(issue).collect {
                 viewState.updateTimer(it)
@@ -27,7 +28,8 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
 
     fun startIssue() {
         issue.isActive = true
-        issue.startTime = System.currentTimeMillis()
+        //TODO исправлено
+        issue.startTime = SystemClock.elapsedRealtime()
         controller.startIssue(issue)
         launch {
             repository.upsertIssueToDB(issue)
@@ -42,7 +44,8 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         issue.state = IssueState.OnStop
         viewState.setIssuesInfo(issue)
         launch {
-            issue.updateTime = repository.getServerTime().unixtime *1000L
+            //TODO исправить
+            issue.updateTime = 0L
             repository.upsertIssueToDB(issue)
         }
         controller.stopIssue(issue)
@@ -58,9 +61,21 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         controller.pauseIssue(issue)
     }
 
-    fun getIssueData(issueId : String) {
+    fun getIssueData(issueId: String) {
         launch {
-            issue = repository.getIssueByIDFromDB(issueId) ?: Issue("0-0","","" , 0.minutes,0.minutes,"","",false,IssueState.Open,0,0)
+            issue = repository.getIssueByIDFromDB(issueId) ?: Issue(
+                "0-0",
+                "",
+                "",
+                0.minutes,
+                0.minutes,
+                "",
+                "",
+                false,
+                IssueState.Open,
+                0,
+                0
+            )
             if (issue.isActive) {
                 viewState.hideStartBtn()
                 viewState.showStopBtn()

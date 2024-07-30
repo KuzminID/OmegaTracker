@@ -4,30 +4,34 @@ import com.example.omegatracker.OmegaTrackerApplication.Companion.retrofitCompon
 import com.example.omegatracker.entity.IssueFromJson
 import com.example.omegatracker.entity.ServerTime
 import com.example.omegatracker.entity.User
+import retrofit2.Response
 
 class YouTrackAPIService {
     private lateinit var requestAPI: RequestsApi
 
-    private fun isRequestApiInitialized(): Boolean {
-        return this::requestAPI.isInitialized
+    private fun initializeRequestAPI () {
+        if (!this::requestAPI.isInitialized) {
+            requestAPI = retrofitComponent.getRequestApi()
+        }
     }
 
     suspend fun sendAuthorizationRequest(token: String?): User {
-        requestAPI = retrofitComponent.getRequestApi()
+        initializeRequestAPI()
         return requestAPI.getUserProfile("Bearer $token")
     }
 
-    suspend fun getIssuesRequest(token: String?): List<IssueFromJson> {
-        if (!isRequestApiInitialized()) {
-            requestAPI = retrofitComponent.getRequestApi()
-        }
-        return requestAPI.getIssuesList("Bearer $token")
+    suspend fun getIssuesRequest(token: String?): Pair<List<IssueFromJson>, String?> {
+        initializeRequestAPI()
+
+        val response: Response<List<IssueFromJson>> = requestAPI.getIssuesList("Bearer $token")
+
+        val issues = response.body() ?: emptyList()
+
+        // Получаем значение заголовка Date из ответа
+        val dateHeader = response.headers()["Date"]
+
+        // Возвращаем список задач и значение заголовка Date
+        return Pair(issues, dateHeader)
     }
 
-    suspend fun getServerTime() : ServerTime {
-        if (!isRequestApiInitialized()) {
-            requestAPI = retrofitComponent.getRequestApi()
-        }
-        return requestAPI.getServerTime()
-    }
 }

@@ -5,8 +5,9 @@ import com.example.omegatracker.entity.Screens
 import com.example.omegatracker.ui.activities.base.BaseView
 
 interface IssuesView : BaseView {
-    fun showProfileScreen()
+    fun setProfileListener()
     fun showScreen(screens: Screens)
+
     //fun showPopUpMenu(view: View)
     fun setIssuesToRV(issueEntities: List<Issue>)
     fun bindService()
