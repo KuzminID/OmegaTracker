@@ -1,21 +1,22 @@
 package com.example.omegatracker.data
 
+import kotlin.math.abs
 import kotlin.time.Duration
 
 fun Duration.componentsToString(
-    hoursFormat: Char,
-    minutesFormat: Char,
-    secondsFormat: Char
+    hoursFormat: Char? = null,
+    minutesFormat: Char? = null,
+    secondsFormat: Char? = null
 ): String {
     val hours = inWholeHours.toInt()
-    val minutes = inWholeMinutes.toInt() % 60
-    val seconds = inWholeSeconds.toInt() % 60
+    val minutes = abs(inWholeMinutes.toInt() % 60)
+    val seconds = abs(inWholeSeconds.toInt() % 60)
     return "$hours" +
-            "$hoursFormat" +
+            "${hoursFormat?:""}" +
             ":$minutes" +
-            "$minutesFormat" +
+            "${minutesFormat?:""}" +
             ":$seconds" +
-            "$secondsFormat"
+            "${secondsFormat?:""}"
 }
 
 fun Duration.componentsToString(
@@ -23,7 +24,7 @@ fun Duration.componentsToString(
     minutesFormat: Char
 ): String {
     val hours = inWholeHours.toInt()
-    val minutes = inWholeMinutes.toInt() % 60
+    val minutes = abs(inWholeMinutes.toInt() % 60)
     return "$hours" +
             "$hoursFormat" +
             ":$minutes" +

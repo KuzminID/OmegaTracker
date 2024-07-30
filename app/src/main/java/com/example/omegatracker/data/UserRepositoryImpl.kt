@@ -71,7 +71,6 @@ class UserRepositoryImpl : UserRepository {
 
         appStartTime=dateMillis
         //TODO определить, что делать если время не пришло (способы проверки)
-        //TODO SystemClock
         compareIssues(dbIssues, parsedIssues)
 
         var updatedData = getAllIssuesFromDB()

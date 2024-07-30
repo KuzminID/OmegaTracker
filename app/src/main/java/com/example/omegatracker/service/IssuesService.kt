@@ -29,7 +29,6 @@ interface IssuesServiceBinder {
     fun stopIssue(issue: Issue)
     fun pauseIssue(issue: Issue)
     fun getResults(issue: Issue): Flow<Issue>
-
     fun stopRunningIssues()
 }
 
@@ -53,7 +52,6 @@ class IssuesService : Service() {
 
         override fun getResults(issue: Issue): Flow<Issue> {
             val flow = taskManager.getIssuesUpdates(issue)
-            Log.d("Service", "Flow is $flow")
             collectIssueUpdates(flow)
             return flow
         }
@@ -116,7 +114,7 @@ class IssuesService : Service() {
                     )
                 }"
             )
-            .setSmallIcon(R.drawable.ic_launcher_omega_tracker_round) // replace icon
+            .setSmallIcon(R.drawable.ic_launcher_omega_tracker_round) //TODO replace icon
         notificationBuilderList[id] = builder
         notificationManager.notify(id, builder.build())
         // startForeground(issueEntity.id.hashCode(),notification)
@@ -140,7 +138,9 @@ class IssuesService : Service() {
                 ?.setContentText(
                     "Remaining Time : ${
                         (updatedIssue.estimatedTime - updatedIssue.spentTime).componentsToString(
-                            'ч', 'м', 'с'
+                            'ч',
+                            'м',
+                            'с'
                         )
                     }"
                 )
@@ -148,6 +148,10 @@ class IssuesService : Service() {
                 id, notificationBuilder?.build()
             )
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     companion object {

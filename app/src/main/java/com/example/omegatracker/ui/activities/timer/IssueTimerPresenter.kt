@@ -21,20 +21,23 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
     private fun observeIssueTimer() {
         launch {
             controller.getResults(issue).collect {
-                viewState.updateTimer(it)
+                issue = it
+                viewState.updateTimer(issue)
+                viewState.updateProgressBar(issue)
             }
         }
     }
 
     fun startIssue() {
         issue.isActive = true
+        issue.state = IssueState.OnWork
         //TODO исправлено
         issue.startTime = SystemClock.elapsedRealtime()
+
         controller.startIssue(issue)
         launch {
             repository.upsertIssueToDB(issue)
         }
-        issue.state = IssueState.OnWork
         viewState.setIssuesInfo(issue)
         observeIssueTimer()
     }
@@ -44,8 +47,6 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         issue.state = IssueState.OnStop
         viewState.setIssuesInfo(issue)
         launch {
-            //TODO исправить
-            issue.updateTime = 0L
             repository.upsertIssueToDB(issue)
         }
         controller.stopIssue(issue)

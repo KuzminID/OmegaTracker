@@ -8,6 +8,8 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.example.omegatracker.R
+import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.databinding.ActivityIssueTimerBinding
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.service.IssuesService
@@ -16,6 +18,7 @@ import com.example.omegatracker.ui.activities.base.BaseActivity
 import com.example.omegatracker.ui.activities.issues.IssuesActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class IssueTimerActivity : BaseActivity(), IssueTimerView {
 
@@ -84,7 +87,7 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
     }
 
     override fun getIssuesInfo(issueId: String) {
-        val data = timerPresenter.getIssueData(issueId)
+        timerPresenter.getIssueData(issueId)
     }
 
     override fun setIssuesInfo(issue: Issue) {
@@ -96,10 +99,17 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
 
     override fun updateTimer(issue: Issue) {
         val curTime = issue.estimatedTime - issue.spentTime
-        val hours = curTime.inWholeHours
-        val minutes = curTime.inWholeMinutes.toInt() % 60
-        val seconds = curTime.inWholeSeconds.toInt() % 60
-        binding.issueTimerProgressbarTimerTv.text = "$hours:$minutes:$seconds"
+        binding.issueTimerProgressbarTimerTv.text = curTime.componentsToString()
+    }
+
+    override fun updateProgressBar(issue: Issue) {
+        val progress = (issue.spentTime / issue.estimatedTime * 100).toFloat()
+        println(progress)
+        if (progress < 100) {
+            binding.issueTimerProgressbar.setProgress(progress)
+        } else {
+            binding.issueTimerProgressbar.setProgress(progress = progress)
+        }
     }
 
     override fun bindService() {

@@ -15,25 +15,27 @@ import kotlin.time.DurationUnit
 
 class TaskManager {
 
-    //private var runningTasks: MutableMap<Issue, TaskRunner> = mutableMapOf()
-    private var runningIssues: ConcurrentHashMap<Issue, TaskRunner> = ConcurrentHashMap()
+    private var runningIssues: MutableMap<String, TaskRunner> = mutableMapOf()
 
     fun addIssue(issue: Issue) {
-        runningIssues.getOrPut(issue) { TaskRunner(issue) }
-        startIssue(issue)
+//        runningIssues.getOrPut(issue.id) { TaskRunner(issue) }
+//        startIssue(issue)
+        if (!runningIssues.containsKey(issue.id)) {
+            runningIssues[issue.id] = TaskRunner(issue)
+            startIssue(issue)
+        }
     }
 
     private fun startIssue(issue: Issue) {
-        runningIssues.getOrPut(issue) { TaskRunner(issue) }
-            .run()
+        runningIssues[issue.id]?.run()
     }
 
     fun stopIssue(issue: Issue) {
-        if (runningIssues.contains(TaskRunner(issue))) {
-            runningIssues[issue]?.issue?.isActive = false
-            runningIssues.remove(issue)
+        if (runningIssues.containsKey(issue.id)) {
+            runningIssues[issue.id]?.issue?.isActive = false
+            runningIssues.remove(issue.id)
         } else {
-            Log.d("TaskManager", "This issue is not running")
+            Log.d("Task Manager", "Task Manager does not contain this issue")
         }
     }
 
@@ -45,26 +47,26 @@ class TaskManager {
     }
 
     fun getIssuesUpdates(issue: Issue): Flow<Issue> {
-        return runningIssues.getOrPut(issue) { TaskRunner(issue) }
-            .run()
+        println(runningIssues)
+        return runningIssues[issue.id]!!.flow
     }
 
     private inner class TaskRunner(val issue: Issue) {
 
-        private val step = 1000.milliseconds
+        private val step = 1000L
+        var elapsedTime: Duration = 0.milliseconds
+        var issueStartSpentTime = issue.spentTime
+        val flow : Flow<Issue> = run()
 
         fun run(): Flow<Issue> = flow {
-            Log.d("Task Runner", " for ${issue.summary} is running")
-            var elapsedTime: Duration
-            var issueStartSpentTime = issue.spentTime
             while (issue.isActive) {
-                /*Время сервера, а не локальное время после запуска приложения*/
+                /*TODO Исправленная формула*/
                 elapsedTime = (SystemClock.elapsedRealtime() - issue.startTime).milliseconds
                 issue.spentTime = issueStartSpentTime + elapsedTime
                 emit(issue)
                 delay(step)
             }
-        }.flowOn(Dispatchers.Default)
+        }.flowOn(Dispatchers.IO)
     }
 
 }

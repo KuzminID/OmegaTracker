@@ -78,18 +78,8 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             activeIssuesType -> {
                 val item = issuesList[position]
                 holder as ActiveIssueHolder
-                if (item.spentTime != null && item.estimatedTime != null) {
-                    holder.issueTime.text =
-                        (item.estimatedTime - item.spentTime).componentsToString('ч', 'м', 'с')
-
-                    //holder.issueTime.text=((item.estimatedTime-item.spentTime).toComponents { hours, minutes, seconds, _ -> "${hours}h:${minutes}m:${seconds}s" }).toString()
-                } else if (item.estimatedTime != null) {
-                    holder.issueTime.text = item.estimatedTime.componentsToString('ч', 'м', 'с')
-                    //holder.issueTime.text=(item.estimatedTime.toComponents { hours, minutes, seconds, _ -> "${hours}h:${minutes}m:${seconds}s" }).toString()
-                } else {
-                    holder.issueTime.text = (0.minutes).componentsToString('ч', 'м', 'с')
-                    //holder.issueTime.text= (0.minutes.toComponents { hours, minutes, seconds, _ -> "${hours}h:${minutes}m:${seconds}s"}).toString()
-                }
+                holder.issueTime.text =
+                    (item.estimatedTime - item.spentTime).componentsToString('ч', 'м', 'с')
                 holder.issueDescription.text = item.projectName
                 holder.parent.setOnClickListener {
                     callback.showIssueInfoActivity(item)
@@ -99,14 +89,8 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             issuesListType -> {
                 val item = issuesList[position - 1]
                 holder as IssueHolder
-                if (item.spentTime != null && item.estimatedTime != null) {
-                    holder.remainingTime.text =
-                        (item.estimatedTime - item.spentTime).componentsToString('ч', 'м')
-                } else if (item.estimatedTime != null) {
-                    holder.remainingTime.text = item.estimatedTime.componentsToString('ч', 'м')
-                } else {
-                    holder.remainingTime.text = 0.minutes.componentsToString('ч', 'м')
-                }
+                holder.remainingTime.text =
+                    (item.estimatedTime - item.spentTime).componentsToString('ч', 'м')
                 holder.issueName.text = item.summary
                 holder.issueGroup.text = item.projectName
                 holder.openedStat.setText(item.state.stateName)
