@@ -8,10 +8,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.DurationUnit
 
 class TaskManager {
 
@@ -56,7 +54,7 @@ class TaskManager {
         private val step = 1000L
         var elapsedTime: Duration = 0.milliseconds
         var issueStartSpentTime = issue.spentTime
-        val flow : Flow<Issue> = run()
+        val flow: Flow<Issue> = run()
 
         fun run(): Flow<Issue> = flow {
             while (issue.isActive) {

@@ -1,7 +1,6 @@
 package com.example.omegatracker.data
 
 import com.example.omegatracker.entity.IssueFromJson
-import com.example.omegatracker.entity.ServerTime
 import com.example.omegatracker.entity.User
 import retrofit2.Response
 import retrofit2.http.GET

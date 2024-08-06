@@ -13,11 +13,11 @@ fun Duration.componentsToString(
     val minutes = abs(inWholeMinutes.toInt() % 60)
     val seconds = abs(inWholeSeconds.toInt() % 60)
     return "$hours" +
-            "${hoursFormat?:""}" +
+            "${hoursFormat ?: ""}" +
             ":$minutes" +
-            "${minutesFormat?:""}" +
+            "${minutesFormat ?: ""}" +
             ":$seconds" +
-            "${secondsFormat?:""}"
+            "${secondsFormat ?: ""}"
 }
 
 fun Duration.componentsToString(

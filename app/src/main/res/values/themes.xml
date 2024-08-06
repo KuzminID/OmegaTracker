@@ -6,6 +6,7 @@
     </style>
 
     <style name="Theme.OmegaTracker" parent="Base.Theme.OmegaTracker" />
+
     <style name="circularProgressBar">
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/circular_progress_bar</item>

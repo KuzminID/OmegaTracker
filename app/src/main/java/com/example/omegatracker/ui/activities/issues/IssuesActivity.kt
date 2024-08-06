@@ -5,8 +5,6 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.view.View
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.databinding.ActivityIssuesBinding
@@ -43,6 +41,7 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
             service as IssuesServiceBinder
             _serviceControllerState.value = service
         }
+
         override fun onServiceDisconnected(name: ComponentName?) {
             _serviceControllerState.value = null
         }

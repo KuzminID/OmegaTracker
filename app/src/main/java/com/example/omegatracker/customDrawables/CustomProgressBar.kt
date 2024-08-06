@@ -2,7 +2,6 @@ package com.example.omegatracker.customDrawables
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Shader
@@ -11,7 +10,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.example.omegatracker.R
 
-class CustomProgressBar@JvmOverloads constructor(
+class CustomProgressBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -25,7 +24,7 @@ class CustomProgressBar@JvmOverloads constructor(
     // Colors
     private val startColor = ContextCompat.getColor(context, R.color.yoghurt)
     private val endColor = ContextCompat.getColor(context, R.color.darkOrchid)
-    private val backgroundColor = ContextCompat.getColor(context,R.color.lavender)
+    private val backgroundColor = ContextCompat.getColor(context, R.color.lavender)
 
     // Paint objects
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {

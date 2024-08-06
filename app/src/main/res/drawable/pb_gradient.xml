@@ -5,5 +5,5 @@
         android:endColor="@color/darkOrchid"
         android:type="linear"
         android:angle="270"
-        android:useLevel="false"/>
+        android:useLevel="false" />
 </shape>

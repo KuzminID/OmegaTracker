@@ -1,22 +1,7 @@
 package com.example.omegatracker
 
-import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
-import com.example.omegatracker.entity.Issue
-import com.example.omegatracker.entity.IssueState
-import com.example.omegatracker.room.IssueEntity
-import com.example.omegatracker.room.IssuesDao
-import com.example.omegatracker.room.IssuesDatabase
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
-import junit.framework.TestCase.assertNull
-import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.time.Duration.Companion.milliseconds
 
 //  Tests class
 @RunWith(AndroidJUnit4::class)

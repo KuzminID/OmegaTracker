@@ -1,17 +1,12 @@
 package com.example.omegatracker.ui.activities.issues
 
 import android.os.SystemClock
-import android.text.format.Time
-import android.util.Log
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BasePresenter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalTime
-import java.util.Date
 
 class IssuesPresenter : BasePresenter<IssuesView>() {
     private var userRepositoryImpl = appComponent.getUserRepositoryImpl()
@@ -20,12 +15,12 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
 
     fun getIssuesList() {
         launch {
-                userRepositoryImpl.getIssuesList().collect {
-                    checkActiveIssues(it)
-                    val sortedIssues = sortIssues(it)
-                    viewState.setIssuesToRV(sortedIssues)
-                }
+            userRepositoryImpl.getIssuesList().collect {
+                checkActiveIssues(it)
+                val sortedIssues = sortIssues(it)
+                viewState.setIssuesToRV(sortedIssues)
             }
+        }
     }
 
     private fun checkActiveIssues(issues: List<Issue>) {

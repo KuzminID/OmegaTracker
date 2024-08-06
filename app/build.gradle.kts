@@ -89,5 +89,5 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     ksp("com.github.bumptech.glide:compiler:4.16.0")
 
-    implementation ("com.akexorcist:round-corner-progress-bar:2.2.1")
+    implementation("com.akexorcist:round-corner-progress-bar:2.2.1")
 }

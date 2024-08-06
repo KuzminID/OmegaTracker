@@ -1,11 +1,6 @@
 package com.example.omegatracker.data
 
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
-import android.telephony.TelephonyManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import com.example.omegatracker.OmegaTrackerApplication
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.HelperContent
@@ -52,8 +47,8 @@ class UserRepositoryImpl : UserRepository {
 
     override suspend fun getIssuesList(): Flow<List<Issue>> = flow {
         //Defining variables for current date in milliseconds and parsed issues from server
-        var dateMillis : Long = 0L
-        var parsedIssues : List<Issue> = emptyList()
+        var dateMillis: Long = 0L
+        var parsedIssues: List<Issue> = emptyList()
 
         //Getting tasks from the database has not yet received a response to the request
         val dbIssues = getAllIssuesFromDB()
@@ -66,12 +61,12 @@ class UserRepositoryImpl : UserRepository {
             val (issuesFromServer, date) = youTrackApiService.getIssuesRequest(userManager.getToken())
             dateMillis = convertStringDateToMilliseconds(date)
             parsedIssues = parseIssue(issuesFromServer)
-        } catch (e : Exception) {
-            Log.d("getIssuesList",e.toString())
+        } catch (e: Exception) {
+            Log.d("getIssuesList", e.toString())
             dateMillis = System.currentTimeMillis()
         }
 
-        appStartTime=dateMillis
+        appStartTime = dateMillis
         //TODO определить, что делать если время не пришло (способы проверки)
         compareIssues(dbIssues, parsedIssues)
 
@@ -105,6 +100,7 @@ class UserRepositoryImpl : UserRepository {
                                 field.value.minutes?.toDuration(DurationUnit.MINUTES)
                                     ?: Duration.ZERO
                             }
+
                             else -> {
                                 Duration.ZERO
                             }
@@ -118,6 +114,7 @@ class UserRepositoryImpl : UserRepository {
                                 field.value.minutes?.toDuration(DurationUnit.MINUTES)
                                     ?: Duration.ZERO
                             }
+
                             else -> {
                                 Duration.ZERO
                             }
@@ -164,24 +161,26 @@ class UserRepositoryImpl : UserRepository {
                     upsertIssueToDB(it)
                 }
             } else {
-                val updatedIssues : MutableList<Issue> = mutableListOf()
-                serverIssues.forEach { serverIssue->
-                    val currentIssue : Issue? = dbIssues.find { it.id == serverIssue.id }
+                val updatedIssues: MutableList<Issue> = mutableListOf()
+                serverIssues.forEach { serverIssue ->
+                    val currentIssue: Issue? = dbIssues.find { it.id == serverIssue.id }
                     if (currentIssue != null) {
-                        updatedIssues.add(Issue(
-                            id = serverIssue.id,
-                            description = serverIssue.description,
-                            estimatedTime = serverIssue.estimatedTime,
-                            spentTime = currentIssue.spentTime,
-                            projectName = serverIssue.projectName,
-                            projectShortName = serverIssue.projectShortName,
-                            state = currentIssue.state,
-                            summary = serverIssue.summary,
-                            //TODO убрать update time
-                            updateTime = serverIssue.updateTime,
-                            startTime = currentIssue.startTime,
-                            isActive = currentIssue.isActive
-                        ))
+                        updatedIssues.add(
+                            Issue(
+                                id = serverIssue.id,
+                                description = serverIssue.description,
+                                estimatedTime = serverIssue.estimatedTime,
+                                spentTime = currentIssue.spentTime,
+                                projectName = serverIssue.projectName,
+                                projectShortName = serverIssue.projectShortName,
+                                state = currentIssue.state,
+                                summary = serverIssue.summary,
+                                //TODO убрать update time
+                                updateTime = serverIssue.updateTime,
+                                startTime = currentIssue.startTime,
+                                isActive = currentIssue.isActive
+                            )
+                        )
                     } else {
                         updatedIssues.add(serverIssue)
                     }

@@ -9,7 +9,6 @@ import com.example.omegatracker.databinding.ItemIssueBinding
 import com.example.omegatracker.databinding.ItemIssuesHeaderBinding
 import com.example.omegatracker.databinding.ItemRvLoadingBinding
 import com.example.omegatracker.entity.Issue
-import kotlin.time.Duration.Companion.minutes
 
 class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -41,7 +40,7 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             activeIssuesType
         } else if (position == issuesList.count { it.isActive }) {
             issuesHeaderType
-        } else if (position < issuesList.size+1) {
+        } else if (position < issuesList.size + 1) {
             issuesListType
         } else {
             loadingType
@@ -150,6 +149,6 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val parent = binding.root
     }
 
-    inner class LoadingHolder(binding : ItemRvLoadingBinding) :
-            RecyclerView.ViewHolder(binding.root)
+    inner class LoadingHolder(binding: ItemRvLoadingBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

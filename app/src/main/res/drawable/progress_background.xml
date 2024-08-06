@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/lavender"/>
-    <corners android:radius="100dp"/>
+    <solid android:color="@color/lavender" />
+    <corners android:radius="100dp" />
     <size
         android:width="300dp"
         android:height="10dp" /> <!-- Измените высоту по необходимости -->

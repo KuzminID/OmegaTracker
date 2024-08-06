@@ -2,12 +2,11 @@ package com.example.omegatracker.entity
 
 import com.example.omegatracker.room.IssueEntity
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDateTime
 
 interface UserRepository {
     suspend fun authenticate(token: String, url: String): User?
 
-    fun convertStringDateToMilliseconds(date : String?) : Long
+    fun convertStringDateToMilliseconds(date: String?): Long
     suspend fun getIssuesList(): Flow<List<Issue>>
     fun getHelperData(): List<HelperContent>
     suspend fun parseIssue(issue: List<IssueFromJson>): List<Issue>

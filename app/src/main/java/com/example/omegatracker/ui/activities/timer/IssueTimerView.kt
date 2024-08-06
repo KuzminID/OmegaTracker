@@ -8,7 +8,7 @@ interface IssueTimerView : BaseView {
     fun setIssuesInfo(issue: Issue)
     fun updateTimer(issue: Issue)
 
-    fun updateProgressBar(issue : Issue)
+    fun updateProgressBar(issue: Issue)
     fun bindService()
     fun showStartBtn()
     fun showStopBtn()

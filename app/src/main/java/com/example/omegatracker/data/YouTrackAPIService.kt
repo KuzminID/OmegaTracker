@@ -2,14 +2,13 @@ package com.example.omegatracker.data
 
 import com.example.omegatracker.OmegaTrackerApplication.Companion.retrofitComponent
 import com.example.omegatracker.entity.IssueFromJson
-import com.example.omegatracker.entity.ServerTime
 import com.example.omegatracker.entity.User
 import retrofit2.Response
 
 class YouTrackAPIService {
     private lateinit var requestAPI: RequestsApi
 
-    private fun initializeRequestAPI () {
+    private fun initializeRequestAPI() {
         if (!this::requestAPI.isInitialized) {
             requestAPI = retrofitComponent.getRequestApi()
         }
