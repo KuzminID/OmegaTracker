@@ -110,9 +110,9 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         finish()
     }
 
-    override fun startIssue(issues: List<Issue>, position: Int) {
-        issuesPresenter.sortIssues(issues, position)
-        issuesPresenter.startIssue(issues[position])
+    override fun startIssue(issueEntities: List<Issue>, position: Int) {
+        issuesPresenter.sortIssues(issueEntities, position)
+        issuesPresenter.startIssue(issueEntities[position])
     }
 
     override fun showIssueInfoActivity(issue: Issue) {

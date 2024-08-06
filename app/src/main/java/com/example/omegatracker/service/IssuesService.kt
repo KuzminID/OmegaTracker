@@ -3,6 +3,7 @@ package com.example.omegatracker.service
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -14,6 +15,7 @@ import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.R
 import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.entity.Issue
+import com.example.omegatracker.ui.activities.timer.IssueTimerActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -43,6 +45,7 @@ class IssuesService : Service() {
 
         override fun stopIssue(issue: Issue) {
             taskManager.stopIssue(issue)
+            cancelNotificationForIssue(issue)
         }
 
         override fun pauseIssue(issue: Issue) {
@@ -57,11 +60,12 @@ class IssuesService : Service() {
 
         override fun stopRunningIssues() {
             taskManager.stopRunningIssues()
+            cancelAllNotifications()
         }
     }
 
     private lateinit var notificationManager: NotificationManager
-    private val notificationBuilderList: MutableMap<Int, NotificationCompat.Builder> =
+    private var notificationBuilderList: MutableMap<Int, NotificationCompat.Builder> =
         mutableMapOf()
 
     private val taskManager = appComponent.getTaskManager()
@@ -98,8 +102,22 @@ class IssuesService : Service() {
         }
     }
 
+    private fun cancelNotificationForIssue(issue : Issue) {
+        val id = issue.id.hashCode()
+        notificationManager.cancel(id)
+        notificationBuilderList.remove(id)
+    }
+
+    private fun cancelAllNotifications() {
+        notificationManager.cancelAll()
+        notificationBuilderList = mutableMapOf()
+    }
+
     private fun createNotificationForIssue(issue: Issue) {
         val id = issue.id.hashCode()
+        val intent = Intent(appComponent.getContext(), IssueTimerActivity::class.java)
+        intent.putExtra("issue_id", issue.id)
+        val pendingIntent = PendingIntent.getActivity(appComponent.getContext(), id, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val builder = NotificationCompat.Builder(appComponent.getContext(), CHANNEL_ID)
             .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_LIGHTS)
             .setVibrate(LongArray(2) { 0 })
@@ -114,6 +132,7 @@ class IssuesService : Service() {
                 }"
             )
             .setSmallIcon(R.drawable.ic_launcher_omega_tracker_round) //TODO replace icon
+            .setContentIntent(pendingIntent)
         notificationBuilderList[id] = builder
         notificationManager.notify(id, builder.build())
         // startForeground(issueEntity.id.hashCode(),notification)

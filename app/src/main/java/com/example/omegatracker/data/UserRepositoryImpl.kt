@@ -67,7 +67,6 @@ class UserRepositoryImpl : UserRepository {
         }
 
         appStartTime = dateMillis
-        //TODO определить, что делать если время не пришло (способы проверки)
         compareIssues(dbIssues, parsedIssues)
 
         var updatedData = getAllIssuesFromDB()
@@ -147,7 +146,6 @@ class UserRepositoryImpl : UserRepository {
         return data
     }
 
-    //TODO переделано сравнение
     override fun compareIssues(dbIssues: List<Issue>?, serverIssues: List<Issue>) {
         CoroutineScope(Dispatchers.IO).launch {
             if (dbIssues.isNullOrEmpty() && serverIssues.isEmpty()) {
@@ -175,7 +173,6 @@ class UserRepositoryImpl : UserRepository {
                                 projectShortName = serverIssue.projectShortName,
                                 state = currentIssue.state,
                                 summary = serverIssue.summary,
-                                //TODO убрать update time
                                 updateTime = serverIssue.updateTime,
                                 startTime = currentIssue.startTime,
                                 isActive = currentIssue.isActive

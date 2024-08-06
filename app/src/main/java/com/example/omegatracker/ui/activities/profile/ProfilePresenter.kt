@@ -29,7 +29,6 @@ class ProfilePresenter : BasePresenter<ProfileView>() {
         }
     }
 
-    //TODO добавить запрос на отправку перед выходом
     fun exitFromAccount() {
         userManager.deleteUser()
         controller.stopRunningIssues()

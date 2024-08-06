@@ -58,7 +58,6 @@ class TaskManager {
 
         fun run(): Flow<Issue> = flow {
             while (issue.isActive) {
-                /*TODO Исправленная формула*/
                 elapsedTime = (SystemClock.elapsedRealtime() - issue.startTime).milliseconds
                 issue.spentTime = issueStartSpentTime + elapsedTime
                 emit(issue)

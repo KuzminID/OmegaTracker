@@ -31,7 +31,6 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
     fun startIssue() {
         issue.isActive = true
         issue.state = IssueState.OnWork
-        //TODO исправлено
         issue.startTime = SystemClock.elapsedRealtime()
 
         controller.startIssue(issue)
