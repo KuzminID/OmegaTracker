@@ -6,7 +6,7 @@ import com.example.omegatracker.ui.activities.base.BaseView
 
 interface AuthView : BaseView {
     fun initAuthButtonListener()
-    fun showScreen(screens: Screens)
+    fun showScreen(screen: Screens)
     fun setSavedUrl(url: String)
     fun setHelperData(data: List<HelperContent>)
     fun initEditTextAction()

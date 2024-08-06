@@ -16,8 +16,6 @@ class TaskManager {
     private var runningIssues: MutableMap<String, TaskRunner> = mutableMapOf()
 
     fun addIssue(issue: Issue) {
-//        runningIssues.getOrPut(issue.id) { TaskRunner(issue) }
-//        startIssue(issue)
         if (!runningIssues.containsKey(issue.id)) {
             runningIssues[issue.id] = TaskRunner(issue)
             startIssue(issue)

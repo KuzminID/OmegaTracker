@@ -90,9 +90,9 @@ class UserRepositoryImpl : UserRepository {
     }
 
     override suspend fun parseIssue(issue: List<IssueFromJson>): List<Issue> {
-        var data: List<Issue> = issue.map {
+        var data: List<Issue> = issue.map { issueFromJson ->
             val spentTime =
-                it.customFields.find { it.type == "PeriodIssueCustomField" && it.id == "150-1" }
+                issueFromJson.customFields.find { it.type == "PeriodIssueCustomField" && it.id == "150-1" }
                     .let { field ->
                         when (field?.value) {
                             is Value.Period -> {
@@ -106,7 +106,7 @@ class UserRepositoryImpl : UserRepository {
                         }
                     }
             val estimatedTime =
-                it.customFields.find { it.type == "PeriodIssueCustomField" && it.id == "150-0" }
+                issueFromJson.customFields.find { it.type == "PeriodIssueCustomField" && it.id == "150-0" }
                     .let { field ->
                         when (field?.value) {
                             is Value.Period -> {
@@ -120,7 +120,7 @@ class UserRepositoryImpl : UserRepository {
                         }
                     }
             var isResolved: Boolean
-            val state = it.customFields.find { it.type == "StateIssueCustomField" }
+            val state = issueFromJson.customFields.find { it.type == "StateIssueCustomField" }
                 .let { field ->
                     field?.value as Value.State
                     isResolved = field.value.isResolved
@@ -131,15 +131,14 @@ class UserRepositoryImpl : UserRepository {
                     }
                 }
             Issue(
-                id = it.id,
-                summary = it.summary,
-                description = it.description,
+                id = issueFromJson.id,
+                summary = issueFromJson.summary,
+                description = issueFromJson.description,
                 spentTime = spentTime,
                 estimatedTime = estimatedTime,
-                projectShortName = it.project.shortName,
-                projectName = it.project.name,
+                projectShortName = issueFromJson.project.shortName,
+                projectName = issueFromJson.project.name,
                 state = state,
-                updateTime = it.updated
             )
         }
         data = data.filter { it.state.stateName != IssueState.Finished.stateName }
@@ -173,7 +172,6 @@ class UserRepositoryImpl : UserRepository {
                                 projectShortName = serverIssue.projectShortName,
                                 state = currentIssue.state,
                                 summary = serverIssue.summary,
-                                updateTime = serverIssue.updateTime,
                                 startTime = currentIssue.startTime,
                                 isActive = currentIssue.isActive
                             )
@@ -268,7 +266,6 @@ class UserRepositoryImpl : UserRepository {
                     it.stateName == entity.state
                 } ?: IssueState.Open,
                 entity.startTime,
-                entity.updateTime
             )
         } else {
             return null

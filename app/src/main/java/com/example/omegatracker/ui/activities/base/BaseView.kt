@@ -7,9 +7,6 @@ interface BaseView : MvpView {
     fun showMessage(msg: Int)
     fun initialization()
 
-    //fun bindService()
-
     fun setAvatar(url: String?, iv: ImageView)
 
-    //fun createIntentForChildClass(context : Context) : Intent
 }

@@ -25,6 +25,6 @@ abstract class IssuesDatabase : RoomDatabase() {
     }
 
     companion object {
-        const val DB_NAME = "issues_db.db"
+        const val DB_NAME = "issues.db"
     }
 }

@@ -22,8 +22,7 @@ open class BaseActivity : MvpAppCompatActivity(), BaseView, LifecycleObserver {
         toast.show()
         val handler = Handler()
         handler.postDelayed(
-            Runnable
-            {
+            Runnable {
                 toast.cancel()
             }, 1000
         )

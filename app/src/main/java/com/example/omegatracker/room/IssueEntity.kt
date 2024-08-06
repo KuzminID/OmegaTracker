@@ -16,7 +16,6 @@ data class IssueEntity(
     val state: Int,
     val isActive: Boolean,
     val startTime: Long,
-    val updateTime: Long
 ) {
     constructor(issue: Issue) : this(
         issue.id,
@@ -29,6 +28,5 @@ data class IssueEntity(
         issue.state.stateName,
         issue.isActive,
         issue.startTime,
-        issue.updateTime
     )
 }

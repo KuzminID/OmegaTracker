@@ -20,7 +20,6 @@ data class IssueFromJson(
     val description: String?,
     val project: Project,
     val customFields: List<CustomField>,
-    val updated: Long
 )
 
 @JsonClass(generateAdapter = true)
@@ -52,25 +51,3 @@ sealed class Value {
         val name: String? = null
     ) : Value()
 }
-
-//@JsonClass(generateAdapter = true)
-//sealed class CustomField (open val name : String?) {
-//
-//    @JsonClass(generateAdapter = true)
-//    data class IssueCustomFieldWithValue (
-//        override val name: String?,
-//        val value: Value?
-//    ) : CustomField(name)
-//
-//    @JsonClass(generateAdapter = true)
-//    data class IssueCustomFieldArrayValue (
-//        override val name : String?,
-//        val value : Array<Value>
-//    ) : CustomField(name)
-//
-//    @JsonClass(generateAdapter = true)
-//    data class DefaultIssueCustomField (
-//        override val name : String?,
-//        val value : Value?
-//    ) : CustomField(name)
-//}

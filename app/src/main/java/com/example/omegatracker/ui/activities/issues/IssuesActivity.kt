@@ -79,12 +79,12 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         }
     }
 
-    override fun updateIssueTimer(issueEntity: Issue) {
-        adapter.onIssueTimerUpdated(issueEntity)
+    override fun updateIssueTimer(issue: Issue) {
+        adapter.onIssueTimerUpdated(issue)
     }
 
-    override fun setIssuesToRV(issueEntities: List<Issue>) {
-        adapter.issuesList = issueEntities
+    override fun setIssuesToRV(issues: List<Issue>) {
+        adapter.issuesList = issues
         adapter.setCallback(this)
     }
 
@@ -95,8 +95,8 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         }
     }
 
-    override fun showScreen(screens: Screens) {
-        val intent = when (screens) {
+    override fun showScreen(screen: Screens) {
+        val intent = when (screen) {
             Screens.AuthenticationScreens ->
                 Intent(this, AuthActivity::class.java)
 

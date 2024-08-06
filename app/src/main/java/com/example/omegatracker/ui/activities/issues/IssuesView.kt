@@ -6,10 +6,10 @@ import com.example.omegatracker.ui.activities.base.BaseView
 
 interface IssuesView : BaseView {
     fun setProfileListener()
-    fun showScreen(screens: Screens)
+    fun showScreen(screen: Screens)
 
     //fun showPopUpMenu(view: View)
-    fun setIssuesToRV(issueEntities: List<Issue>)
+    fun setIssuesToRV(issues: List<Issue>)
     fun bindService()
-    fun updateIssueTimer(issueEntity: Issue)
+    fun updateIssueTimer(issue: Issue)
 }

@@ -24,5 +24,4 @@ data class Issue(
     var isActive: Boolean = false,
     var state: IssueState,
     var startTime: Long = 0L,
-    var updateTime: Long
 )

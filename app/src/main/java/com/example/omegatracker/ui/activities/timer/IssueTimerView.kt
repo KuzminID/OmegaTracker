@@ -10,10 +10,7 @@ interface IssueTimerView : BaseView {
 
     fun updateProgressBar(issue: Issue)
     fun bindService()
-    fun showStartBtn()
-    fun showStopBtn()
-    fun showPauseBtn()
-    fun hideStartBtn()
-    fun hideStopBtn()
-    fun hidePauseBtn()
+
+    fun showBtnContent(vararg buttons : IssuesButtons)
+    fun hideBtnContent(vararg buttons : IssuesButtons)
 }

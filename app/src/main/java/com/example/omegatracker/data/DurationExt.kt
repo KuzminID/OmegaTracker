@@ -8,25 +8,39 @@ fun Duration.componentsToString(
     minutesFormat: Char? = null,
     secondsFormat: Char? = null
 ): String {
-    val hours = inWholeHours.toInt()
-    val minutes = abs(inWholeMinutes.toInt() % 60)
-    val seconds = abs(inWholeSeconds.toInt() % 60)
-    return "$hours" +
-            "${hoursFormat ?: ""}" +
-            ":$minutes" +
-            "${minutesFormat ?: ""}" +
-            ":$seconds" +
-            "${secondsFormat ?: ""}"
+    return toComponents { hours, minutes, seconds, _ ->
+        // Форматируем часы
+        val formattedHours = if (seconds < 0) {
+            "-${String.format("%02d", abs(hours))}"
+        } else {
+            String.format("%02d", hours)
+        }
+
+        // Форматируем минуты и секунды
+        val formattedMinutes = String.format("%02d", abs(minutes))
+        val formattedSeconds = String.format("%02d", abs(seconds))
+
+        // Возвращаем строку с отформатированными часами, минутами и секундами
+        "$formattedHours${hoursFormat ?: ""}:$formattedMinutes${minutesFormat ?: ""}:$formattedSeconds${secondsFormat ?: ""}"
+    }
 }
 
 fun Duration.componentsToString(
     hoursFormat: Char,
     minutesFormat: Char
 ): String {
-    val hours = inWholeHours.toInt()
-    val minutes = abs(inWholeMinutes.toInt() % 60)
-    return "$hours" +
-            "$hoursFormat" +
-            ":$minutes" +
-            "$minutesFormat"
+    return toComponents { hours, minutes, _, _ ->
+        // Форматируем часы
+        val formattedHours = if (hours < 0) {
+            "-${String.format("%02d", abs(hours))}"
+        } else {
+            String.format("%02d", hours)
+        }
+
+        // Форматируем минуты
+        val formattedMinutes = String.format("%02d", minutes)
+
+        // Возвращаем строку с отформатированными часами и минутами
+        "$formattedHours$hoursFormat:$formattedMinutes$minutesFormat"
+    }
 }

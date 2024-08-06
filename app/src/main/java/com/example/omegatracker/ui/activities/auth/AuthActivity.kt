@@ -55,8 +55,8 @@ class AuthActivity : BaseActivity(), AuthView {
         }
     }
 
-    override fun showScreen(screens: Screens) {
-        val intent = when (screens) {
+    override fun showScreen(screen: Screens) {
+        val intent = when (screen) {
             Screens.AuthenticationScreens ->
                 Intent(this, AuthActivity::class.java)
 

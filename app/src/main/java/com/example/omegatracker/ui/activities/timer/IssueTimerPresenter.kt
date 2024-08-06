@@ -74,12 +74,10 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
                 false,
                 IssueState.Open,
                 0,
-                0
             )
             if (issue.isActive) {
-                viewState.hideStartBtn()
-                viewState.showStopBtn()
-                viewState.showPauseBtn()
+                viewState.showBtnContent(IssuesButtons.StopBtn,IssuesButtons.PauseBtn)
+                viewState.hideBtnContent(IssuesButtons.StartBtn)
                 observeIssueTimer()
             }
             viewState.setIssuesInfo(issue)
