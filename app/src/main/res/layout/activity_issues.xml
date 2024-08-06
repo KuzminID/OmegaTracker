@@ -9,7 +9,7 @@
     tools:context=".ui.activities.issues.IssuesActivity">
 
     <LinearLayout
-        android:id="@id/issues_header_container"
+        android:id="@+id/issues_header_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
@@ -55,14 +55,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@color/issues_bg_color"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/issues_header_container"
         tools:listitem="@layout/item_issue" />
 
 </LinearLayout>

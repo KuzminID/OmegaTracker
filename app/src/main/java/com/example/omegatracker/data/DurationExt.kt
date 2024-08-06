@@ -3,6 +3,7 @@ package com.example.omegatracker.data
 import kotlin.math.abs
 import kotlin.time.Duration
 
+//TODO переделать через Duration.toComponents
 fun Duration.componentsToString(
     hoursFormat: Char? = null,
     minutesFormat: Char? = null,

@@ -60,6 +60,8 @@ class UserRepositoryImpl : UserRepository {
         if (dbIssues.isNotEmpty()) {
             emit(dbIssues)
         }
+
+        //Getting tasks and current date from server
         try {
             val (issuesFromServer, date) = youTrackApiService.getIssuesRequest(userManager.getToken())
             dateMillis = convertStringDateToMilliseconds(date)
@@ -74,11 +76,18 @@ class UserRepositoryImpl : UserRepository {
         compareIssues(dbIssues, parsedIssues)
 
         var updatedData = getAllIssuesFromDB()
-        while (updatedData.isEmpty()) {
+        for (i in 0..10) {
             kotlinx.coroutines.delay(1000)
             updatedData = getAllIssuesFromDB()
+            if (updatedData.isNotEmpty()) {
+                break
+            }
         }
-        emit(updatedData)
+        if (updatedData.isNotEmpty()) {
+            emit(updatedData)
+        } else {
+            emit(emptyList())
+        }
 
     }.flowOn(Dispatchers.IO)
 
@@ -141,30 +150,66 @@ class UserRepositoryImpl : UserRepository {
         return data
     }
 
-    //TODO переделать сравнение
+    //TODO переделано сравнение
     override fun compareIssues(dbIssues: List<Issue>?, serverIssues: List<Issue>) {
         CoroutineScope(Dispatchers.IO).launch {
-            if (!dbIssues.isNullOrEmpty()) {
-                val updatedIssues = mutableListOf<Issue>()
-                serverIssues.forEach { serverIssue ->
-                    val curIssue: Issue? = dbIssues.find { it.id == serverIssue.id }
-                    if (curIssue != null) {
-                        if (curIssue.updateTime > serverIssue.updateTime) {
-                            updatedIssues.add(curIssue)
-                        } else {
-                            updatedIssues.add(serverIssue)
-                        }
-                    }
-                }
-                updatedIssues.forEach {
-                    upsertIssueToDB(it)
-                }
-            } else {
+            if (dbIssues.isNullOrEmpty() && serverIssues.isEmpty()) {
+                return@launch
+            } else if (dbIssues.isNullOrEmpty()) {
                 serverIssues.forEach {
                     upsertIssueToDB(it)
                 }
+            } else if (serverIssues.isEmpty()) {
+                dbIssues.forEach {
+                    upsertIssueToDB(it)
+                }
+            } else {
+                val updatedIssues : MutableList<Issue> = mutableListOf()
+                serverIssues.forEach { serverIssue->
+                    val currentIssue : Issue? = dbIssues.find { it.id == serverIssue.id }
+                    if (currentIssue != null) {
+                        updatedIssues.add(Issue(
+                            id = serverIssue.id,
+                            description = serverIssue.description,
+                            estimatedTime = serverIssue.estimatedTime,
+                            spentTime = currentIssue.spentTime,
+                            projectName = serverIssue.projectName,
+                            projectShortName = serverIssue.projectShortName,
+                            state = currentIssue.state,
+                            summary = serverIssue.summary,
+                            //TODO убрать update time
+                            updateTime = serverIssue.updateTime,
+                            startTime = currentIssue.startTime,
+                            isActive = currentIssue.isActive
+                        ))
+                    } else {
+                        updatedIssues.add(serverIssue)
+                    }
+                }
             }
         }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            if (!dbIssues.isNullOrEmpty()) {
+//                val updatedIssues = mutableListOf<Issue>()
+//                serverIssues.forEach { serverIssue ->
+//                    val curIssue: Issue? = dbIssues.find { it.id == serverIssue.id }
+//                    if (curIssue != null) {
+//                        if (curIssue.updateTime > serverIssue.updateTime) {
+//                            updatedIssues.add(curIssue)
+//                        } else {
+//                            updatedIssues.add(serverIssue)
+//                        }
+//                    }
+//                }
+//                updatedIssues.forEach {
+//                    upsertIssueToDB(it)
+//                }
+//            } else {
+//                serverIssues.forEach {
+//                    upsertIssueToDB(it)
+//                }
+//            }
+//        }
     }
 
     override suspend fun upsertIssueToDB(issue: Issue) {

@@ -15,7 +15,6 @@ import java.util.Date
 
 class IssuesPresenter : BasePresenter<IssuesView>() {
     private var userRepositoryImpl = appComponent.getUserRepositoryImpl()
-    private var customUserManager = appComponent.getUserManager()
     private lateinit var controller: IssuesServiceBinder
     private val observableIssues = mutableMapOf<String, Job>()
 
@@ -48,8 +47,7 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     }
 
     fun startIssue(issue: Issue) {
-        val job = launch {
-            //TODO исправлено
+        launch {
             issue.startTime = SystemClock.elapsedRealtime()
         }.invokeOnCompletion {
             launch {

@@ -7,6 +7,7 @@ import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.databinding.ItemActiveIssueBinding
 import com.example.omegatracker.databinding.ItemIssueBinding
 import com.example.omegatracker.databinding.ItemIssuesHeaderBinding
+import com.example.omegatracker.databinding.ItemRvLoadingBinding
 import com.example.omegatracker.entity.Issue
 import kotlin.time.Duration.Companion.minutes
 
@@ -23,6 +24,7 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val activeIssuesType = 0
     private val issuesHeaderType = 1
     private val issuesListType = 2
+    private val loadingType = 3
 
     fun setCallback(callback: IssuesCallback) {
         this.callback = callback
@@ -39,8 +41,10 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             activeIssuesType
         } else if (position == issuesList.count { it.isActive }) {
             issuesHeaderType
-        } else {
+        } else if (position < issuesList.size+1) {
             issuesListType
+        } else {
+            loadingType
         }
     }
 
@@ -62,13 +66,22 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 return IssueHolder(binding)
             }
 
-            else -> {
+            issuesHeaderType -> {
                 val binding = ItemIssuesHeaderBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
                 )
                 return IssuesHeaderHolder(binding)
+            }
+
+            else -> {
+                val binding = ItemRvLoadingBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                return LoadingHolder(binding)
             }
         }
     }
@@ -109,7 +122,7 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return if (issuesList.isNotEmpty()) {
             issuesList.size + 1
         } else {
-            0
+            2
         }
     }
 
@@ -136,4 +149,7 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val remainingTime = binding.itemRemainingTime
         val parent = binding.root
     }
+
+    inner class LoadingHolder(binding : ItemRvLoadingBinding) :
+            RecyclerView.ViewHolder(binding.root)
 }
