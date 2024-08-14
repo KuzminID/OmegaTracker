@@ -9,18 +9,18 @@ fun Duration.componentsToString(
     secondsFormat: Char? = null
 ): String {
     return toComponents { hours, minutes, seconds, _ ->
-        // Форматируем часы
-        val formattedHours = if (seconds < 0) {
+        // hours formatting
+        val formattedHours = if (seconds < 0 || minutes < 0) {
             "-${String.format("%02d", abs(hours))}"
         } else {
             String.format("%02d", hours)
         }
 
-        // Форматируем минуты и секунды
+        // minutes and seconds formatting
         val formattedMinutes = String.format("%02d", abs(minutes))
         val formattedSeconds = String.format("%02d", abs(seconds))
 
-        // Возвращаем строку с отформатированными часами, минутами и секундами
+        // returning string that contains formatted time including hours, minutes and seconds
         "$formattedHours${hoursFormat ?: ""}:$formattedMinutes${minutesFormat ?: ""}:$formattedSeconds${secondsFormat ?: ""}"
     }
 }
@@ -30,17 +30,14 @@ fun Duration.componentsToString(
     minutesFormat: Char
 ): String {
     return toComponents { hours, minutes, _, _ ->
-        // Форматируем часы
         val formattedHours = if (hours < 0) {
             "-${String.format("%02d", abs(hours))}"
         } else {
             String.format("%02d", hours)
         }
-
-        // Форматируем минуты
         val formattedMinutes = String.format("%02d", minutes)
 
-        // Возвращаем строку с отформатированными часами и минутами
+        // returning string that contains formatted time including hours and minutes
         "$formattedHours$hoursFormat:$formattedMinutes$minutesFormat"
     }
 }

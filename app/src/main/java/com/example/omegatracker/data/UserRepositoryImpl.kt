@@ -180,6 +180,9 @@ class UserRepositoryImpl : UserRepository {
                         updatedIssues.add(serverIssue)
                     }
                 }
+                updatedIssues.forEach {
+                    upsertIssueToDB(it)
+                }
             }
         }
 //        CoroutineScope(Dispatchers.IO).launch {

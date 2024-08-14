@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.R
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import javax.inject.Singleton
+import kotlin.NullPointerException
 import kotlin.time.Duration.Companion.milliseconds
 
 interface IssuesServiceBinder {
@@ -44,8 +46,8 @@ class IssuesService : Service() {
         }
 
         override fun stopIssue(issue: Issue) {
-            taskManager.stopIssue(issue)
             cancelNotificationForIssue(issue)
+            taskManager.stopIssue(issue)
         }
 
         override fun pauseIssue(issue: Issue) {
@@ -106,11 +108,15 @@ class IssuesService : Service() {
         val id = issue.id.hashCode()
         notificationManager.cancel(id)
         notificationBuilderList.remove(id)
+        if (notificationBuilderList.isEmpty()) {
+            stopForeground(true)
+        }
     }
 
     private fun cancelAllNotifications() {
         notificationManager.cancelAll()
         notificationBuilderList = mutableMapOf()
+        stopForeground(true)
     }
 
     private fun createNotificationForIssue(issue: Issue) {
@@ -122,6 +128,7 @@ class IssuesService : Service() {
             .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_LIGHTS)
             .setVibrate(LongArray(2) { 0 })
             .setContentTitle(issue.summary)
+            .setOngoing(true)
             .setContentText(
                 "Remaining Time : ${
                     (issue.estimatedTime - issue.spentTime).componentsToString(
@@ -134,13 +141,14 @@ class IssuesService : Service() {
             .setSmallIcon(R.drawable.ic_launcher_omega_tracker_round) //TODO replace icon
             .setContentIntent(pendingIntent)
         notificationBuilderList[id] = builder
-        notificationManager.notify(id, builder.build())
-        // startForeground(issueEntity.id.hashCode(),notification)
+        val notification = builder.build()
+        notificationManager.notify(id, notification)
+        startForeground(issue.id.hashCode(),notification)
     }
 
     @OptIn(FlowPreview::class)
     fun collectIssueUpdates(flow: Flow<Issue>) {
-        val updateDelay = 60000.milliseconds
+        val updateDelay = 1000.milliseconds
         serviceScope.launch {
             flow.sample(updateDelay).collect {
                 updateNotifications(it)
@@ -151,20 +159,25 @@ class IssuesService : Service() {
     private fun updateNotifications(updatedIssue: Issue) {
         val id = updatedIssue.id.hashCode()
         val notificationBuilder = notificationBuilderList[id]
-        serviceScope.launch {
-            notificationBuilder
-                ?.setContentText(
-                    "Remaining Time : ${
-                        (updatedIssue.estimatedTime - updatedIssue.spentTime).componentsToString(
-                            'ч',
-                            'м',
-                            'с'
-                        )
-                    }"
+        val notification = notificationBuilder?.build()
+        if (notification!=null) {
+            serviceScope.launch {
+                notificationBuilder
+                    .setContentText(
+                        "Remaining Time : ${
+                            (updatedIssue.estimatedTime - updatedIssue.spentTime).componentsToString(
+                                'ч',
+                                'м',
+                                'с'
+                            )
+                        }"
+                    )
+                notificationManager.notify(
+                    id, notificationBuilder.build()
                 )
-            notificationManager.notify(
-                id, notificationBuilder?.build()
-            )
+            }
+        } else {
+            Log.d("Update Notification Fun", "notification was null")
         }
     }
 

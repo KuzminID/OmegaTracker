@@ -121,7 +121,6 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
             } else {
                 ((issue.estimatedTime - issue.spentTime)/issue.estimatedTime * 100).toFloat()
             }
-        println(progress)
         if (progress < 100) {
             binding.issueTimerProgressbar.setProgress(progress)
         } else {
