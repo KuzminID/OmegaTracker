@@ -9,12 +9,20 @@ import com.example.omegatracker.databinding.ItemIssueBinding
 import com.example.omegatracker.databinding.ItemIssuesHeaderBinding
 import com.example.omegatracker.databinding.ItemRvLoadingBinding
 import com.example.omegatracker.entity.Issue
+import com.example.omegatracker.entity.IssuesFilterType
 
 class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var callback: IssuesCallback
 
     var issuesList = emptyList<Issue>()
+        set(value) {
+            field = value
+            issuesListFiltered = value
+            notifyDataSetChanged()
+        }
+
+    private var issuesListFiltered = emptyList<Issue>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -25,22 +33,28 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val issuesListType = 2
     private val loadingType = 3
 
+    private var currentFilterType = IssuesFilterType.All
+    var filterData = emptyList<IssuesFilterType>()
+        set(value) {
+            field = value
+        }
+
     fun setCallback(callback: IssuesCallback) {
         this.callback = callback
     }
 
-    fun onIssueTimerUpdated(issueEntity: Issue) {
-        val position: Int = issuesList.indexOfFirst { it.id == issueEntity.id }
-        issuesList[position].spentTime = issueEntity.spentTime
+    fun onIssueTimerUpdated(issue: Issue) {
+        val position: Int = issuesListFiltered.indexOfFirst { it.id == issue.id }
+        issuesListFiltered[position].spentTime = issue.spentTime
         notifyItemChanged(position)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position < issuesList.count { it.isActive }) {
+        return if (position < issuesListFiltered.count { it.isActive }) {
             activeIssuesType
-        } else if (position == issuesList.count { it.isActive }) {
+        } else if (position == issuesListFiltered.count { it.isActive }) {
             issuesHeaderType
-        } else if (position < issuesList.size + 1) {
+        } else if (position < issuesListFiltered.size + 1) {
             issuesListType
         } else {
             loadingType
@@ -88,7 +102,7 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             activeIssuesType -> {
-                val item = issuesList[position]
+                val item = issuesListFiltered[position]
                 holder as ActiveIssueHolder
                 holder.issueTime.text =
                     (item.estimatedTime - item.spentTime).componentsToString('ч', 'м', 'с')
@@ -98,8 +112,28 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 }
             }
 
+            issuesHeaderType -> {
+                holder as IssuesHeaderHolder
+                holder.filterBtn.setOnClickListener {
+                    val item : IssuesFilterType
+                    when (currentFilterType) {
+                        IssuesFilterType.Today -> {
+                            currentFilterType = IssuesFilterType.All
+                            item = filterData[0]
+                        }
+                        IssuesFilterType.All -> {
+                            currentFilterType = IssuesFilterType.Today
+                            item = filterData[1]
+                        }
+                    }
+                    issuesListFiltered = callback.filterIssuesByType(currentFilterType,issuesList)
+                    holder.filterBtn.setText(item.btnText)
+                    holder.header.setText(item.headerText)
+                }
+            }
+
             issuesListType -> {
-                val item = issuesList[position - 1]
+                val item = issuesListFiltered[position - 1]
                 holder as IssueHolder
                 holder.remainingTime.text =
                     (item.estimatedTime - item.spentTime).componentsToString('ч', 'м')
@@ -118,8 +152,8 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return if (issuesList.isNotEmpty()) {
-            issuesList.size + 1
+        return if (issuesListFiltered.isNotEmpty()) {
+            issuesListFiltered.size + 1
         } else {
             2
         }
@@ -136,7 +170,10 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     inner class IssuesHeaderHolder(binding: ItemIssuesHeaderBinding) :
-        RecyclerView.ViewHolder(binding.root)
+        RecyclerView.ViewHolder(binding.root) {
+            val filterBtn = binding.changeIssuesFilter
+            val header = binding.activeIssuesListHeader
+        }
 
     inner class IssueHolder(binding: ItemIssueBinding) :
         RecyclerView.ViewHolder(binding.root) {

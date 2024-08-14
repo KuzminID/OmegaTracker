@@ -7,10 +7,10 @@
     <string name="successful_auth">Авторизация успешна.</string>
     <string name="issues_title">Задачи</string>
     <string name="welcome_msg">Добро пожаловать </string>
-    <string name="issues_list_show_current">Сегодня</string>
-    <string name="issues_list_stat_show_all">Смотреть всё</string>
-    <string name="issues_list_stat_all">Все задания</string>
-    <string name="issues_list_stat_current">Смотреть на сегодня</string>
+    <string name="issues_header_show_current">Сегодня</string>
+    <string name="issues_header_show_all">Смотреть всё</string>
+    <string name="issues_btn_show_all">Все задания</string>
+    <string name="issues_btn_show_current">Смотреть на сегодня</string>
     <string name="bottom_sheet_auth_text">Как получить токен</string>
     <string name="auth_token_tint">Введите токен</string>
     <string name="auth_button_text">Войти</string>

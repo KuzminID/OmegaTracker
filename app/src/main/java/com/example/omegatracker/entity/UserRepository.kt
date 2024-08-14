@@ -8,6 +8,8 @@ interface UserRepository {
 
     fun convertStringDateToMilliseconds(date: String?): Long
     suspend fun getIssuesList(): Flow<List<Issue>>
+
+    fun getIssuesHeaderData() : List<IssuesFilterType>
     fun getHelperData(): List<HelperContent>
     suspend fun parseIssue(issue: List<IssueFromJson>): List<Issue>
     fun compareIssues(dbIssues: List<Issue>?, serverIssues: List<Issue>)
@@ -20,6 +22,8 @@ interface UserRepository {
     suspend fun deactivateIssue(issue: Issue)
 
     suspend fun clearDB()
+
+    fun checkIsTimeToday(time : Long) : Boolean
 
     suspend fun deactivateAllIssues()
     fun convertFromEntityToIssue(entity: IssueEntity?): Issue?

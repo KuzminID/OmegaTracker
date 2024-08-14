@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.databinding.ActivityIssuesBinding
 import com.example.omegatracker.entity.Issue
+import com.example.omegatracker.entity.IssuesFilterType
 import com.example.omegatracker.entity.Screens
 import com.example.omegatracker.service.IssuesService
 import com.example.omegatracker.service.IssuesServiceBinder
@@ -23,6 +24,8 @@ import kotlinx.coroutines.launch
 interface IssuesCallback {
     fun startIssue(issueEntities: List<Issue>, position: Int)
     fun showIssueInfoActivity(issueEntity: Issue)
+
+    fun filterIssuesByType(filterType: IssuesFilterType, issues : List<Issue>) : List<Issue>
 }
 
 class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
@@ -110,6 +113,10 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         finish()
     }
 
+    override fun setFilterData(data: List<IssuesFilterType>) {
+        adapter.filterData = data
+    }
+
     override fun startIssue(issueEntities: List<Issue>, position: Int) {
         issuesPresenter.sortIssues(issueEntities, position)
         issuesPresenter.startIssue(issueEntities[position])
@@ -119,5 +126,9 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         val intent = Intent(this, IssueTimerActivity::class.java)
         intent.putExtra("issue_id", issue.id)
         startActivity(intent)
+    }
+
+    override fun filterIssuesByType(filterType: IssuesFilterType, issues: List<Issue>) : List<Issue> {
+        return issuesPresenter.filterIssuesByType(filterType, issues)
     }
 }

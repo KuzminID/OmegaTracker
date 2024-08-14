@@ -3,6 +3,7 @@ package com.example.omegatracker.ui.activities.issues
 import android.os.SystemClock
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
+import com.example.omegatracker.entity.IssuesFilterType
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BasePresenter
 import kotlinx.coroutines.Job
@@ -15,11 +16,16 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
 
     fun getIssuesList() {
         launch {
+            try {
+                viewState.setFilterData(userRepositoryImpl.getIssuesHeaderData())
             userRepositoryImpl.getIssuesList().collect {
                 checkActiveIssues(it)
                 val sortedIssues = sortIssues(it)
                 viewState.setIssuesToRV(sortedIssues)
             }
+        } catch (e : Exception) {
+            throw e
+        }
         }
     }
 
@@ -75,5 +81,19 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
 
     private fun sortIssues(issues: List<Issue>): List<Issue> {
         return issues.sortedByDescending { it.isActive }
+    }
+
+    fun filterIssuesByType(filterType: IssuesFilterType, issues : List<Issue>) : List<Issue> {
+        return when (filterType) {
+            IssuesFilterType.All -> {
+                issues
+            }
+
+            IssuesFilterType.Today -> {
+                issues.filter {
+                    userRepositoryImpl.checkIsTimeToday(it.created) || it.isActive
+                }
+            }
+        }
     }
 }

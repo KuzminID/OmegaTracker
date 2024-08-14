@@ -74,6 +74,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
                 false,
                 IssueState.Open,
                 0,
+                created = 0
             )
             if (issue.isActive) {
                 viewState.showBtnContent(IssuesButtons.StopBtn,IssuesButtons.PauseBtn)

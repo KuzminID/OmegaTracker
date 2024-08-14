@@ -1,12 +1,14 @@
 package com.example.omegatracker.data
 
-import android.util.Log
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.omegatracker.OmegaTrackerApplication
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.HelperContent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssueFromJson
 import com.example.omegatracker.entity.IssueState
+import com.example.omegatracker.entity.IssuesFilterType
 import com.example.omegatracker.entity.User
 import com.example.omegatracker.entity.UserRepository
 import com.example.omegatracker.entity.Value
@@ -17,9 +19,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.util.Date
 import java.util.Locale
-import kotlin.properties.Delegates
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -29,7 +33,7 @@ class UserRepositoryImpl : UserRepository {
     private val youTrackApiService = appComponent.getYouTrackApiService()
     private val userManager = appComponent.getUserManager()
     private val issuesDao = appComponent.getIssuesDao()
-    private var appStartTime by Delegates.notNull<Long>()
+    private var appStartTime : Long = 0L
 
     override suspend fun authenticate(token: String, url: String): User {
         OmegaTrackerApplication.setBaseUrl(url)
@@ -47,7 +51,6 @@ class UserRepositoryImpl : UserRepository {
 
     override suspend fun getIssuesList(): Flow<List<Issue>> = flow {
         //Defining variables for current date in milliseconds and parsed issues from server
-        var dateMillis: Long = 0L
         var parsedIssues: List<Issue> = emptyList()
 
         //Getting tasks from the database has not yet received a response to the request
@@ -56,17 +59,15 @@ class UserRepositoryImpl : UserRepository {
             emit(dbIssues)
         }
 
-        //Getting tasks and current date from server
         try {
             val (issuesFromServer, date) = youTrackApiService.getIssuesRequest(userManager.getToken())
-            dateMillis = convertStringDateToMilliseconds(date)
+            appStartTime = convertStringDateToMilliseconds(date)
             parsedIssues = parseIssue(issuesFromServer)
+            println(parsedIssues)
         } catch (e: Exception) {
-            Log.d("getIssuesList", e.toString())
-            dateMillis = System.currentTimeMillis()
+            appStartTime = System.currentTimeMillis()
         }
 
-        appStartTime = dateMillis
         compareIssues(dbIssues, parsedIssues)
 
         var updatedData = getAllIssuesFromDB()
@@ -78,15 +79,23 @@ class UserRepositoryImpl : UserRepository {
             }
         }
         if (updatedData.isNotEmpty()) {
+            updatedData.forEach {
+                println(it.summary + checkIsTimeToday(it.created))
+            }
             emit(updatedData)
         } else {
             emit(emptyList())
+            throw UnknownHostException()
         }
 
     }.flowOn(Dispatchers.IO)
 
     override fun getHelperData(): List<HelperContent> {
         return HelperContent.entries
+    }
+
+    override fun getIssuesHeaderData() : List<IssuesFilterType> {
+        return IssuesFilterType.entries
     }
 
     override suspend fun parseIssue(issue: List<IssueFromJson>): List<Issue> {
@@ -130,6 +139,7 @@ class UserRepositoryImpl : UserRepository {
                         IssueState.Open
                     }
                 }
+            val created = issueFromJson.created
             Issue(
                 id = issueFromJson.id,
                 summary = issueFromJson.summary,
@@ -139,6 +149,7 @@ class UserRepositoryImpl : UserRepository {
                 projectShortName = issueFromJson.project.shortName,
                 projectName = issueFromJson.project.name,
                 state = state,
+                created = created
             )
         }
         data = data.filter { it.state.stateName != IssueState.Finished.stateName }
@@ -173,7 +184,8 @@ class UserRepositoryImpl : UserRepository {
                                 state = currentIssue.state,
                                 summary = serverIssue.summary,
                                 startTime = currentIssue.startTime,
-                                isActive = currentIssue.isActive
+                                isActive = currentIssue.isActive,
+                                created = serverIssue.created,
                             )
                         )
                     } else {
@@ -185,28 +197,6 @@ class UserRepositoryImpl : UserRepository {
                 }
             }
         }
-//        CoroutineScope(Dispatchers.IO).launch {
-//            if (!dbIssues.isNullOrEmpty()) {
-//                val updatedIssues = mutableListOf<Issue>()
-//                serverIssues.forEach { serverIssue ->
-//                    val curIssue: Issue? = dbIssues.find { it.id == serverIssue.id }
-//                    if (curIssue != null) {
-//                        if (curIssue.updateTime > serverIssue.updateTime) {
-//                            updatedIssues.add(curIssue)
-//                        } else {
-//                            updatedIssues.add(serverIssue)
-//                        }
-//                    }
-//                }
-//                updatedIssues.forEach {
-//                    upsertIssueToDB(it)
-//                }
-//            } else {
-//                serverIssues.forEach {
-//                    upsertIssueToDB(it)
-//                }
-//            }
-//        }
     }
 
     override suspend fun upsertIssueToDB(issue: Issue) {
@@ -250,6 +240,12 @@ class UserRepositoryImpl : UserRepository {
         issuesDao.deleteAll()
     }
 
+    override fun checkIsTimeToday(time: Long) : Boolean {
+        val createdTime = Date(time)
+        val currentTime = Date(appStartTime)
+        return (createdTime.day == currentTime.day)
+    }
+
     override suspend fun deactivateAllIssues() {
         issuesDao.deactivateAllIssues()
     }
@@ -269,6 +265,7 @@ class UserRepositoryImpl : UserRepository {
                     it.stateName == entity.state
                 } ?: IssueState.Open,
                 entity.startTime,
+                entity.created,
             )
         } else {
             return null

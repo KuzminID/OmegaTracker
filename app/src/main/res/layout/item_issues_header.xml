@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:fontFamily="@font/rubik_medium"
-            android:text="@string/issues_list_stat_current"
+            android:text="@string/issues_header_show_all"
             android:textColor="@color/black"
             android:textSize="24sp" />
 
@@ -32,12 +32,12 @@
             android:layout_weight="3" />
 
         <Button
-            android:id="@+id/change_issues_btn"
+            android:id="@+id/change_issues_filter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
             android:backgroundTint="@color/white"
-            android:text="@string/issues_list_stat_show_all"
+            android:text="@string/issues_btn_show_current"
             android:textAlignment="viewEnd"
             android:textColor="@color/black" />
 
