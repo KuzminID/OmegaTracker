@@ -19,7 +19,7 @@ class CustomProgressBar @JvmOverloads constructor(
     // Attributes
     private var progress = 0f
     private var maxProgress = 100f
-    private val strokeWidth = 75f
+    private val strokeWidth = 60f
 
     // Colors
     private val startColor = ContextCompat.getColor(context, R.color.yoghurt)

@@ -38,6 +38,6 @@ fun Duration.componentsToString(
         val formattedMinutes = String.format("%02d", minutes)
 
         // returning string that contains formatted time including hours and minutes
-        "$formattedHours$hoursFormat:$formattedMinutes$minutesFormat"
+        "$formattedHours$hoursFormat $formattedMinutes$minutesFormat"
     }
 }

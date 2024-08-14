@@ -75,7 +75,7 @@
         android:id="@+id/issue_timer_progressbar_timer_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="40sp"
 
         android:text="@string/zero_timer"
         app:layout_constraintTop_toTopOf="@id/issue_timer_progressbar"
