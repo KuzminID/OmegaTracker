@@ -7,6 +7,7 @@ import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.databinding.ItemActiveIssueBinding
 import com.example.omegatracker.databinding.ItemIssueBinding
 import com.example.omegatracker.databinding.ItemIssuesHeaderBinding
+import com.example.omegatracker.databinding.ItemRvEmptyTodayListBinding
 import com.example.omegatracker.databinding.ItemRvLoadingBinding
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssuesFilterType
@@ -19,7 +20,6 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         set(value) {
             field = value
             issuesListFiltered = value
-            notifyDataSetChanged()
         }
 
     private var issuesListFiltered = emptyList<Issue>()
@@ -32,6 +32,7 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val issuesHeaderType = 1
     private val issuesListType = 2
     private val loadingType = 3
+    private val emptyTodayListType = 4
 
     private var currentFilterType = IssuesFilterType.All
     var filterData = emptyList<IssuesFilterType>()
@@ -54,8 +55,14 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             activeIssuesType
         } else if (position == issuesListFiltered.count { it.isActive }) {
             issuesHeaderType
-        } else if (position < issuesListFiltered.size + 1) {
+        } else if (position < issuesListFiltered.size + 1 && issuesListFiltered.size != issuesListFiltered.count { it.isActive }) {
             issuesListType
+        } else if (
+            (issuesListFiltered.isEmpty() || issuesListFiltered.size == issuesListFiltered.count { it.isActive })
+            && currentFilterType == IssuesFilterType.Today)
+        {
+            println(1)
+            emptyTodayListType
         } else {
             loadingType
         }
@@ -88,13 +95,21 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 return IssuesHeaderHolder(binding)
             }
 
-            else -> {
+            loadingType -> {
                 val binding = ItemRvLoadingBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
                 )
                 return LoadingHolder(binding)
+            }
+            else -> {
+                val binding = ItemRvEmptyTodayListBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                return EmptyTodayListHolder(binding)
             }
         }
     }
@@ -153,8 +168,12 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return if (issuesListFiltered.isNotEmpty()) {
-            issuesListFiltered.size + 1
-        } else {
+            if (issuesListFiltered.size == issuesListFiltered.count { it.isActive }) {
+                issuesListFiltered.size+2
+            } else {
+                issuesListFiltered.size + 1
+            }
+            } else {
             2
         }
     }
@@ -188,4 +207,7 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class LoadingHolder(binding: ItemRvLoadingBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    inner class EmptyTodayListHolder(binding : ItemRvEmptyTodayListBinding) :
+            RecyclerView.ViewHolder(binding.root)
 }

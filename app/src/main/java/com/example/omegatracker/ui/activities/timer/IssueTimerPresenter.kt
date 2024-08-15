@@ -4,6 +4,7 @@ import android.os.SystemClock
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssueState
+import com.example.omegatracker.entity.IssueButtonsAction
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BasePresenter
 import kotlinx.coroutines.launch
@@ -77,8 +78,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
                 created = 0
             )
             if (issue.isActive) {
-                viewState.showBtnContent(IssuesButtons.StopBtn,IssuesButtons.PauseBtn)
-                viewState.hideBtnContent(IssuesButtons.StartBtn)
+                viewState.actionChanged(IssueButtonsAction.StartAction)
                 observeIssueTimer()
             }
             viewState.setIssuesInfo(issue)

@@ -1,6 +1,7 @@
 package com.example.omegatracker.ui.activities.timer
 
 import com.example.omegatracker.entity.Issue
+import com.example.omegatracker.entity.IssueButtonsAction
 import com.example.omegatracker.ui.activities.base.BaseView
 
 interface IssueTimerView : BaseView {
@@ -11,6 +12,5 @@ interface IssueTimerView : BaseView {
     fun updateProgressBar(issue: Issue)
     fun bindService()
 
-    fun showBtnContent(vararg buttons : IssuesButtons)
-    fun hideBtnContent(vararg buttons : IssuesButtons)
+    fun actionChanged(action : IssueButtonsAction)
 }

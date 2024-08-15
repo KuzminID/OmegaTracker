@@ -63,7 +63,6 @@ class UserRepositoryImpl : UserRepository {
             val (issuesFromServer, date) = youTrackApiService.getIssuesRequest(userManager.getToken())
             appStartTime = convertStringDateToMilliseconds(date)
             parsedIssues = parseIssue(issuesFromServer)
-            println(parsedIssues)
         } catch (e: Exception) {
             appStartTime = System.currentTimeMillis()
         }
@@ -79,9 +78,6 @@ class UserRepositoryImpl : UserRepository {
             }
         }
         if (updatedData.isNotEmpty()) {
-            updatedData.forEach {
-                println(it.summary + checkIsTimeToday(it.created))
-            }
             emit(updatedData)
         } else {
             emit(emptyList())

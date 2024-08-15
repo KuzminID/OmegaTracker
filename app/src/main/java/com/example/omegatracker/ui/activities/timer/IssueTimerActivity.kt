@@ -5,13 +5,12 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
-import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.databinding.ActivityIssueTimerBinding
 import com.example.omegatracker.entity.Issue
+import com.example.omegatracker.entity.IssueButtonsAction
 import com.example.omegatracker.service.IssuesService
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BaseActivity
@@ -70,18 +69,15 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
 
         binding.issueTimerStartBtn.setOnClickListener {
             timerPresenter.startIssue()
-            hideBtnContent(IssuesButtons.StartBtn)
-            showBtnContent(IssuesButtons.StopBtn,IssuesButtons.PauseBtn)
+            actionChanged(IssueButtonsAction.StartAction)
         }
         binding.issueTimerStopBtn.setOnClickListener {
             timerPresenter.stopIssue()
-            hideBtnContent(IssuesButtons.PauseBtn,IssuesButtons.StopBtn)
-            showBtnContent(IssuesButtons.StartBtn)
+            actionChanged(IssueButtonsAction.StopAction)
         }
         binding.issueTimerPauseBtn.setOnClickListener {
             timerPresenter.pauseIssue()
-            hideBtnContent(IssuesButtons.PauseBtn)
-            showBtnContent(IssuesButtons.StartBtn)
+           actionChanged(IssueButtonsAction.PauseAction)
         }
 
         //Clicking on progress bar switches progress bar state to show spent time or estimated time
@@ -145,44 +141,43 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
         }
     }
 
-    override fun showBtnContent(vararg buttons: IssuesButtons) {
-        buttons.forEach {
-            when (it) {
-                IssuesButtons.StartBtn -> {
-                    binding.issueTimerStartText.isVisible = true
-                    binding.issueTimerStartBtn.isVisible = true
-                }
+    override fun actionChanged(action: IssueButtonsAction) {
+        when (action) {
 
-                IssuesButtons.PauseBtn -> {
-                    binding.issueTimerPauseBtn.isVisible = true
-                    binding.issueTimerPauseText.isVisible = true
-                }
+            IssueButtonsAction.StartAction -> {
 
-                IssuesButtons.StopBtn -> {
-                    binding.issueTimerStopBtn.isVisible = true
-                    binding.issueTimerStopText.isVisible = true
-                }
+                binding.issueTimerStartText.isVisible = false
+                binding.issueTimerStartBtn.isVisible = false
+
+                binding.issueTimerPauseBtn.isVisible = true
+                binding.issueTimerPauseText.isVisible = true
+
+                binding.issueTimerStopBtn.isVisible = true
+                binding.issueTimerStopText.isVisible = true
             }
-        }
-    }
 
-    override fun hideBtnContent(vararg buttons: IssuesButtons) {
-        buttons.forEach {
-            when (it) {
-                IssuesButtons.StartBtn -> {
-                    binding.issueTimerStartText.isVisible = false
-                    binding.issueTimerStartBtn.isVisible = false
-                }
+            IssueButtonsAction.PauseAction -> {
 
-                IssuesButtons.PauseBtn -> {
-                    binding.issueTimerPauseBtn.isVisible = false
-                    binding.issueTimerPauseText.isVisible = false
-                }
+                binding.issueTimerStartText.isVisible = true
+                binding.issueTimerStartBtn.isVisible = true
 
-                IssuesButtons.StopBtn -> {
-                    binding.issueTimerStopBtn.isVisible = false
-                    binding.issueTimerStopText.isVisible = false
-                }
+                binding.issueTimerPauseBtn.isVisible = false
+                binding.issueTimerPauseText.isVisible = false
+
+                binding.issueTimerStopBtn.isVisible = true
+                binding.issueTimerStopText.isVisible = true
+            }
+
+            IssueButtonsAction.StopAction -> {
+
+                binding.issueTimerStartText.isVisible = true
+                binding.issueTimerStartBtn.isVisible = true
+
+                binding.issueTimerPauseBtn.isVisible = false
+                binding.issueTimerPauseText.isVisible = false
+
+                binding.issueTimerStopBtn.isVisible = false
+                binding.issueTimerStopText.isVisible = false
             }
         }
     }
