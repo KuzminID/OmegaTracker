@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.os.Binder
@@ -16,6 +17,7 @@ import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.R
 import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.entity.Issue
+import com.example.omegatracker.ui.activities.issues.IssuesActivity
 import com.example.omegatracker.ui.activities.timer.IssueTimerActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -123,7 +125,15 @@ class IssuesService : Service() {
         val id = issue.id.hashCode()
         val intent = Intent(appComponent.getContext(), IssueTimerActivity::class.java)
         intent.putExtra("issue_id", issue.id)
-        val pendingIntent = PendingIntent.getActivity(appComponent.getContext(), id, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val stackBuilder = TaskStackBuilder.create(appComponent.getContext())
+        val pendingIntent : PendingIntent? = TaskStackBuilder.create(appComponent.getContext()).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(id, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+//        val pendingIntent = stackBuilder.getPendingIntent(
+//            0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+//        )
+        //val pendingIntent = PendingIntent.getActivity(appComponent.getContext(), id, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val builder = NotificationCompat.Builder(appComponent.getContext(), CHANNEL_ID)
             .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_LIGHTS)
             .setVibrate(LongArray(2) { 0 })

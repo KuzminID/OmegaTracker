@@ -23,10 +23,15 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.activities.profile.ProfileActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activities.timer.IssueTimerActivity"
-            android:exported="false" />
+            android:parentActivityName=".ui.activities.issues.IssuesActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".service.IssuesService"

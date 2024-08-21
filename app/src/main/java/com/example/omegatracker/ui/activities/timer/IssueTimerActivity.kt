@@ -48,13 +48,13 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
         super.onCreate(savedInstanceState)
         binding = ActivityIssueTimerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        bindService()
         initialization()
     }
 
     override fun initialization() {
-        bindService()
-
         issueId = intent.getStringExtra("issue_id") ?: ""
+        println(issueId)
 
         if (issueId != "") {
             getIssuesInfo(issueId)
@@ -137,6 +137,13 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        println("Is new intent")
+        super.onNewIntent(intent)
+
+        initialization()
     }
 
     override fun actionChanged(action: IssueButtonsAction) {
