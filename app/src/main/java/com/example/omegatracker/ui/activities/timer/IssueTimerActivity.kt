@@ -62,8 +62,6 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
 
         //If back btn clicked move to previous activity
         binding.issueTimerBackBtn.setOnClickListener {
-            val intent = Intent(this, IssuesActivity::class.java)
-            startActivity(intent)
             finish()
         }
 
@@ -94,7 +92,7 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
     }
 
     override fun setIssuesInfo(issue: Issue) {
-        binding.issueTimerDescription.text = issue.description
+        binding.issuesBottomSheetToolbar.descriptionContent.text = issue.description
         binding.issueTimerStatus.text = getString(issue.state.stateName)
         binding.issueTimerSummary.text = issue.summary
         updateTimer(issue)

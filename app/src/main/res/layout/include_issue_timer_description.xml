@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/authBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_marginHorizontal="5dp"
+    android:layout_marginBottom="5dp"
+    app:behavior_peekHeight="@dimen/auth_bottom_sheet_header_peek_height"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/issuesBottomSheetToolbar"
+        android:gravity="center"
+        android:layout_height="@dimen/auth_bottom_sheet_header_height"
+        android:background="@drawable/auth_button_shape"
+        android:layout_width="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/issue_desc_filler"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:fontFamily="@font/rubik_regular" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_marginRight="@dimen/content_margin"
+        android:layout_marginLeft="@dimen/content_margin"
+        app:behavior_hideable="false"
+        android:clipToPadding="true"
+        app:behavior_skipCollapsed="true">
+
+        <TextView
+            android:id="@+id/description_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:fontFamily="@font/rubik_regular"/>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

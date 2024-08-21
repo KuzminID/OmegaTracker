@@ -62,6 +62,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         controller.pauseIssue(issue)
     }
 
+
     fun getIssueData(issueId: String) {
         launch {
             issue = repository.getIssueByIDFromDB(issueId) ?: Issue(

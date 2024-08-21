@@ -83,6 +83,14 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
         return issues.sortedByDescending { it.isActive }
     }
 
+    fun checkIssuesChanged() {
+        launch{
+            val issues = sortIssues(userRepositoryImpl.getAllIssuesFromDB())
+            restartIssues(issues)
+            viewState.setIssuesToRV(issues)
+        }
+    }
+
     fun filterIssuesByType(filterType: IssuesFilterType, issues : List<Issue>) : List<Issue> {
         return when (filterType) {
             IssuesFilterType.All -> {

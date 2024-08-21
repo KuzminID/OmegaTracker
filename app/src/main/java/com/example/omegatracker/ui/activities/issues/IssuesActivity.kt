@@ -57,6 +57,11 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         initialization()
     }
 
+    override fun onResume() {
+        super.onResume()
+        issuesPresenter.checkIssuesChanged()
+    }
+
     override fun initialization() {
         serviceIntent = Intent(this, IssuesService::class.java)
         startService(serviceIntent)
