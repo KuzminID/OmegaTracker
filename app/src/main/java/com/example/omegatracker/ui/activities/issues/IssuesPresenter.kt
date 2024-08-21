@@ -31,7 +31,9 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
 
     private fun checkActiveIssues(issues: List<Issue>) {
         val activeIssues = issues.filter { it.isActive }
+        println(activeIssues.size)
         if (activeIssues.isNotEmpty()) {
+            println("Entered")
             restartIssues(activeIssues)
         }
     }
@@ -41,6 +43,8 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     }
 
     private fun restartIssues(issues: List<Issue>) {
+        println("Here")
+        println(issues.size)
         issues.forEach {
             controller.startIssue(it)
             observeActiveIssueUpdate(it)
@@ -86,7 +90,7 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     fun checkIssuesChanged() {
         launch{
             val issues = sortIssues(userRepositoryImpl.getAllIssuesFromDB())
-            restartIssues(issues)
+            checkActiveIssues(issues)
             viewState.setIssuesToRV(issues)
         }
     }

@@ -48,8 +48,9 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         viewState.setIssuesInfo(issue)
         launch {
             repository.upsertIssueToDB(issue)
+        }.invokeOnCompletion {
+            controller.stopIssue(issue)
         }
-        controller.stopIssue(issue)
     }
 
     fun pauseIssue() {
@@ -58,8 +59,9 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         viewState.setIssuesInfo(issue)
         launch {
             repository.upsertIssueToDB(issue)
+        }.invokeOnCompletion {
+            controller.pauseIssue(issue)
         }
-        controller.pauseIssue(issue)
     }
 
 

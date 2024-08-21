@@ -48,8 +48,8 @@ class IssuesService : Service() {
         }
 
         override fun stopIssue(issue: Issue) {
-            cancelNotificationForIssue(issue)
             taskManager.stopIssue(issue)
+            cancelNotificationForIssue(issue)
         }
 
         override fun pauseIssue(issue: Issue) {
@@ -108,6 +108,7 @@ class IssuesService : Service() {
 
     private fun cancelNotificationForIssue(issue : Issue) {
         val id = issue.id.hashCode()
+        Log.d("Cancel Notification", id.toString())
         notificationManager.cancel(id)
         notificationBuilderList.remove(id)
         if (notificationBuilderList.isEmpty()) {
@@ -123,6 +124,7 @@ class IssuesService : Service() {
 
     private fun createNotificationForIssue(issue: Issue) {
         val id = issue.id.hashCode()
+        Log.d("Create Notification", id.toString())
         val intent = Intent(appComponent.getContext(), IssueTimerActivity::class.java)
         intent.putExtra("issue_id", issue.id)
         val stackBuilder = TaskStackBuilder.create(appComponent.getContext())
@@ -158,7 +160,7 @@ class IssuesService : Service() {
 
     @OptIn(FlowPreview::class)
     fun collectIssueUpdates(flow: Flow<Issue>) {
-        val updateDelay = 1000.milliseconds
+        val updateDelay = 60000.milliseconds
         serviceScope.launch {
             flow.sample(updateDelay).collect {
                 updateNotifications(it)
