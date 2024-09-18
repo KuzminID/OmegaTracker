@@ -1,7 +1,5 @@
 package com.example.omegatracker.data
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.omegatracker.OmegaTrackerApplication
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.HelperContent
@@ -21,7 +19,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.util.Date
 import java.util.Locale
 import kotlin.time.Duration
@@ -33,7 +30,7 @@ class UserRepositoryImpl : UserRepository {
     private val youTrackApiService = appComponent.getYouTrackApiService()
     private val userManager = appComponent.getUserManager()
     private val issuesDao = appComponent.getIssuesDao()
-    private var appStartTime : Long = 0L
+    private var appStartTime: Long = 0L
 
     override suspend fun authenticate(token: String, url: String): User {
         OmegaTrackerApplication.setBaseUrl(url)
@@ -90,7 +87,7 @@ class UserRepositoryImpl : UserRepository {
         return HelperContent.entries
     }
 
-    override fun getIssuesHeaderData() : List<IssuesFilterType> {
+    override fun getIssuesHeaderData(): List<IssuesFilterType> {
         return IssuesFilterType.entries
     }
 
@@ -236,7 +233,7 @@ class UserRepositoryImpl : UserRepository {
         issuesDao.deleteAll()
     }
 
-    override fun checkIsTimeToday(time: Long) : Boolean {
+    override fun checkIsTimeToday(time: Long): Boolean {
         val createdTime = Date(time)
         val currentTime = Date(appStartTime)
         return (createdTime.day == currentTime.day)

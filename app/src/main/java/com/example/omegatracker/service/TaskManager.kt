@@ -43,7 +43,6 @@ class TaskManager {
     }
 
     fun getIssuesUpdates(issue: Issue): Flow<Issue> {
-        println(runningIssues)
         return runningIssues[issue.id]!!.flow
     }
 

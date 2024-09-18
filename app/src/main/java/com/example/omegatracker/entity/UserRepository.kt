@@ -9,7 +9,7 @@ interface UserRepository {
     fun convertStringDateToMilliseconds(date: String?): Long
     suspend fun getIssuesList(): Flow<List<Issue>>
 
-    fun getIssuesHeaderData() : List<IssuesFilterType>
+    fun getIssuesHeaderData(): List<IssuesFilterType>
     fun getHelperData(): List<HelperContent>
     suspend fun parseIssue(issue: List<IssueFromJson>): List<Issue>
     fun compareIssues(dbIssues: List<Issue>?, serverIssues: List<Issue>)
@@ -23,8 +23,41 @@ interface UserRepository {
 
     suspend fun clearDB()
 
-    fun checkIsTimeToday(time : Long) : Boolean
+    fun checkIsTimeToday(time: Long): Boolean
 
     suspend fun deactivateAllIssues()
     fun convertFromEntityToIssue(entity: IssueEntity?): Issue?
+
+    interface Queries {
+        suspend fun auth(token : String, url : String) : User
+
+        suspend fun getIssues() : Flow<List<Issue>>
+
+        suspend fun sendIssue(issue : Issue)
+
+        suspend fun sendAllIssues(issues : List<Issue>)
+    }
+
+    interface RoomInteraction {
+        suspend fun upsertIssue(issue : Issue)
+        suspend fun deleteIssue(issue : Issue)
+        suspend fun getIssueById(id : String) : Issue?
+        suspend fun getAllTasks() : List<Issue>?
+        suspend fun clearDb()
+    }
+
+    interface IssuesInteraction {
+
+        suspend fun convertStringDataToMillis(date : String?)
+
+        suspend fun getHelperContent() : List<HelperContent>
+
+        suspend fun getIssuesHeaderContent() : List<IssuesFilterType>
+
+        suspend fun parseIssues(issues : List<Issue>)
+
+        suspend fun compareIssues(dbIssues : List<Issue>?, serverIssues : List<Issue>?)
+
+        suspend fun fromEntityToIssue(entity : IssueEntity?) : Issue?
+    }
 }

@@ -14,7 +14,6 @@ import com.example.omegatracker.entity.IssueButtonsAction
 import com.example.omegatracker.service.IssuesService
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BaseActivity
-import com.example.omegatracker.ui.activities.issues.IssuesActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -54,7 +53,6 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
 
     override fun initialization() {
         issueId = intent.getStringExtra("issue_id") ?: ""
-        println(issueId)
 
         if (issueId != "") {
             getIssuesInfo(issueId)
@@ -75,13 +73,13 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
         }
         binding.issueTimerPauseBtn.setOnClickListener {
             timerPresenter.pauseIssue()
-           actionChanged(IssueButtonsAction.PauseAction)
+            actionChanged(IssueButtonsAction.PauseAction)
         }
 
         //Clicking on progress bar switches progress bar state to show spent time or estimated time
         binding.issueTimerProgressbar.setOnClickListener {
             timerEstimatedTimeType = !timerEstimatedTimeType
-            if (issueId!="") {
+            if (issueId != "") {
                 getIssuesInfo(issueId)
             }
         }
@@ -111,10 +109,10 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
 
     override fun updateProgressBar(issue: Issue) {
         val progress = if (timerEstimatedTimeType) {
-                (issue.spentTime / issue.estimatedTime * 100).toFloat()
-            } else {
-                ((issue.estimatedTime - issue.spentTime)/issue.estimatedTime * 100).toFloat()
-            }
+            (issue.spentTime / issue.estimatedTime * 100).toFloat()
+        } else {
+            ((issue.estimatedTime - issue.spentTime) / issue.estimatedTime * 100).toFloat()
+        }
         if (progress < 100) {
             binding.issueTimerProgressbar.setProgress(progress)
         } else {

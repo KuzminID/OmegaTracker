@@ -25,7 +25,7 @@ interface IssuesCallback {
     fun startIssue(issueEntities: List<Issue>, position: Int)
     fun showIssueInfoActivity(issueEntity: Issue)
 
-    fun filterIssuesByType(filterType: IssuesFilterType, issues : List<Issue>) : List<Issue>
+    fun filterIssuesByType(filterType: IssuesFilterType, issues: List<Issue>): List<Issue>
 }
 
 class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
@@ -133,7 +133,10 @@ class IssuesActivity : BaseActivity(), IssuesView, IssuesCallback {
         startActivity(intent)
     }
 
-    override fun filterIssuesByType(filterType: IssuesFilterType, issues: List<Issue>) : List<Issue> {
+    override fun filterIssuesByType(
+        filterType: IssuesFilterType,
+        issues: List<Issue>
+    ): List<Issue> {
         return issuesPresenter.filterIssuesByType(filterType, issues)
     }
 }

@@ -16,7 +16,7 @@ data class IssueEntity(
     val state: Int,
     val isActive: Boolean,
     val startTime: Long,
-    val created : Long
+    val created: Long
 ) {
     constructor(issue: Issue) : this(
         issue.id,

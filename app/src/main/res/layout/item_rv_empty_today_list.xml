@@ -11,6 +11,6 @@
         android:fontFamily="@font/rubik_medium"
         android:text="@string/issues_today_issues_list_empty"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

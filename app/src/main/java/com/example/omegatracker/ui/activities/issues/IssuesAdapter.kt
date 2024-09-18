@@ -59,9 +59,8 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             issuesListType
         } else if (
             (issuesListFiltered.isEmpty() || issuesListFiltered.size == issuesListFiltered.count { it.isActive })
-            && currentFilterType == IssuesFilterType.Today)
-        {
-            println(1)
+            && currentFilterType == IssuesFilterType.Today
+        ) {
             emptyTodayListType
         } else {
             loadingType
@@ -103,6 +102,7 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 )
                 return LoadingHolder(binding)
             }
+
             else -> {
                 val binding = ItemRvEmptyTodayListBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -130,18 +130,19 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             issuesHeaderType -> {
                 holder as IssuesHeaderHolder
                 holder.filterBtn.setOnClickListener {
-                    val item : IssuesFilterType
+                    val item: IssuesFilterType
                     when (currentFilterType) {
                         IssuesFilterType.Today -> {
                             currentFilterType = IssuesFilterType.All
                             item = filterData[0]
                         }
+
                         IssuesFilterType.All -> {
                             currentFilterType = IssuesFilterType.Today
                             item = filterData[1]
                         }
                     }
-                    issuesListFiltered = callback.filterIssuesByType(currentFilterType,issuesList)
+                    issuesListFiltered = callback.filterIssuesByType(currentFilterType, issuesList)
                     holder.filterBtn.setText(item.btnText)
                     holder.header.setText(item.headerText)
                 }
@@ -169,11 +170,11 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int {
         return if (issuesListFiltered.isNotEmpty()) {
             if (issuesListFiltered.size == issuesListFiltered.count { it.isActive }) {
-                issuesListFiltered.size+2
+                issuesListFiltered.size + 2
             } else {
                 issuesListFiltered.size + 1
             }
-            } else {
+        } else {
             2
         }
     }
@@ -190,9 +191,9 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class IssuesHeaderHolder(binding: ItemIssuesHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-            val filterBtn = binding.changeIssuesFilter
-            val header = binding.activeIssuesListHeader
-        }
+        val filterBtn = binding.changeIssuesFilter
+        val header = binding.activeIssuesListHeader
+    }
 
     inner class IssueHolder(binding: ItemIssueBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -208,6 +209,6 @@ class IssuesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class LoadingHolder(binding: ItemRvLoadingBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    inner class EmptyTodayListHolder(binding : ItemRvEmptyTodayListBinding) :
-            RecyclerView.ViewHolder(binding.root)
+    inner class EmptyTodayListHolder(binding: ItemRvEmptyTodayListBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

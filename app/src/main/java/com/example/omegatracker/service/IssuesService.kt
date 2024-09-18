@@ -15,9 +15,10 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.R
+import com.example.omegatracker.data.NotificationReceiver
 import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.entity.Issue
-import com.example.omegatracker.ui.activities.issues.IssuesActivity
+import com.example.omegatracker.entity.IssueState
 import com.example.omegatracker.ui.activities.timer.IssueTimerActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +27,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import javax.inject.Singleton
-import kotlin.NullPointerException
 import kotlin.time.Duration.Companion.milliseconds
 
 interface IssuesServiceBinder {
@@ -106,7 +106,7 @@ class IssuesService : Service() {
         }
     }
 
-    private fun cancelNotificationForIssue(issue : Issue) {
+    private fun cancelNotificationForIssue(issue: Issue) {
         val id = issue.id.hashCode()
         Log.d("Cancel Notification", id.toString())
         notificationManager.cancel(id)
@@ -123,24 +123,22 @@ class IssuesService : Service() {
     }
 
     private fun createNotificationForIssue(issue: Issue) {
+        createSummaryNotification()
         val id = issue.id.hashCode()
+        val context = appComponent.getContext()
         Log.d("Create Notification", id.toString())
-        val intent = Intent(appComponent.getContext(), IssueTimerActivity::class.java)
+        val intent = Intent(this, IssueTimerActivity::class.java)
         intent.putExtra("issue_id", issue.id)
-        val stackBuilder = TaskStackBuilder.create(appComponent.getContext())
-        val pendingIntent : PendingIntent? = TaskStackBuilder.create(appComponent.getContext()).run {
+        val pendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(intent)
             getPendingIntent(id, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         }
-//        val pendingIntent = stackBuilder.getPendingIntent(
-//            0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-//        )
-        //val pendingIntent = PendingIntent.getActivity(appComponent.getContext(), id, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val builder = NotificationCompat.Builder(appComponent.getContext(), CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_LIGHTS)
             .setVibrate(LongArray(2) { 0 })
             .setContentTitle(issue.summary)
             .setOngoing(true)
+            .setGroup("issues_group")
             .setContentText(
                 "Remaining Time : ${
                     (issue.estimatedTime - issue.spentTime).componentsToString(
@@ -152,15 +150,112 @@ class IssuesService : Service() {
             )
             .setSmallIcon(R.drawable.ic_launcher_omega_tracker_round) //TODO replace icon
             .setContentIntent(pendingIntent)
+
+        when (issue.state) {
+            IssueState.Finished -> Log.d("Notification creation", "This issue is finished")
+            IssueState.Open -> Log.d("Notification creation","This issue is not running")
+
+            IssueState.OnStop -> Log.d("Notification creation","This issue in stopped")
+            IssueState.OnWork -> {
+                builder.addAction(
+                    R.drawable.pause_icon,
+                    "Пауза",
+                    PendingIntent.getBroadcast(
+                        context,id,Intent(context, NotificationReceiver::class.java).apply {
+                            action = "PAUSE"
+                            putExtra("issue_id",id)
+                        },
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                )
+                builder.addAction(
+                    R.drawable.stop_icon,
+                    "Стоп",
+                    PendingIntent.getBroadcast(
+                        context,id,Intent(context, NotificationReceiver::class.java).apply {
+                            action = "STOP"
+                            putExtra("issue_id",id)
+                        },
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                )
+            }
+            IssueState.OnPause -> {
+                builder.addAction(
+                    R.drawable.play_icon,
+                    "Старт",
+                    PendingIntent.getBroadcast(
+                        context,id,Intent(context, NotificationReceiver::class.java).apply {
+                            action = "START"
+                            putExtra("issue_id",id)
+                        },
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                )
+                builder.addAction(
+                    R.drawable.pause_icon,
+                    "Стоп",
+                    PendingIntent.getBroadcast(
+                        context,id,Intent(context, NotificationReceiver::class.java).apply {
+                            action = "STOP"
+                            putExtra("issue_id",id)
+                        },
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                )
+            }
+        }
         notificationBuilderList[id] = builder
         val notification = builder.build()
         notificationManager.notify(id, notification)
-        startForeground(issue.id.hashCode(),notification)
+        startForeground(issue.id.hashCode(), notification)
+    }
+
+    private fun createSummaryNotification() {
+        val context = appComponent.getContext()
+        val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_omega_tracker_round) //TODO replace icon
+            .setContentTitle("Задачи")
+            .setContentText("Все запущенные задачи")
+            .setGroup("issues_group") // Идентификатор группы уведомлений
+            .setGroupSummary(true) // Обозначить как сводное уведомление
+            .setAutoCancel(true)
+
+        // Добавление кнопок
+        notificationBuilder.addAction(
+            R.drawable.pause_icon, //TODO replace icon
+            "Пауза",
+            PendingIntent.getBroadcast(
+                context,
+                0,
+                Intent(context, NotificationReceiver::class.java).apply {
+                    action = "PAUSE_ALL"
+                },
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        )
+        notificationBuilder.addAction(
+            R.drawable.stop_icon, //TODO replace icon
+            "Стоп",
+            PendingIntent.getBroadcast(
+                context,
+                0,
+                Intent(context, NotificationReceiver::class.java).apply {
+                    action = "STOP_ALL"
+                },
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        )
+
+        // Отправка уведомления
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(0, notificationBuilder.build())
     }
 
     @OptIn(FlowPreview::class)
     fun collectIssueUpdates(flow: Flow<Issue>) {
-        val updateDelay = 60000.milliseconds
+        val updateDelay = 1000.milliseconds
         serviceScope.launch {
             flow.sample(updateDelay).collect {
                 updateNotifications(it)
@@ -172,7 +267,7 @@ class IssuesService : Service() {
         val id = updatedIssue.id.hashCode()
         val notificationBuilder = notificationBuilderList[id]
         val notification = notificationBuilder?.build()
-        if (notification!=null) {
+        if (notification != null) {
             serviceScope.launch {
                 notificationBuilder
                     .setContentText(
@@ -185,7 +280,7 @@ class IssuesService : Service() {
                         }"
                     )
                 notificationManager.notify(
-                    id, notificationBuilder.build()
+                    id, notification
                 )
             }
         } else {

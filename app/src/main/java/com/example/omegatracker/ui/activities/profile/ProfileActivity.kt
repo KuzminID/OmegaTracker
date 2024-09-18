@@ -12,7 +12,6 @@ import com.example.omegatracker.service.IssuesService
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.auth.AuthActivity
 import com.example.omegatracker.ui.activities.base.BaseActivity
-import com.example.omegatracker.ui.activities.issues.IssuesActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -81,8 +80,6 @@ class ProfileActivity : BaseActivity(), ProfileView {
 
     override fun showIssueScreen() {
         binding.profileBackBtn.setOnClickListener {
-            val intent = Intent(this, IssuesActivity::class.java)
-            startActivity(intent)
             finish()
         }
     }

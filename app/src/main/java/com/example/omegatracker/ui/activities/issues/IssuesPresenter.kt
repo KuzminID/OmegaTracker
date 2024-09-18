@@ -1,6 +1,7 @@
 package com.example.omegatracker.ui.activities.issues
 
 import android.os.SystemClock
+import android.util.Log
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssuesFilterType
@@ -17,23 +18,23 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     fun getIssuesList() {
         launch {
             try {
+
+
                 viewState.setFilterData(userRepositoryImpl.getIssuesHeaderData())
-            userRepositoryImpl.getIssuesList().collect {
-                checkActiveIssues(it)
-                val sortedIssues = sortIssues(it)
-                viewState.setIssuesToRV(sortedIssues)
+                userRepositoryImpl.getIssuesList().collect {
+                    checkActiveIssues(it)
+                    val sortedIssues = sortIssues(it)
+                    viewState.setIssuesToRV(sortedIssues)
+                }
+            } catch (e: Exception) {
+                throw e
             }
-        } catch (e : Exception) {
-            throw e
-        }
         }
     }
 
     private fun checkActiveIssues(issues: List<Issue>) {
         val activeIssues = issues.filter { it.isActive }
-        println(activeIssues.size)
         if (activeIssues.isNotEmpty()) {
-            println("Entered")
             restartIssues(activeIssues)
         }
     }
@@ -43,8 +44,6 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     }
 
     private fun restartIssues(issues: List<Issue>) {
-        println("Here")
-        println(issues.size)
         issues.forEach {
             controller.startIssue(it)
             observeActiveIssueUpdate(it)
@@ -61,12 +60,6 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
             controller.startIssue(issue)
             observeActiveIssueUpdate(issue)
         }
-    }
-
-    fun stopTask(issue: Issue) {
-        controller.stopIssue(issue)
-        observableIssues[issue.id]?.cancel()
-        observableIssues.remove(issue.id)
     }
 
     private fun observeActiveIssueUpdate(issue: Issue) {
@@ -88,14 +81,14 @@ class IssuesPresenter : BasePresenter<IssuesView>() {
     }
 
     fun checkIssuesChanged() {
-        launch{
+        launch {
             val issues = sortIssues(userRepositoryImpl.getAllIssuesFromDB())
             checkActiveIssues(issues)
             viewState.setIssuesToRV(issues)
         }
     }
 
-    fun filterIssuesByType(filterType: IssuesFilterType, issues : List<Issue>) : List<Issue> {
+    fun filterIssuesByType(filterType: IssuesFilterType, issues: List<Issue>): List<Issue> {
         return when (filterType) {
             IssuesFilterType.All -> {
                 issues

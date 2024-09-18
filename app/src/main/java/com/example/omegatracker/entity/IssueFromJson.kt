@@ -20,7 +20,7 @@ data class IssueFromJson(
     val description: String?,
     val project: Project,
     val customFields: List<CustomField>,
-    val created : Long
+    val created: Long
 )
 
 @JsonClass(generateAdapter = true)

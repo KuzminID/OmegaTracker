@@ -3,8 +3,8 @@ package com.example.omegatracker.ui.activities.timer
 import android.os.SystemClock
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
-import com.example.omegatracker.entity.IssueState
 import com.example.omegatracker.entity.IssueButtonsAction
+import com.example.omegatracker.entity.IssueState
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BasePresenter
 import kotlinx.coroutines.launch

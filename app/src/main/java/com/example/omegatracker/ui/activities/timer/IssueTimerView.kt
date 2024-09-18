@@ -12,5 +12,5 @@ interface IssueTimerView : BaseView {
     fun updateProgressBar(issue: Issue)
     fun bindService()
 
-    fun actionChanged(action : IssueButtonsAction)
+    fun actionChanged(action: IssueButtonsAction)
 }
