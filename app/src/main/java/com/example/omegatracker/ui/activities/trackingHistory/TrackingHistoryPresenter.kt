@@ -1,4 +1,4 @@
-package com.example.omegatracker.ui.activities.issuesChange
+package com.example.omegatracker.ui.activities.trackingHistory
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
-class ChangesListPresenter : BasePresenter<ChangesListView>() {
+class TrackingHistoryPresenter : BasePresenter<TrackingHistoryView>() {
     val repository = appComponent.getChangeListRepository()
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -9,7 +9,7 @@ import com.example.omegatracker.entity.IssuesFilterType
 import com.example.omegatracker.entity.Screens
 import com.example.omegatracker.ui.activities.auth.AuthActivity
 import com.example.omegatracker.ui.activities.baseService.BaseServiceActivity
-import com.example.omegatracker.ui.activities.issuesChange.ChangesListActivity
+import com.example.omegatracker.ui.activities.trackingHistory.ChangesListActivity
 import com.example.omegatracker.ui.activities.profile.ProfileActivity
 import com.example.omegatracker.ui.activities.start.StartScreenActivity
 import com.example.omegatracker.ui.activities.timer.IssueTimerActivity

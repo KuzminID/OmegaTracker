@@ -1,9 +1,9 @@
-package com.example.omegatracker.ui.activities.issuesChange
+package com.example.omegatracker.ui.activities.trackingHistory
 
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import com.example.omegatracker.databinding.ActivityChangesListBinding
+import com.example.omegatracker.databinding.ActivityTrackingHistoryBinding
 import com.example.omegatracker.room.IssuesChangeList
 import com.example.omegatracker.ui.activities.base.BaseActivity
 
@@ -11,20 +11,20 @@ interface ChangesActivityCallback {
     fun formatTimeToHMS(time: Long?): String
 }
 
-class ChangesListActivity : BaseActivity(), ChangesListView, ChangesActivityCallback {
+class ChangesListActivity : BaseActivity(), TrackingHistoryView, ChangesActivityCallback {
 
-    private val presenter: ChangesListPresenter by providePresenter {
-        ChangesListPresenter()
+    private val presenter: TrackingHistoryPresenter by providePresenter {
+        TrackingHistoryPresenter()
     }
 
-    private val adapter = ChangesListAdapter()
+    private val adapter = TrackingHistoryAdapter(this)
 
-    private lateinit var binding: ActivityChangesListBinding
+    private lateinit var binding: ActivityTrackingHistoryBinding
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityChangesListBinding.inflate(layoutInflater)
+        binding = ActivityTrackingHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initialization()
     }
@@ -32,7 +32,6 @@ class ChangesListActivity : BaseActivity(), ChangesListView, ChangesActivityCall
     @RequiresApi(Build.VERSION_CODES.O)
     override fun initialization() {
         binding.changesRv.adapter = adapter
-        adapter.callback = this
         presenter.getChangesList()
 
         binding.issueTimerBackBtn.setOnClickListener {

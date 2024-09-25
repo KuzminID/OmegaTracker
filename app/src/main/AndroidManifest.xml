@@ -25,7 +25,7 @@
             android:name=".ui.activities.statistics.StatisticsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.issuesChange.ChangesListActivity"
+            android:name=".ui.activities.trackingHistory.ChangesListActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.profile.ProfileActivity"

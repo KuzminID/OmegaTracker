@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.issuesChange.ChangesListActivity">
+    tools:context=".ui.activities.trackingHistory.ChangesListActivity">
 
     <LinearLayout
         android:id="@+id/changes_header"
@@ -46,6 +46,6 @@
         app:layout_constraintTop_toBottomOf="@id/changes_header"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp"
-        tools:listitem="@layout/item_changes_rv_issue" />
+        tools:listitem="@layout/item_tracking_history_issue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
