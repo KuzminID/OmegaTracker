@@ -8,6 +8,20 @@
     android:orientation="vertical"
     tools:context=".ui.activities.issues.IssuesActivity">
 
+    <RelativeLayout
+        android:id="@+id/loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/issues_header_container"
         android:layout_width="match_parent"

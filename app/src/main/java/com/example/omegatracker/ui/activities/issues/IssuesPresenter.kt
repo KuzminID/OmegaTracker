@@ -1,8 +1,10 @@
 package com.example.omegatracker.ui.activities.issues
 
+import android.util.Log
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssuesFilterType
+import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.baseService.BaseServicePresenter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -10,12 +12,18 @@ import kotlinx.coroutines.launch
 class IssuesPresenter : BaseServicePresenter<IssuesView>() {
     private var userRepositoryImpl = appComponent.getUserRepository()
     private val observableIssues = mutableMapOf<String, Job>()
+    private lateinit var controller : IssuesServiceBinder
 
+
+    fun setController(controller : IssuesServiceBinder?) {
+        if (controller != null) {
+            this.controller = controller
+            Log.d("Presenter controller",controller.toString())
+        }
+    }
     fun getIssuesList() {
         launch {
             try {
-
-
                 viewState.setFilterData(userRepositoryImpl.getIssuesHeaderData())
                 userRepositoryImpl.getIssuesList().collect {
                     checkActiveIssues(it)
@@ -41,7 +49,7 @@ class IssuesPresenter : BaseServicePresenter<IssuesView>() {
 
     private fun restartIssues(issues: List<Issue>) {
         issues.forEach {
-            controller?.startIssue(it)
+            controller.startIssue(it)
             observeActiveIssueUpdate(it)
         }
     }
@@ -53,18 +61,19 @@ class IssuesPresenter : BaseServicePresenter<IssuesView>() {
             launch {
                 userRepositoryImpl.upsertIssueToDB(issue)
             }
+            super.printThis()
             println(controller)
             println(1)
             println(2)
             println(3)
-            controller?.startIssue(issue)
+            controller.startIssue(issue)
             observeActiveIssueUpdate(issue)
         }
     }
 
     private fun observeActiveIssueUpdate(issue: Issue) {
         observableIssues[issue.id] = launch {
-            controller?.getResults(issue)?.collect { updatedIssue ->
+            controller.getResults(issue).collect { updatedIssue ->
                 viewState.updateIssueTimer(updatedIssue)
             }
         }
