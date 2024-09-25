@@ -32,7 +32,7 @@ class StartScreenActivity : BaseActivity(), StartScreenView {
     }
 
     override fun startService() {
-        val serviceIntent = Intent(appComponent.getContext(),IssuesService::class.java)
+        val serviceIntent = Intent(appComponent.getContext(), IssuesService::class.java)
         startService(serviceIntent)
     }
 }

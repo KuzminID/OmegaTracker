@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 
 class ProfilePresenter : BasePresenter<ProfileView>() {
     private val userManager = appComponent.getUserManager()
-    private val repository = appComponent.getUserRepositoryImpl()
+    private val repository = appComponent.getUserRepository()
     private lateinit var controller: IssuesServiceBinder
     fun setData() {
         val data = userManager.getUser()

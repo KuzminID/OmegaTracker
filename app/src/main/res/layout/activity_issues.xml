@@ -63,6 +63,7 @@
         tools:listitem="@layout/item_issue" />
 
     <include
+        android:id="@+id/bottomNavBar"
         layout="@layout/navigation_bottom_bar" />
 
 </LinearLayout>

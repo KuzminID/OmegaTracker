@@ -1,15 +1,14 @@
 package com.example.omegatracker.ui.activities.base
 
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Handler
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.ImageViewTarget
-import com.example.omegatracker.service.IssuesService
 import com.omegar.mvp.MvpAppCompatActivity
 import javax.inject.Singleton
 
@@ -28,6 +27,10 @@ open class BaseActivity : MvpAppCompatActivity(), BaseView, LifecycleObserver {
         )
     }
 
+    override fun initialization() {
+        Log.d("BaseActivity", "Initialization complete")
+    }
+
     override fun setAvatar(url: String?, iv: ImageView) {
         Glide.with(this)
             .asDrawable()
@@ -40,8 +43,4 @@ open class BaseActivity : MvpAppCompatActivity(), BaseView, LifecycleObserver {
             })
     }
 
-    override fun initialization() {
-        val serviceIntent = Intent(this, IssuesService::class.java)
-        startService(serviceIntent)
-    }
 }

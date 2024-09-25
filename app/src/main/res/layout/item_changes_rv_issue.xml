@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@color/issues_bg_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/item_issue_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_omega_tracker_round" />
+
+    <TextView
+        android:id="@+id/item_issue_name"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/rubik_medium"
+        android:maxLines="2"
+        android:text="Issue Name "
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/item_issue_icon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_issue_project"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="90dp"
+        android:textColor="@color/violet"
+        android:background="@drawable/issues_item_desc_shape"
+        android:text="IssueProject"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_issue_name" />
+
+    <TextView
+        android:id="@+id/item_spent_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="1ч 25м"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/item_start_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Время начала : "
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/rubik_regular"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_issue_project" />
+
+    <TextView
+        android:id="@+id/item_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:fontFamily="@font/rubik_regular"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintStart_toEndOf="@id/item_start_text"
+        app:layout_constraintTop_toBottomOf="@id/item_issue_project" />
+
+    <TextView
+        android:id="@+id/item_stop_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Время завершения : "
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/rubik_regular"
+        app:layout_constraintTop_toBottomOf="@id/item_start_time"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/item_stop_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/rubik_regular"
+        app:layout_constraintLeft_toRightOf="@id/item_stop_text"
+        app:layout_constraintTop_toBottomOf="@id/item_start_time" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

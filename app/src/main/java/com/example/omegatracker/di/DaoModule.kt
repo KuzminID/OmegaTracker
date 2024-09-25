@@ -1,5 +1,6 @@
 package com.example.omegatracker.di
 
+import com.example.omegatracker.room.ChangesDao
 import com.example.omegatracker.room.IssuesDao
 import com.example.omegatracker.room.IssuesDatabase
 import dagger.Module
@@ -13,6 +14,12 @@ class DaoModule {
     @Provides
     fun provideIssuesDao(database: IssuesDatabase): IssuesDao {
         return database.getIssuesDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideChangesDao(database: IssuesDatabase): ChangesDao {
+        return database.getChangesDao()
     }
 
     @Singleton

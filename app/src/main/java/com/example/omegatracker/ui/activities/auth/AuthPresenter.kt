@@ -7,7 +7,7 @@ import com.example.omegatracker.ui.activities.base.BasePresenter
 import kotlinx.coroutines.launch
 
 class AuthPresenter : BasePresenter<AuthView>() {
-    private var userRepositoryImpl = appComponent.getUserRepositoryImpl()
+    private var userRepositoryImpl = appComponent.getUserRepository()
     private val userManager = appComponent.getUserManager()
 
     override fun onFirstViewAttach() {

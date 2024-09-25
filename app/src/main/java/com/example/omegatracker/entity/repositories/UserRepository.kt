@@ -1,5 +1,10 @@
-package com.example.omegatracker.entity
+package com.example.omegatracker.entity.repositories
 
+import com.example.omegatracker.entity.HelperContent
+import com.example.omegatracker.entity.Issue
+import com.example.omegatracker.entity.IssueFromJson
+import com.example.omegatracker.entity.IssuesFilterType
+import com.example.omegatracker.entity.User
 import com.example.omegatracker.room.IssueEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -29,35 +34,35 @@ interface UserRepository {
     fun convertFromEntityToIssue(entity: IssueEntity?): Issue?
 
     interface Queries {
-        suspend fun auth(token : String, url : String) : User
+        suspend fun auth(token: String, url: String): User
 
-        suspend fun getIssues() : Flow<List<Issue>>
+        suspend fun getIssues(): Flow<List<Issue>>
 
-        suspend fun sendIssue(issue : Issue)
+        suspend fun sendIssue(issue: Issue)
 
-        suspend fun sendAllIssues(issues : List<Issue>)
+        suspend fun sendAllIssues(issues: List<Issue>)
     }
 
     interface RoomInteraction {
-        suspend fun upsertIssue(issue : Issue)
-        suspend fun deleteIssue(issue : Issue)
-        suspend fun getIssueById(id : String) : Issue?
-        suspend fun getAllTasks() : List<Issue>?
+        suspend fun upsertIssue(issue: Issue)
+        suspend fun deleteIssue(issue: Issue)
+        suspend fun getIssueById(id: String): Issue?
+        suspend fun getAllTasks(): List<Issue>?
         suspend fun clearDb()
     }
 
     interface IssuesInteraction {
 
-        suspend fun convertStringDataToMillis(date : String?)
+        suspend fun convertStringDataToMillis(date: String?)
 
-        suspend fun getHelperContent() : List<HelperContent>
+        suspend fun getHelperContent(): List<HelperContent>
 
-        suspend fun getIssuesHeaderContent() : List<IssuesFilterType>
+        suspend fun getIssuesHeaderContent(): List<IssuesFilterType>
 
-        suspend fun parseIssues(issues : List<Issue>)
+        suspend fun parseIssues(issues: List<Issue>)
 
-        suspend fun compareIssues(dbIssues : List<Issue>?, serverIssues : List<Issue>?)
+        suspend fun compareIssues(dbIssues: List<Issue>?, serverIssues: List<Issue>?)
 
-        suspend fun fromEntityToIssue(entity : IssueEntity?) : Issue?
+        suspend fun fromEntityToIssue(entity: IssueEntity?): Issue?
     }
 }

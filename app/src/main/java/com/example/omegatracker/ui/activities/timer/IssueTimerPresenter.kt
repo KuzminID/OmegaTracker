@@ -5,13 +5,15 @@ import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssueButtonsAction
 import com.example.omegatracker.entity.IssueState
+import com.example.omegatracker.room.IssuesChangeList
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.activities.base.BasePresenter
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.minutes
 
 class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
-    private val repository = appComponent.getUserRepositoryImpl()
+    private val issueRepository = appComponent.getUserRepository()
+    private val changesRepository = appComponent.getChangeListRepository()
     private lateinit var controller: IssuesServiceBinder
     private lateinit var issue: Issue
 
@@ -36,7 +38,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
 
         controller.startIssue(issue)
         launch {
-            repository.upsertIssueToDB(issue)
+            issueRepository.upsertIssueToDB(issue)
         }
         viewState.setIssuesInfo(issue)
         observeIssueTimer()
@@ -47,7 +49,18 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         issue.state = IssueState.OnStop
         viewState.setIssuesInfo(issue)
         launch {
-            repository.upsertIssueToDB(issue)
+            issueRepository.upsertIssueToDB(issue)
+
+            changesRepository.insertChange(
+                IssuesChangeList(
+                    durationTime = 0,
+                    endTime = System.currentTimeMillis(),
+                    issueSummary = issue.summary,
+                    projectName = issue.projectName,
+                    startTime = issue.startTime,
+                    time = System.currentTimeMillis()
+                )
+            )
         }.invokeOnCompletion {
             controller.stopIssue(issue)
         }
@@ -58,7 +71,17 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
         issue.state = IssueState.OnPause
         viewState.setIssuesInfo(issue)
         launch {
-            repository.upsertIssueToDB(issue)
+            issueRepository.upsertIssueToDB(issue)
+            changesRepository.insertChange(
+                IssuesChangeList(
+                    durationTime = 0,
+                    endTime = System.currentTimeMillis(),
+                    issueSummary = issue.summary,
+                    projectName = issue.projectName,
+                    startTime = issue.startTime,
+                    time = System.currentTimeMillis()
+                )
+            )
         }.invokeOnCompletion {
             controller.pauseIssue(issue)
         }
@@ -67,7 +90,7 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
 
     fun getIssueData(issueId: String) {
         launch {
-            issue = repository.getIssueByIDFromDB(issueId) ?: Issue(
+            issue = issueRepository.getIssueByIDFromDB(issueId) ?: Issue(
                 "0-0",
                 "",
                 "",

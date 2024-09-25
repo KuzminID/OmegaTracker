@@ -153,17 +153,17 @@ class IssuesService : Service() {
 
         when (issue.state) {
             IssueState.Finished -> Log.d("Notification creation", "This issue is finished")
-            IssueState.Open -> Log.d("Notification creation","This issue is not running")
+            IssueState.Open -> Log.d("Notification creation", "This issue is not running")
 
-            IssueState.OnStop -> Log.d("Notification creation","This issue in stopped")
+            IssueState.OnStop -> Log.d("Notification creation", "This issue in stopped")
             IssueState.OnWork -> {
                 builder.addAction(
                     R.drawable.pause_icon,
                     "Пауза",
                     PendingIntent.getBroadcast(
-                        context,id,Intent(context, NotificationReceiver::class.java).apply {
+                        context, id, Intent(context, NotificationReceiver::class.java).apply {
                             action = "PAUSE"
-                            putExtra("issue_id",id)
+                            putExtra("issue_id", id)
                         },
                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                     )
@@ -172,22 +172,23 @@ class IssuesService : Service() {
                     R.drawable.stop_icon,
                     "Стоп",
                     PendingIntent.getBroadcast(
-                        context,id,Intent(context, NotificationReceiver::class.java).apply {
+                        context, id, Intent(context, NotificationReceiver::class.java).apply {
                             action = "STOP"
-                            putExtra("issue_id",id)
+                            putExtra("issue_id", id)
                         },
                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )
             }
+
             IssueState.OnPause -> {
                 builder.addAction(
                     R.drawable.play_icon,
                     "Старт",
                     PendingIntent.getBroadcast(
-                        context,id,Intent(context, NotificationReceiver::class.java).apply {
+                        context, id, Intent(context, NotificationReceiver::class.java).apply {
                             action = "START"
-                            putExtra("issue_id",id)
+                            putExtra("issue_id", id)
                         },
                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                     )
@@ -196,9 +197,9 @@ class IssuesService : Service() {
                     R.drawable.pause_icon,
                     "Стоп",
                     PendingIntent.getBroadcast(
-                        context,id,Intent(context, NotificationReceiver::class.java).apply {
+                        context, id, Intent(context, NotificationReceiver::class.java).apply {
                             action = "STOP"
-                            putExtra("issue_id",id)
+                            putExtra("issue_id", id)
                         },
                         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                     )

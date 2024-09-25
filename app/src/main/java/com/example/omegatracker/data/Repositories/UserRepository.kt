@@ -1,4 +1,4 @@
-package com.example.omegatracker.data
+package com.example.omegatracker.data.Repositories
 
 import com.example.omegatracker.OmegaTrackerApplication
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
@@ -8,8 +8,8 @@ import com.example.omegatracker.entity.IssueFromJson
 import com.example.omegatracker.entity.IssueState
 import com.example.omegatracker.entity.IssuesFilterType
 import com.example.omegatracker.entity.User
-import com.example.omegatracker.entity.UserRepository
 import com.example.omegatracker.entity.Value
+import com.example.omegatracker.entity.repositories.UserRepository
 import com.example.omegatracker.room.IssueEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,8 @@ import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-class UserRepositoryImpl : UserRepository {
+class UserRepository :
+    UserRepository {
 
     private val youTrackApiService = appComponent.getYouTrackApiService()
     private val userManager = appComponent.getUserManager()

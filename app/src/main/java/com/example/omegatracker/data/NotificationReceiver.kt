@@ -6,7 +6,7 @@ import android.content.Intent
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 
 class NotificationReceiver : BroadcastReceiver() {
-    val repository = appComponent.getUserRepositoryImpl()
+    val repository = appComponent.getUserRepository()
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent != null) {
             when (intent.action) {

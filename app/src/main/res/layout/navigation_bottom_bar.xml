@@ -3,33 +3,41 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp"
+    android:layout_marginHorizontal="5dp"
     android:background="@color/transparent_white">
 
-    <Button
+    <ImageButton
         android:id="@+id/buttonChangesList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="ChangeList"
+        android:src="@drawable/change_icon"
+        android:background="@color/transparent_white"
         android:gravity="center"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/buttonAddIssue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="AddIssue"
+        android:src="@drawable/add_icon"
+        android:background="@color/transparent_white"
         android:gravity="center"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/buttonStatistics"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:src="@drawable/statistics_icon"
         android:text="Statistics"
+        android:background="@color/transparent_white"
         android:gravity="center"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
 </LinearLayout>

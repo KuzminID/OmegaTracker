@@ -5,10 +5,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 
-@Database(entities = [IssueEntity::class], version = 1)
+@Database(entities = [IssueEntity::class, IssuesChangeList::class], version = 1)
 abstract class IssuesDatabase : RoomDatabase() {
 
     abstract fun getIssuesDao(): IssuesDao
+
+    abstract fun getChangesDao(): ChangesDao
 
     object Dependencies {
         private val applicationContext = appComponent.getContext()
