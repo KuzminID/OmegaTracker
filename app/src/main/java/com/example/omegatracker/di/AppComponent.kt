@@ -1,12 +1,12 @@
 package com.example.omegatracker.di
 
 import android.content.Context
-import com.example.omegatracker.data.Repositories.ChangeListRepository
-import com.example.omegatracker.data.Repositories.IssueRepository
-import com.example.omegatracker.data.Repositories.UserRepository
+import com.example.omegatracker.data.Repositories.IssueRepositoryImpl
+import com.example.omegatracker.data.Repositories.TrackingHistoryRepositoryImpl
+import com.example.omegatracker.data.Repositories.UserRepositoryImpl
 import com.example.omegatracker.data.UserManager
 import com.example.omegatracker.data.YouTrackAPIService
-import com.example.omegatracker.room.ChangesDao
+import com.example.omegatracker.room.HistoryDao
 import com.example.omegatracker.room.IssuesDao
 import com.example.omegatracker.service.TaskManager
 import com.google.gson.Gson
@@ -20,14 +20,14 @@ interface AppComponent {
     fun createRetrofitBuilder(): RetrofitComponent.Builder
 
     fun getContext(): Context
-    fun getUserRepository(): UserRepository
-    fun getChangeListRepository(): ChangeListRepository
-    fun getIssueRepository(): IssueRepository
+    fun getUserRepository(): UserRepositoryImpl
+    fun getChangeListRepository(): TrackingHistoryRepositoryImpl
+    fun getIssueRepository(): IssueRepositoryImpl
     fun getGson(): Gson
     fun getUserManager(): UserManager
     fun getYouTrackApiService(): YouTrackAPIService
     fun getTaskManager(): TaskManager
     fun getIssuesDao(): IssuesDao
 
-    fun getChangesDao(): ChangesDao
+    fun getChangesDao(): HistoryDao
 }

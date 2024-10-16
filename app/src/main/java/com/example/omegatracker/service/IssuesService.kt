@@ -19,17 +19,18 @@ import com.example.omegatracker.data.NotificationReceiver
 import com.example.omegatracker.data.componentsToString
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssueState
-import com.example.omegatracker.ui.activities.timer.IssueTimerActivity
+import com.example.omegatracker.ui.timer.IssueTimerActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
+import java.io.Serializable
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.milliseconds
 
-interface IssuesServiceBinder {
+interface IssuesServiceBinder : Serializable {
     fun startIssue(issue: Issue)
     fun stopIssue(issue: Issue)
     fun pauseIssue(issue: Issue)

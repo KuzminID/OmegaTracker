@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loadingFragment">
+
+    <fragment
+        android:id="@+id/issuesFragment"
+        android:name="com.example.omegatracker.ui.issues.IssuesFragment"
+        android:label="fragment_issues"
+        tools:layout="@layout/fragment_issues">
+        <argument
+            android:name="Controller"
+            app:argType="com.example.omegatracker.service.IssuesServiceBinder" />
+    </fragment>
+    <fragment
+        android:id="@+id/trackingHistoryFragment"
+        android:name="com.example.omegatracker.ui.trackingHistory.TrackingHistoryFragment"
+        android:label="fragment_tracking_history"
+        tools:layout="@layout/fragment_tracking_history" />
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="com.example.omegatracker.LoadingFragment"
+        android:label="fragment_loading"
+        tools:layout="@layout/fragment_loading">
+        <action
+            android:id="@+id/action_loadingFragment_to_issuesFragment"
+            app:destination="@id/issuesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.example.omegatracker.ui.statistics.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics" />
+</navigation>

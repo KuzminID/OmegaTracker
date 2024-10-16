@@ -1,6 +1,5 @@
 package com.example.omegatracker.service
 
-import android.os.SystemClock
 import android.util.Log
 import com.example.omegatracker.entity.Issue
 import kotlinx.coroutines.Dispatchers

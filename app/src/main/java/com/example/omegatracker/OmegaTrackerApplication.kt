@@ -13,6 +13,7 @@ import com.example.omegatracker.room.IssuesDatabase
 class OmegaTrackerApplication : Application() {
 
     companion object {
+        val appStartTime = System.currentTimeMillis()
         private lateinit var userManager: UserManager
         private const val defaultUrl = "https://example.youtrack.cloud"
 

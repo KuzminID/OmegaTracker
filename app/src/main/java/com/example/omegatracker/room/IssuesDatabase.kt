@@ -10,7 +10,7 @@ abstract class IssuesDatabase : RoomDatabase() {
 
     abstract fun getIssuesDao(): IssuesDao
 
-    abstract fun getChangesDao(): ChangesDao
+    abstract fun getChangesDao(): HistoryDao
 
     object Dependencies {
         private val applicationContext = appComponent.getContext()

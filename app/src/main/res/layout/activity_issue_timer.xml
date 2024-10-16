@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activities.timer.IssueTimerActivity">
+        tools:context=".ui.timer.IssueTimerActivity">
 
         <ImageButton
             android:id="@+id/issue_timer_back_btn"

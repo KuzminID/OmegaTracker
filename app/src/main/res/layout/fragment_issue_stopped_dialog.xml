@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:layout_gravity="center"
+    android:background="@color/lavender"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/issue_summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:fontFamily="@font/rubik_regular"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/issue_timer_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Сколько времени было затрачено?"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:fontFamily="@font/rubik_regular"
+        app:layout_constraintTop_toBottomOf="@id/issue_summary"/>
+
+    <TimePicker
+        android:id="@+id/issue_time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/issue_timer_header"/>
+
+    <LinearLayout
+        android:id="@+id/is_completed_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/issue_time_picker"
+        app:layout_constraintLeft_toLeftOf="parent">
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/issue_is_completed_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Задача была выполнена?"
+            android:textSize="14sp"
+            android:fontFamily="@font/rubik_regular" />
+
+        <RadioButton
+            android:id="@+id/r_b_completed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/auth_button_shape"
+        android:text="Завершено"
+        android:textColor="@color/white"
+        style="@style/button_style"
+        app:layout_constraintTop_toBottomOf="@id/is_completed_layout"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

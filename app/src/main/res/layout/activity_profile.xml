@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.profile.ProfileActivity">
+    tools:context=".ui.profile.ProfileActivity">
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/profile_test_btn"
