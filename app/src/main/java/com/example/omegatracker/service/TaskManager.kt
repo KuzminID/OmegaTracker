@@ -18,6 +18,8 @@ class TaskManager {
         if (!runningIssues.containsKey(issue.id)) {
             runningIssues[issue.id] = TaskRunner(issue)
             startIssue(issue)
+        } else {
+            startIssue(issue)
         }
     }
 
@@ -42,6 +44,9 @@ class TaskManager {
     }
 
     fun getIssuesUpdates(issue: Issue): Flow<Issue> {
+        if (!runningIssues.containsKey(issue.id)) {
+            addIssue(issue)
+        }
         return runningIssues[issue.id]!!.flow
     }
 

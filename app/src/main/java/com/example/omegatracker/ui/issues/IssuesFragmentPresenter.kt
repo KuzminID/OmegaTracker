@@ -4,26 +4,24 @@ import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssuesFilterType
 import com.example.omegatracker.service.IssuesServiceBinder
-import com.example.omegatracker.ui.base.BasePresenter
+import com.example.omegatracker.ui.base.BaseServicePresenter
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class IssuesFragmentPresenter : BasePresenter<IssuesFragmentView>() {
+
+
+class IssuesFragmentPresenter : BaseServicePresenter<IssuesFragmentView>() {
 
     private val userRepositoryImpl = appComponent.getIssueRepository()
-    private val observableIssues = mutableMapOf<String, Job>()
-    private lateinit var controller: IssuesServiceBinder
-
-    fun setController(controller: IssuesServiceBinder) {
-        this.controller = controller
-    }
 
     fun getIssuesList() {
         launch {
             try {
                 viewState.setFilterData(userRepositoryImpl.getIssuesHeaderData())
                 userRepositoryImpl.getIssuesList().collect {
-                    //checkActiveIssues(it)
+                    checkActiveIssues(it)
                     val sortedIssues = sortIssues(it)
                     viewState.setIssuesToRV(sortedIssues)
                 }
@@ -33,36 +31,39 @@ class IssuesFragmentPresenter : BasePresenter<IssuesFragmentView>() {
         }
     }
 
-    fun startIssue(issue: Issue) {
-        launch {
-            issue.startTime = System.currentTimeMillis()
-        }.invokeOnCompletion {
-            launch {
-                userRepositoryImpl.upsertIssueToDB(issue)
-            }
-            controller.startIssue(issue)
-            observeActiveIssueUpdate(issue)
-        }
-    }
-
     private fun checkActiveIssues(issues: List<Issue>) {
         val activeIssues = issues.filter { it.isActive }
         if (activeIssues.isNotEmpty()) {
-            restartIssues(activeIssues)
+            launch {
+                activeIssues.forEach { issue ->
+                    lateStartIssue(issue)
+                }
+                _isControllerInit.collect{
+                    println("Это было собрано $it")
+                    if (it) {
+                        println(observableIssuesList)
+                        activeIssues.forEach{entry->
+                            observeIssueUpdates(entry)
+                        }
+                    }
+                }
+            }
         }
     }
 
-    private fun restartIssues(issues: List<Issue>) {
-        issues.forEach {
-            controller.startIssue(it)
-            observeActiveIssueUpdate(it)
+    private fun observeIssueUpdates(issue : Issue) {
+        launch {
+            controller.getResults(issue).collect{
+                viewState.updateIssueTimer(it)
+            }
         }
     }
 
-    private fun observeActiveIssueUpdate(issue: Issue) {
-        observableIssues[issue.id] = launch {
-            controller.getResults(issue).collect { updatedIssue ->
-                viewState.updateIssueTimer(updatedIssue)
+    public override fun startIssue(issue : Issue) {
+        super.startIssue(issue)
+        launch {
+            observableIssuesList[issue]?.collect() {
+                viewState.updateIssueTimer(it)
             }
         }
     }

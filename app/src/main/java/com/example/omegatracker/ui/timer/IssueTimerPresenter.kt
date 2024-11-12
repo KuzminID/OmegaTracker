@@ -1,25 +1,25 @@
 package com.example.omegatracker.ui.timer
 
-import android.os.SystemClock
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssueButtonsAction
 import com.example.omegatracker.entity.IssueState
-import com.example.omegatracker.room.IssuesChangeList
+import com.example.omegatracker.room.IssuesTrackingHistory
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.base.BasePresenter
+import com.example.omegatracker.ui.base.BaseServicePresenter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.minutes
 
-class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
+class IssueTimerPresenter : BaseServicePresenter<IssueTimerView>() {
     private val issueRepository = appComponent.getIssueRepository()
-    private val changesRepository = appComponent.getChangeListRepository()
-    private lateinit var controller: IssuesServiceBinder
+    private val changesRepository = appComponent.getTrackingHistoryRepository()
     private lateinit var issue: Issue
 
-    fun setController(controller: IssuesServiceBinder) {
-        this.controller = controller
-    }
+//    fun setController(controller: IssuesServiceBinder) {
+//        this.controller = controller
+//    }
 
     private fun observeIssueTimer() {
         launch {
@@ -32,59 +32,45 @@ class IssueTimerPresenter : BasePresenter<IssueTimerView>() {
     }
 
     fun startIssue() {
-        issue.isActive = true
-        issue.state = IssueState.OnWork
-        issue.startTime = SystemClock.elapsedRealtime()
-
-        controller.startIssue(issue)
-        launch {
-            issueRepository.upsertIssueToDB(issue)
-        }
-        viewState.setIssuesInfo(issue)
+//        launch {
+//            issue = issueRepository.getIssueByIDFromDB(issue.id)!!
+//            issue.isActive = true
+//            issue.state = IssueState.OnWork
+//            issue.startTime = System.currentTimeMillis()
+//
+//            controller.startIssue(issue)
+//            issueRepository.upsertIssueToDB(issue)
+//            viewState.setIssuesInfo(issue)
+//            observeIssueTimer()
+//        }
+        super.startIssue(issue)
         observeIssueTimer()
     }
 
     fun stopIssue() {
-        issue.isActive = false
-        issue.state = IssueState.OnStop
-        viewState.setIssuesInfo(issue)
-        launch {
-            issueRepository.upsertIssueToDB(issue)
-
-            changesRepository.insertChange(
-                IssuesChangeList(
-                    durationTime = 0,
-                    endTime = System.currentTimeMillis(),
-                    issueSummary = issue.summary,
-                    projectName = issue.projectName,
-                    startTime = issue.startTime,
-                    time = System.currentTimeMillis()
-                )
-            )
-        }.invokeOnCompletion {
-            controller.stopIssue(issue)
-        }
+        super.stopIssue(issue)
     }
 
     fun pauseIssue() {
-        issue.isActive = false
-        issue.state = IssueState.OnPause
-        viewState.setIssuesInfo(issue)
-        launch {
-            issueRepository.upsertIssueToDB(issue)
-            changesRepository.insertChange(
-                IssuesChangeList(
-                    durationTime = 0,
-                    endTime = System.currentTimeMillis(),
-                    issueSummary = issue.summary,
-                    projectName = issue.projectName,
-                    startTime = issue.startTime,
-                    time = System.currentTimeMillis()
-                )
-            )
-        }.invokeOnCompletion {
-            controller.pauseIssue(issue)
-        }
+//        issue.isActive = false
+//        issue.state = IssueState.OnPause
+//        viewState.setIssuesInfo(issue)
+//        launch {
+//            issueRepository.upsertIssueToDB(issue)
+//            changesRepository.insertChange(
+//                IssuesTrackingHistory(
+//                    durationTime = 0,
+//                    endTime = System.currentTimeMillis(),
+//                    issueSummary = issue.summary,
+//                    projectName = issue.projectName,
+//                    startTime = issue.startTime,
+//                    time = System.currentTimeMillis()
+//                )
+//            )
+//        }.invokeOnCompletion {
+//            controller.pauseIssue(issue)
+//        }
+        super.pauseIssue(issue)
     }
 
 

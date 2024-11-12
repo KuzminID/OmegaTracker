@@ -16,6 +16,8 @@ interface IssueRepository {
     fun compareIssues(dbIssues: List<Issue>?, serverIssues: List<Issue>)
 
     suspend fun upsertIssueToDB(issue: Issue)
+
+    suspend fun updateDBIssue(issue: Issue)
     suspend fun getAllIssuesFromDB(): List<Issue>
     suspend fun getIssueByIDFromDB(id: String): Issue?
     suspend fun deleteIssueFromDB(issue: Issue)

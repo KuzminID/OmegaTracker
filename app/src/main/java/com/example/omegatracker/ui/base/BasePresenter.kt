@@ -11,6 +11,8 @@ import java.net.UnknownHostException
 import kotlin.coroutines.CoroutineContext
 
 open class BasePresenter<V : BaseView> : MvpPresenter<V>(), CoroutineScope {
+
+    //Coroutine and exception handler implementation
     private val supervisorJob = SupervisorJob()
     private val coroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
@@ -36,4 +38,6 @@ open class BasePresenter<V : BaseView> : MvpPresenter<V>(), CoroutineScope {
         }
     override val coroutineContext: CoroutineContext =
         supervisorJob + Dispatchers.Main + coroutineExceptionHandler
+
+    //Service controller handling implementation
 }

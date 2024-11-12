@@ -47,4 +47,8 @@
     <string name="empty_tracking_history">Не было зафиксировано изменений</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="spent_time_question">Сколько времени было затрачено?</string>
+    <string name="issue_completed_question">Задача была выполнена?</string>
+    <string name="completed_btn">Завершено</string>
+    <string name="loading_text">Загрузка...</string>
 </resources>

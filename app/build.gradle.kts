@@ -98,4 +98,9 @@ dependencies {
     // Views/Fragments integration
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+
+
+    //Omega RecyclerView
+    implementation("com.github.Omega-R.OmegaRecyclerView:omegarecyclerview:1.10.1@aar")
+//    implementation("com.github.Omega-R:OmegaRecyclerView:1.8.2@aar")
 }

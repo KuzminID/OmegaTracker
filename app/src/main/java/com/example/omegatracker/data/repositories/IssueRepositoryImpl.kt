@@ -1,4 +1,4 @@
-package com.example.omegatracker.data.Repositories
+package com.example.omegatracker.data.repositories
 
 import com.example.omegatracker.OmegaTrackerApplication
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appStartTime
@@ -27,6 +27,13 @@ class IssueRepositoryImpl : IssueRepository {
     private val youTrackApiService = OmegaTrackerApplication.appComponent.getYouTrackApiService()
     private val userManager = OmegaTrackerApplication.appComponent.getUserManager()
     private val issuesDao = OmegaTrackerApplication.appComponent.getIssuesDao()
+
+    private companion object {
+        const val spentTimeCFID = "150-1" //defining value that contains PeriodCustomField spent time id
+        const val estimatedTimeCFID = "150-0"
+        const val periodCFType = "PeriodIssueCustomField"
+        const val stateCFType = "StateIssueCustomField"
+    }
 
     override suspend fun getIssuesList(): Flow<List<Issue>> = flow {
         //Defining variables for current date in milliseconds and parsed issues from server
@@ -58,7 +65,6 @@ class IssueRepositoryImpl : IssueRepository {
             emit(emptyList())
             throw UnknownHostException()
         }
-
     }.flowOn(Dispatchers.IO)
 
     override fun getIssuesHeaderData(): List<IssuesFilterType> {
@@ -68,7 +74,7 @@ class IssueRepositoryImpl : IssueRepository {
     override suspend fun parseIssue(issue: List<IssueFromJson>): List<Issue> {
         var data: List<Issue> = issue.map { issueFromJson ->
             val spentTime =
-                issueFromJson.customFields.find { it.type == "PeriodIssueCustomField" && it.id == "150-1" }
+                issueFromJson.customFields.find { it.type == periodCFType && it.id == spentTimeCFID }
                     .let { field ->
                         when (field?.value) {
                             is Value.Period -> {
@@ -82,7 +88,7 @@ class IssueRepositoryImpl : IssueRepository {
                         }
                     }
             val estimatedTime =
-                issueFromJson.customFields.find { it.type == "PeriodIssueCustomField" && it.id == "150-0" }
+                issueFromJson.customFields.find { it.type == periodCFType && it.id == estimatedTimeCFID }
                     .let { field ->
                         when (field?.value) {
                             is Value.Period -> {
@@ -96,7 +102,7 @@ class IssueRepositoryImpl : IssueRepository {
                         }
                     }
             var isResolved: Boolean
-            val state = issueFromJson.customFields.find { it.type == "StateIssueCustomField" }
+            val state = issueFromJson.customFields.find { it.type == stateCFType }
                 .let { field ->
                     field?.value as Value.State
                     isResolved = field.value.isResolved
@@ -160,10 +166,14 @@ class IssueRepositoryImpl : IssueRepository {
                     }
                 }
                 updatedIssues.forEach {
-                    upsertIssueToDB(it)
+                    updateDBIssue(it)
                 }
             }
         }
+    }
+
+    override suspend fun updateDBIssue(issue: Issue) {
+        issuesDao.updateIssue(IssueEntity(issue))
     }
 
     override suspend fun upsertIssueToDB(issue: Issue) {

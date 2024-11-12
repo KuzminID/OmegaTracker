@@ -13,7 +13,7 @@ import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssuesFilterType
 
 class IssuesFragmentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private lateinit var callback: IssuesCallback
+    private lateinit var callback: IssuesAdapterCallback
 
     var issuesList = emptyList<Issue>()
         set(value) {
@@ -39,7 +39,7 @@ class IssuesFragmentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             field = value
         }
 
-    fun setCallback(callback: IssuesCallback) {
+    fun setCallback(callback: IssuesAdapterCallback) {
         this.callback = callback
     }
 

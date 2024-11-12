@@ -1,26 +1,69 @@
 package com.example.omegatracker
 
+import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import com.example.omegatracker.entity.Issue
+import com.example.omegatracker.entity.IssueState
+import com.example.omegatracker.room.IssueEntity
+import com.example.omegatracker.room.IssuesDao
+import com.example.omegatracker.room.IssuesDatabase
+import com.example.omegatracker.room.IssuesTrackingHistory
+import com.example.omegatracker.room.TrackingHistoryDao
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
+import kotlinx.coroutines.runBlocking
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.time.Duration.Companion.milliseconds
 
 //  Tests class
 @RunWith(AndroidJUnit4::class)
 class IssuesDaoTest {
 
-//    private lateinit var db: IssuesDatabase
-//    private lateinit var issuesDao: IssuesDao
-//
-//    @Before
-//    fun createDb() {
-//        val context = InstrumentationRegistry.getInstrumentation().targetContext
-//        db = Room.inMemoryDatabaseBuilder(context, IssuesDatabase::class.java).build()
-//        issuesDao = db.getIssuesDao()
-//    }
-//
-//    @After
-//    fun closeDb() {
-//        db.close()
-//    }
+    private lateinit var db: IssuesDatabase
+    private lateinit var historyDao: TrackingHistoryDao
+    private lateinit var issuesDao : IssuesDao
+
+    @Before
+    fun createDb() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        db = Room.inMemoryDatabaseBuilder(context, IssuesDatabase::class.java).build()
+        historyDao = db.getTrackingHistoryDAO()
+        issuesDao = db.getIssuesDao()
+    }
+
+    @After
+    fun closeDb() {
+        db.close()
+    }
+
+    @Test
+    fun insertHistory_shouldInsertIssue() =
+        runBlocking {
+            val issue = Issue(
+                "0-1", "Issue 1", "Description 1", 1000.milliseconds, 2000.milliseconds,
+                "Project 1", "Project Name 1", true, IssueState.Open,created = 0, startTime = System.currentTimeMillis()
+            )
+            val history = IssuesTrackingHistory(
+                historyElementID = 1,
+                durationTime = 0,
+                issueId = issue.id,
+                endTime = System.currentTimeMillis(),
+                issueStartTime = issue.startTime,
+            )
+            issuesDao.insertIssue(IssueEntity(issue))
+            historyDao.insertData(history)
+
+            val insertedHistory = historyDao.getHistoryById("1")
+            val groupedElement = historyDao.getAllHistory()
+            val firstHistory = groupedElement.flatMap { it.history }[0]
+            println(firstHistory)
+            assertNotNull(insertedHistory)
+            assertEquals(history,firstHistory)
+        }
 //
 //    //  Inserts test
 //    @Test

@@ -91,8 +91,8 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
             actionChanged(IssueButtonsAction.StartAction)
         }
         binding.issueTimerStopBtn.setOnClickListener {
-            timerPresenter.stopIssue()
             IssueStoppedDialogFragment.showDialog(supportFragmentManager)
+            timerPresenter.stopIssue()
             actionChanged(IssueButtonsAction.StopAction)
         }
         binding.issueTimerPauseBtn.setOnClickListener {
@@ -155,7 +155,7 @@ class IssueTimerActivity : BaseActivity(), IssueTimerView {
         lifecycleScope.launch {
             _serviceControllerState.collect { controller ->
                 if (controller != null) {
-                    timerPresenter.setController(controller)
+                    timerPresenter.attachController(controller)
                 }
             }
         }

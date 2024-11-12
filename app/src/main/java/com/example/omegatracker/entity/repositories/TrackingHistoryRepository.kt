@@ -1,10 +1,11 @@
 package com.example.omegatracker.entity.repositories
 
-import com.example.omegatracker.room.IssuesChangeList
+import com.example.omegatracker.room.IssueAndHistory
+import com.example.omegatracker.room.IssuesTrackingHistory
 
 interface TrackingHistoryRepository {
-    suspend fun getChangeList(): List<IssuesChangeList>
-    suspend fun insertChange(changeList: IssuesChangeList)
+    suspend fun insertChange(trackingHistory: IssuesTrackingHistory)
 
+    suspend fun getAllHistory() : List<IssueAndHistory>
     suspend fun clearDB()
 }

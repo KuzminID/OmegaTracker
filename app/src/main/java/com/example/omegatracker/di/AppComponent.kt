@@ -1,13 +1,13 @@
 package com.example.omegatracker.di
 
 import android.content.Context
-import com.example.omegatracker.data.Repositories.IssueRepositoryImpl
-import com.example.omegatracker.data.Repositories.TrackingHistoryRepositoryImpl
-import com.example.omegatracker.data.Repositories.UserRepositoryImpl
+import com.example.omegatracker.data.repositories.IssueRepositoryImpl
+import com.example.omegatracker.data.repositories.TrackingHistoryRepositoryImpl
+import com.example.omegatracker.data.repositories.UserRepositoryImpl
 import com.example.omegatracker.data.UserManager
 import com.example.omegatracker.data.YouTrackAPIService
-import com.example.omegatracker.room.HistoryDao
 import com.example.omegatracker.room.IssuesDao
+import com.example.omegatracker.room.TrackingHistoryDao
 import com.example.omegatracker.service.TaskManager
 import com.google.gson.Gson
 import dagger.Component
@@ -21,7 +21,7 @@ interface AppComponent {
 
     fun getContext(): Context
     fun getUserRepository(): UserRepositoryImpl
-    fun getChangeListRepository(): TrackingHistoryRepositoryImpl
+    fun getTrackingHistoryRepository(): TrackingHistoryRepositoryImpl
     fun getIssueRepository(): IssueRepositoryImpl
     fun getGson(): Gson
     fun getUserManager(): UserManager
@@ -29,5 +29,5 @@ interface AppComponent {
     fun getTaskManager(): TaskManager
     fun getIssuesDao(): IssuesDao
 
-    fun getChangesDao(): HistoryDao
+    fun getHistoryDao(): TrackingHistoryDao
 }

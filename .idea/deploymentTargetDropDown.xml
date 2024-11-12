@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="IssuesDaoTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -17,6 +20,9 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-08-15T14:45:39.569406800Z" />
         </State>
+      </entry>
+      <entry key="insertHistory_shouldInsertIssue()">
+        <State />
       </entry>
     </value>
   </component>

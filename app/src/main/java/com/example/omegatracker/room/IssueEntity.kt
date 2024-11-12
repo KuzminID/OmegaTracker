@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.omegatracker.entity.Issue
 
-@Entity(tableName = "issues")
+@Entity(tableName = "issuesTable")
 data class IssueEntity(
     @PrimaryKey val id: String,
     val summary: String,

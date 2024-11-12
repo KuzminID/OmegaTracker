@@ -1,9 +1,9 @@
 package com.example.omegatracker.di
 
 import android.content.SharedPreferences
-import com.example.omegatracker.data.Repositories.IssueRepositoryImpl
-import com.example.omegatracker.data.Repositories.TrackingHistoryRepositoryImpl
-import com.example.omegatracker.data.Repositories.UserRepositoryImpl
+import com.example.omegatracker.data.repositories.IssueRepositoryImpl
+import com.example.omegatracker.data.repositories.TrackingHistoryRepositoryImpl
+import com.example.omegatracker.data.repositories.UserRepositoryImpl
 import com.example.omegatracker.data.UserManager
 import com.google.gson.Gson
 import dagger.Module
@@ -21,7 +21,7 @@ class CustomDependenciesModule {
 
     @Singleton
     @Provides
-    fun provideChangeListRepository(): TrackingHistoryRepositoryImpl {
+    fun provideTrackingHistoryRepository(): TrackingHistoryRepositoryImpl {
         return TrackingHistoryRepositoryImpl()
     }
 

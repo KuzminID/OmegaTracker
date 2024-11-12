@@ -52,7 +52,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.example.omegatracker.customDrawables.CustomProgressBar
+        <com.example.omegatracker.custom_views.CustomProgressBar
             android:id="@+id/issue_timer_progressbar"
             android:layout_width="300dp"
             android:layout_height="0dp"

@@ -2,26 +2,24 @@ package com.example.omegatracker.ui.trackingHistory
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.omegatracker.OmegaTrackerApplication
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
-import com.example.omegatracker.room.IssuesChangeList
+import com.example.omegatracker.room.IssueAndHistory
+import com.example.omegatracker.room.IssueEntity
+import com.example.omegatracker.room.IssuesTrackingHistory
 import com.example.omegatracker.ui.base.BasePresenter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
 
 class TrackingHistoryFragmentPresenter : BasePresenter<TrackingHistoryFragmentView>() {
-    private val repository = appComponent.getChangeListRepository()
+    private val repository = appComponent.getTrackingHistoryRepository()
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getChangesList() {
+    fun getTrackingHistory() {
         launch(Dispatchers.IO) {
-            val data = repository.getChangeList()
+            val data = repository.getAllHistory()
             launch(Dispatchers.Main) {
              viewState.setAdapterData(filterChangesList(data))
             }
@@ -41,11 +39,20 @@ class TrackingHistoryFragmentPresenter : BasePresenter<TrackingHistoryFragmentVi
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun filterChangesList(changesList: List<IssuesChangeList>): Map<String, List<IssuesChangeList>> {
-        return changesList.groupBy {
-            val date = Date(it.startTime)
-            val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-            formatter.format(date)
+    private fun filterChangesList(trackingHistory: List<IssueAndHistory>) : List<IssueAndHistory> {
+        var history : List<IssueAndHistory> = listOf()
+        history = trackingHistory.sortedByDescending {
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+            LocalDate.parse(it.history.historyGroup,formatter)
         }
+//        val history: List<IssuesTrackingHistory> = trackingHistory.flatMap { it.history }
+//            .sortedByDescending {
+//                // Парсим строку даты в объект LocalDate
+//                val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+//                LocalDate.parse(it.historyGroup, formatter)
+//            }
+//        val issues: List<IssueEntity> = trackingHistory.map { it.issue }
+
+        return history
     }
 }

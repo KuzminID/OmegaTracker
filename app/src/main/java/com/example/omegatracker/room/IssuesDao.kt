@@ -19,24 +19,24 @@ interface IssuesDao {
     @Delete
     suspend fun deleteIssue(issue: IssueEntity)
 
-    @Query("SELECT * FROM issues WHERE id = :id")
+    @Query("SELECT * FROM issuesTable WHERE id = :id")
     suspend fun getIssueById(id: String): IssueEntity?
 
-    @Query("SELECT * FROM issues")
+    @Query("SELECT * FROM issuesTable")
     suspend fun getAllIssues(): List<IssueEntity>
 
-    @Query("SELECT * FROM issues WHERE projectShortName = :projectShortName")
+    @Query("SELECT * FROM issuesTable WHERE projectShortName = :projectShortName")
     suspend fun getIssuesByProject(projectShortName: String): List<IssueEntity>
 
-    @Query("SELECT * FROM issues WHERE isActive = 1")
+    @Query("SELECT * FROM issuesTable WHERE isActive = 1")
     suspend fun getActiveIssues(): List<IssueEntity>
 
-    @Query("UPDATE issues SET isActive = 0 WHERE id = :id")
+    @Query("UPDATE issuesTable SET isActive = 0 WHERE id = :id")
     suspend fun deactivateIssue(id: String)
 
-    @Query("DELETE FROM issues")
+    @Query("DELETE FROM issuesTable")
     suspend fun deleteAll()
 
-    @Query("UPDATE issues SET isActive = 0")
+    @Query("UPDATE issuesTable SET isActive = 0")
     suspend fun deactivateAllIssues()
 }

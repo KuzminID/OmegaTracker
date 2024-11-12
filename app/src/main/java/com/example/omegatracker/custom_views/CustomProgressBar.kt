@@ -1,4 +1,4 @@
-package com.example.omegatracker.customDrawables
+package com.example.omegatracker.custom_views
 
 import android.content.Context
 import android.graphics.Canvas

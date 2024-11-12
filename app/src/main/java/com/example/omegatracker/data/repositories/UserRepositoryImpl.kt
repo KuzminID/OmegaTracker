@@ -1,4 +1,4 @@
-package com.example.omegatracker.data.Repositories
+package com.example.omegatracker.data.repositories
 
 import com.example.omegatracker.OmegaTrackerApplication
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent

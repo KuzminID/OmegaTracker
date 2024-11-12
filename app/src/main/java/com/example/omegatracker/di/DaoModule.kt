@@ -1,8 +1,8 @@
 package com.example.omegatracker.di
 
-import com.example.omegatracker.room.HistoryDao
 import com.example.omegatracker.room.IssuesDao
 import com.example.omegatracker.room.IssuesDatabase
+import com.example.omegatracker.room.TrackingHistoryDao
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -18,8 +18,8 @@ class DaoModule {
 
     @Singleton
     @Provides
-    fun provideChangesDao(database: IssuesDatabase): HistoryDao {
-        return database.getChangesDao()
+    fun provideChangesDao(database: IssuesDatabase): TrackingHistoryDao {
+        return database.getTrackingHistoryDAO()
     }
 
     @Singleton

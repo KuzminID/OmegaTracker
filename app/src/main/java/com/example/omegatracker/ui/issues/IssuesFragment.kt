@@ -12,21 +12,30 @@ import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssuesFilterType
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.base.BaseFragment
+import com.example.omegatracker.ui.main.MainActivity
 import com.example.omegatracker.ui.profile.ProfileActivity
 import com.example.omegatracker.ui.timer.IssueTimerActivity
+import javax.inject.Singleton
 
 /**
  * A simple [Fragment] subclass.
  */
 
-interface IssuesCallback {
+interface IssuesAdapterCallback {
     fun startIssue(issueEntities: List<Issue>, position: Int)
     fun showIssueInfoActivity(issueEntity: Issue)
 
     fun filterIssuesByType(filterType: IssuesFilterType, issues: List<Issue>): List<Issue>
 }
 
-class IssuesFragment : BaseFragment(), IssuesFragmentView, IssuesCallback {
+@Singleton
+interface FragmentCallback {
+    fun setController(controller : IssuesServiceBinder)
+
+    fun detachController()
+}
+
+class IssuesFragment : BaseFragment(), IssuesFragmentView, IssuesAdapterCallback,FragmentCallback {
 
     private val presenter: IssuesFragmentPresenter by providePresenter {
         IssuesFragmentPresenter()
@@ -34,9 +43,14 @@ class IssuesFragment : BaseFragment(), IssuesFragmentView, IssuesCallback {
     private lateinit var binding: FragmentIssuesBinding
     private val adapter = IssuesFragmentAdapter()
 
-    fun setController(controller: IssuesServiceBinder) {
-        presenter.setController(controller)
-        println(controller)
+    override fun setController(controller: IssuesServiceBinder) {
+        presenter.attachController(controller)
+        println("Контроллер получен")
+        hideMessage()
+    }
+
+    override fun detachController() {
+        presenter.detachController()
     }
 
     override fun onCreateView(
@@ -46,6 +60,8 @@ class IssuesFragment : BaseFragment(), IssuesFragmentView, IssuesCallback {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_issues, container, false)
         binding = FragmentIssuesBinding.bind(view)
+        val parent = requireActivity() as MainActivity
+        parent.setFragmentCallback(this)
         return view
     }
 
@@ -54,11 +70,9 @@ class IssuesFragment : BaseFragment(), IssuesFragmentView, IssuesCallback {
         binding.userAvatar.setOnClickListener {
             startActivity(Intent(requireActivity(), ProfileActivity::class.java))
         }
-        val controller = arguments?.getSerializable("Controller") as IssuesServiceBinder
-        println("This is controller : $controller")
-        presenter.setController(controller)
         binding.rvIssuesList.adapter = adapter
         presenter.getIssuesList()
+        showMessageWithLongDuration(R.string.loading_text)
     }
 
     override fun onResume() {

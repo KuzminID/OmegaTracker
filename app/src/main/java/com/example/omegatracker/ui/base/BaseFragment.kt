@@ -25,6 +25,17 @@ open class BaseFragment : MvpAppCompatFragment(), BaseFragmentView {
         )
     }
 
+    override fun showMessageWithLongDuration(msg: Int) {
+        toast = Toast.makeText(requireActivity(),msg,Toast.LENGTH_LONG)
+        toast.show()
+    }
+
+    override fun hideMessage() {
+        if (::toast.isInitialized) {
+            toast.cancel()
+        }
+    }
+
     override fun setAvatar(url: String?, iv: ImageView) {
         Glide.with(this)
             .asDrawable()

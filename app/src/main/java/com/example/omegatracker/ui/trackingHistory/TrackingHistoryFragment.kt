@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import com.example.omegatracker.R
 import com.example.omegatracker.databinding.FragmentTrackingHistoryBinding
-import com.example.omegatracker.room.IssuesChangeList
+import com.example.omegatracker.room.IssueAndHistory
+import com.example.omegatracker.room.IssueEntity
+import com.example.omegatracker.room.IssuesTrackingHistory
 import com.example.omegatracker.ui.base.BaseFragment
-import kotlinx.coroutines.delay
 
 interface TrackingHistoryCallback {
     fun formatTimeToHMS(time: Long?): String
+    fun scrollToPosition(id : Long)
 }
 
 class TrackingHistoryFragment : BaseFragment(), TrackingHistoryFragmentView,
@@ -23,7 +25,7 @@ class TrackingHistoryFragment : BaseFragment(), TrackingHistoryFragmentView,
         TrackingHistoryFragmentPresenter()
     }
 
-    private val adapter = TrackingHistoryAdapter(this)
+    private lateinit var adapter : TrackingHistoryAdapter
 
     private lateinit var binding: FragmentTrackingHistoryBinding
 
@@ -40,8 +42,7 @@ class TrackingHistoryFragment : BaseFragment(), TrackingHistoryFragmentView,
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.changesRv.adapter = adapter
-        presenter.getChangesList()
+        presenter.getTrackingHistory()
 
         binding.issueTimerBackBtn.setOnClickListener {
             navigateUp()
@@ -51,15 +52,22 @@ class TrackingHistoryFragment : BaseFragment(), TrackingHistoryFragmentView,
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
-        presenter.getChangesList()
+        presenter.getTrackingHistory()
     }
 
-    override fun setAdapterData(data: Map<String, List<IssuesChangeList>>) {
-        adapter.items = data
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun setAdapterData(trackingHistory: List<IssueAndHistory>) {
+       // adapter = TrackingHistoryAdapter(this,data.first,data.second)
+        adapter = TrackingHistoryAdapter(this,trackingHistory)
+        binding.changesRv.adapter = adapter
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun formatTimeToHMS(time: Long?): String {
         return presenter.formatTimeToHMS(time)
+    }
+
+    override fun scrollToPosition(id: Long) {
+        binding.changesRv.smoothScrollToPosition(id.toInt())
     }
 }
