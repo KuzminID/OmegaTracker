@@ -25,7 +25,7 @@ class IssuesDaoTest {
 
     private lateinit var db: IssuesDatabase
     private lateinit var historyDao: TrackingHistoryDao
-    private lateinit var issuesDao : IssuesDao
+    private lateinit var issuesDao: IssuesDao
 
     @Before
     fun createDb() {
@@ -44,8 +44,17 @@ class IssuesDaoTest {
     fun insertHistory_shouldInsertIssue() =
         runBlocking {
             val issue = Issue(
-                "0-1", "Issue 1", "Description 1", 1000.milliseconds, 2000.milliseconds,
-                "Project 1", "Project Name 1", true, IssueState.Open,created = 0, startTime = System.currentTimeMillis()
+                "0-1",
+                "Issue 1",
+                "Description 1",
+                1000.milliseconds,
+                2000.milliseconds,
+                "Project 1",
+                "Project Name 1",
+                true,
+                IssueState.Open,
+                created = 0,
+                startTime = System.currentTimeMillis()
             )
             val history = IssuesTrackingHistory(
                 historyElementID = 1,
@@ -62,7 +71,7 @@ class IssuesDaoTest {
             val firstHistory = groupedElement.flatMap { it.history }[0]
             println(firstHistory)
             assertNotNull(insertedHistory)
-            assertEquals(history,firstHistory)
+            assertEquals(history, firstHistory)
         }
 //
 //    //  Inserts test

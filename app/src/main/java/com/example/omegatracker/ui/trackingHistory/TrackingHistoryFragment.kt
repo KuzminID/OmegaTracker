@@ -9,13 +9,11 @@ import androidx.annotation.RequiresApi
 import com.example.omegatracker.R
 import com.example.omegatracker.databinding.FragmentTrackingHistoryBinding
 import com.example.omegatracker.room.IssueAndHistory
-import com.example.omegatracker.room.IssueEntity
-import com.example.omegatracker.room.IssuesTrackingHistory
 import com.example.omegatracker.ui.base.BaseFragment
 
 interface TrackingHistoryCallback {
     fun formatTimeToHMS(time: Long?): String
-    fun scrollToPosition(id : Long)
+    fun scrollToPosition(position: Int)
 }
 
 class TrackingHistoryFragment : BaseFragment(), TrackingHistoryFragmentView,
@@ -25,7 +23,7 @@ class TrackingHistoryFragment : BaseFragment(), TrackingHistoryFragmentView,
         TrackingHistoryFragmentPresenter()
     }
 
-    private lateinit var adapter : TrackingHistoryAdapter
+    private lateinit var adapter: TrackingHistoryAdapter
 
     private lateinit var binding: FragmentTrackingHistoryBinding
 
@@ -57,8 +55,7 @@ class TrackingHistoryFragment : BaseFragment(), TrackingHistoryFragmentView,
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun setAdapterData(trackingHistory: List<IssueAndHistory>) {
-       // adapter = TrackingHistoryAdapter(this,data.first,data.second)
-        adapter = TrackingHistoryAdapter(this,trackingHistory)
+        adapter = TrackingHistoryAdapter(this, trackingHistory)
         binding.changesRv.adapter = adapter
     }
 
@@ -67,7 +64,7 @@ class TrackingHistoryFragment : BaseFragment(), TrackingHistoryFragmentView,
         return presenter.formatTimeToHMS(time)
     }
 
-    override fun scrollToPosition(id: Long) {
-        binding.changesRv.smoothScrollToPosition(id.toInt())
+    override fun scrollToPosition(position: Int) {
+        binding.changesRv.smoothScrollToPosition(position)
     }
 }

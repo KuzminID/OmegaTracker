@@ -30,12 +30,12 @@ interface IssuesAdapterCallback {
 
 @Singleton
 interface FragmentCallback {
-    fun setController(controller : IssuesServiceBinder)
+    fun setController(controller: IssuesServiceBinder)
 
     fun detachController()
 }
 
-class IssuesFragment : BaseFragment(), IssuesFragmentView, IssuesAdapterCallback,FragmentCallback {
+class IssuesFragment : BaseFragment(), IssuesFragmentView, IssuesAdapterCallback, FragmentCallback {
 
     private val presenter: IssuesFragmentPresenter by providePresenter {
         IssuesFragmentPresenter()

@@ -6,7 +6,7 @@ import com.omegar.mvp.MvpView
 interface BaseView : MvpView {
     fun showMessage(msg: Int)
 
-    fun showMessageWithLongDuration(msg : Int)
+    fun showMessageWithLongDuration(msg: Int)
 
     fun hideMessage()
 

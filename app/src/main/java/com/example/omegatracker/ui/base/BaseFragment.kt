@@ -26,7 +26,7 @@ open class BaseFragment : MvpAppCompatFragment(), BaseFragmentView {
     }
 
     override fun showMessageWithLongDuration(msg: Int) {
-        toast = Toast.makeText(requireActivity(),msg,Toast.LENGTH_LONG)
+        toast = Toast.makeText(requireActivity(), msg, Toast.LENGTH_LONG)
         toast.show()
     }
 

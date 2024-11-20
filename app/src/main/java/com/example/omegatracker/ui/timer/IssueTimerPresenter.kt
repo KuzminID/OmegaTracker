@@ -4,11 +4,7 @@ import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssueButtonsAction
 import com.example.omegatracker.entity.IssueState
-import com.example.omegatracker.room.IssuesTrackingHistory
-import com.example.omegatracker.service.IssuesServiceBinder
-import com.example.omegatracker.ui.base.BasePresenter
 import com.example.omegatracker.ui.base.BaseServicePresenter
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.minutes
 

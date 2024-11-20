@@ -9,8 +9,7 @@
         android:id="@+id/issuesFragment"
         android:name="com.example.omegatracker.ui.issues.IssuesFragment"
         android:label="fragment_issues"
-        tools:layout="@layout/fragment_issues">
-    </fragment>
+        tools:layout="@layout/fragment_issues"></fragment>
     <fragment
         android:id="@+id/trackingHistoryFragment"
         android:name="com.example.omegatracker.ui.trackingHistory.TrackingHistoryFragment"

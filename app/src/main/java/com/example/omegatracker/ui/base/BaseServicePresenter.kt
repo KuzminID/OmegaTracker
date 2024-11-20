@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 open class BaseServicePresenter<V : BaseView> : BasePresenter<V>() {
@@ -24,11 +22,12 @@ open class BaseServicePresenter<V : BaseView> : BasePresenter<V>() {
     protected open lateinit var controller: IssuesServiceBinder
     private var issueBackstack: MutableList<IssueBackstack> = mutableListOf()
 
-    protected val observableIssuesList : MutableMap<Issue,Flow<Issue>> = mutableMapOf()
+    protected val observableIssuesList: MutableMap<Issue, Flow<Issue>> = mutableMapOf()
 
-    private val issueRepository = OmegaTrackerApplication.appComponent.getIssueRepository()
+    private val issueRepository = appComponent.getIssueRepository()
 
-    private val trackingHistoryRepos = OmegaTrackerApplication.appComponent.getTrackingHistoryRepository()
+    private val trackingHistoryRepos =
+        appComponent.getTrackingHistoryRepository()
 
     fun attachController(controller: IssuesServiceBinder) {
         this.controller = controller
@@ -68,13 +67,13 @@ open class BaseServicePresenter<V : BaseView> : BasePresenter<V>() {
         issue.startTime = System.currentTimeMillis()
         if (isControllerInit) {
             launch {
-                issue.isActive=true
+                issue.isActive = true
                 controller.startIssue(issue)
                 observableIssuesList[issue] = controller.getResults(issue)
                 issueRepository.upsertIssueToDB(issue)
             }
         } else {
-            issueBackstack.add(IssueBackstack(issue,IssuesActions.START))
+            issueBackstack.add(IssueBackstack(issue, IssuesActions.START))
         }
     }
 
@@ -85,20 +84,14 @@ open class BaseServicePresenter<V : BaseView> : BasePresenter<V>() {
                     issue.isActive = false
                     issue.state = IssueState.OnPause
                     issueRepository.upsertIssueToDB(issue)
-                    appComponent.getHistoryDao().insertData( IssuesTrackingHistory(
-                        issueId = issue.id,
-                        endTime = System.currentTimeMillis(),
-                        issueStartTime = issue.startTime,
-                        historyGroup = convertMillisToStringDate(issue.startTime)
-                    ))
-//                    trackingHistoryRepos.insertChange(
-//                        IssuesTrackingHistory(
-//                            durationTime = 0,
-//                            issueId = issue.id,
-//                            endTime = System.currentTimeMillis(),
-//                            issueStartTime = issue.startTime,
-//                        )
-//                    )
+                    appComponent.getHistoryDao().insertData(
+                        IssuesTrackingHistory(
+                            issueId = issue.id,
+                            endTime = System.currentTimeMillis(),
+                            issueStartTime = issue.startTime,
+                            historyGroup = convertMillisToStringDate(issue.startTime)
+                        )
+                    )
                 }.invokeOnCompletion {
                     controller.pauseIssue(issue)
                     if (observableIssuesList.containsKey(issue)) {
@@ -109,7 +102,7 @@ open class BaseServicePresenter<V : BaseView> : BasePresenter<V>() {
         }
     }
 
-    private fun convertMillisToStringDate(time : Long) : String {
+    private fun convertMillisToStringDate(time: Long): String {
         val date = java.util.Date(time)
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return dateFormat.format(date)
@@ -117,28 +110,28 @@ open class BaseServicePresenter<V : BaseView> : BasePresenter<V>() {
 
     protected open fun stopIssue(issue: Issue) {
         if (isControllerInit) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    issue.isActive = false
-                    issue.state = IssueState.OnStop
+            CoroutineScope(Dispatchers.IO).launch {
+                issue.isActive = false
+                issue.state = IssueState.OnStop
 
-                    issueRepository.upsertIssueToDB(issue)
+                issueRepository.upsertIssueToDB(issue)
 
-                    trackingHistoryRepos.insertChange(
-                        IssuesTrackingHistory(
-                            issueId = issue.id,
-                            endTime = System.currentTimeMillis(),
-                            issueStartTime = issue.startTime,
-                            historyGroup = convertMillisToStringDate(issue.startTime)
-                        )
+                trackingHistoryRepos.insertChange(
+                    IssuesTrackingHistory(
+                        issueId = issue.id,
+                        endTime = System.currentTimeMillis(),
+                        issueStartTime = issue.startTime,
+                        historyGroup = convertMillisToStringDate(issue.startTime)
                     )
+                )
 
-                }.invokeOnCompletion {
-                    controller.stopIssue(issue)
-                    if (observableIssuesList.containsKey(issue)) {
-                        observableIssuesList.remove(issue)
-                    }
+            }.invokeOnCompletion {
+                controller.stopIssue(issue)
+                if (observableIssuesList.containsKey(issue)) {
+                    observableIssuesList.remove(issue)
                 }
             }
+        }
     }
 
 

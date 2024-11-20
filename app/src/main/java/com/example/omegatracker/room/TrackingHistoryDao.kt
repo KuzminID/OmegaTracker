@@ -15,8 +15,8 @@ interface TrackingHistoryDao {
     fun clearDB()
 
     @Query("SELECT * FROM trackingHistoryTable JOIN issuesTable ON trackingHistoryTable.issueId = issuesTable.id")
-    fun getAllHistory() : List<IssueAndHistory>
+    fun getAllHistory(): List<IssueAndHistory>
 
     @Query("SELECT * FROM trackingHistoryTable WHERE historyElementID = :id")
-    fun getHistoryById(id : String) : IssuesTrackingHistory
+    fun getHistoryById(id: String): IssuesTrackingHistory
 }

@@ -3,13 +3,8 @@ package com.example.omegatracker.ui.issues
 import com.example.omegatracker.OmegaTrackerApplication.Companion.appComponent
 import com.example.omegatracker.entity.Issue
 import com.example.omegatracker.entity.IssuesFilterType
-import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.base.BaseServicePresenter
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-
 
 
 class IssuesFragmentPresenter : BaseServicePresenter<IssuesFragmentView>() {
@@ -38,11 +33,11 @@ class IssuesFragmentPresenter : BaseServicePresenter<IssuesFragmentView>() {
                 activeIssues.forEach { issue ->
                     lateStartIssue(issue)
                 }
-                _isControllerInit.collect{
+                _isControllerInit.collect {
                     println("Это было собрано $it")
                     if (it) {
                         println(observableIssuesList)
-                        activeIssues.forEach{entry->
+                        activeIssues.forEach { entry ->
                             observeIssueUpdates(entry)
                         }
                     }
@@ -51,15 +46,15 @@ class IssuesFragmentPresenter : BaseServicePresenter<IssuesFragmentView>() {
         }
     }
 
-    private fun observeIssueUpdates(issue : Issue) {
+    private fun observeIssueUpdates(issue: Issue) {
         launch {
-            controller.getResults(issue).collect{
+            controller.getResults(issue).collect {
                 viewState.updateIssueTimer(it)
             }
         }
     }
 
-    public override fun startIssue(issue : Issue) {
+    public override fun startIssue(issue: Issue) {
         super.startIssue(issue)
         launch {
             observableIssuesList[issue]?.collect() {

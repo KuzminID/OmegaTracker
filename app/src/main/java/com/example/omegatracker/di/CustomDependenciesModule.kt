@@ -1,10 +1,10 @@
 package com.example.omegatracker.di
 
 import android.content.SharedPreferences
+import com.example.omegatracker.data.UserManager
 import com.example.omegatracker.data.repositories.IssueRepositoryImpl
 import com.example.omegatracker.data.repositories.TrackingHistoryRepositoryImpl
 import com.example.omegatracker.data.repositories.UserRepositoryImpl
-import com.example.omegatracker.data.UserManager
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides

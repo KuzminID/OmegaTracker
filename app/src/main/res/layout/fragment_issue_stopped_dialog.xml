@@ -17,7 +17,7 @@
         android:fontFamily="@font/rubik_regular"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/issue_timer_header"
@@ -27,7 +27,7 @@
         android:gravity="center"
         android:textSize="16sp"
         android:fontFamily="@font/rubik_regular"
-        app:layout_constraintTop_toBottomOf="@id/issue_summary"/>
+        app:layout_constraintTop_toBottomOf="@id/issue_summary" />
 
     <TimePicker
         android:id="@+id/issue_time_picker"
@@ -36,7 +36,7 @@
         android:timePickerMode="spinner"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/issue_timer_header"/>
+        app:layout_constraintTop_toBottomOf="@id/issue_timer_header" />
 
     <LinearLayout
         android:id="@+id/is_completed_layout"
@@ -44,6 +44,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/issue_time_picker"
         app:layout_constraintLeft_toLeftOf="parent">
+
         <TextView
             android:layout_weight="1"
             android:id="@+id/issue_is_completed_header"
@@ -56,7 +57,7 @@
         <RadioButton
             android:id="@+id/r_b_completed"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -71,6 +72,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/is_completed_layout"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

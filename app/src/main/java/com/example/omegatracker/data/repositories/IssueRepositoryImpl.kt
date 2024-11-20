@@ -29,7 +29,8 @@ class IssueRepositoryImpl : IssueRepository {
     private val issuesDao = OmegaTrackerApplication.appComponent.getIssuesDao()
 
     private companion object {
-        const val spentTimeCFID = "150-1" //defining value that contains PeriodCustomField spent time id
+        const val spentTimeCFID =
+            "150-1" //defining value that contains PeriodCustomField spent time id
         const val estimatedTimeCFID = "150-0"
         const val periodCFType = "PeriodIssueCustomField"
         const val stateCFType = "StateIssueCustomField"

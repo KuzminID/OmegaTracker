@@ -29,13 +29,13 @@ class IssueStoppedDialogFragment() : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_issue_stopped_dialog,container,false)
+        return inflater.inflate(R.layout.fragment_issue_stopped_dialog, container, false)
     }
 
     companion object {
         fun showDialog(fragmentManager: FragmentManager) {
             val dialog = IssueStoppedDialogFragment()
-            dialog.show(fragmentManager,"dialog")
+            dialog.show(fragmentManager, "dialog")
         }
     }
 }

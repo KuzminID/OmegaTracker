@@ -15,11 +15,9 @@ import com.example.omegatracker.databinding.ActivityMainBinding
 import com.example.omegatracker.service.IssuesService
 import com.example.omegatracker.service.IssuesServiceBinder
 import com.example.omegatracker.ui.issues.FragmentCallback
-import com.example.omegatracker.ui.issues.IssuesFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -41,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
             //Setting controller to fragment
             lifecycleScope.launch {
-                callback.collect{
+                callback.collect {
                     delay(3000)
                     it?.setController(service)
                 }

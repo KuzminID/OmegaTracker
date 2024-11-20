@@ -6,6 +6,6 @@ import com.example.omegatracker.room.IssuesTrackingHistory
 interface TrackingHistoryRepository {
     suspend fun insertChange(trackingHistory: IssuesTrackingHistory)
 
-    suspend fun getAllHistory() : List<IssueAndHistory>
+    suspend fun getAllHistory(): List<IssueAndHistory>
     suspend fun clearDB()
 }

@@ -8,8 +8,8 @@ import com.example.omegatracker.R
 import com.example.omegatracker.databinding.FragmentStatisticsBinding
 import com.example.omegatracker.ui.base.BaseFragment
 
-class StatisticsFragment : BaseFragment(),StatisticsView {
-    private lateinit var binding : FragmentStatisticsBinding
+class StatisticsFragment : BaseFragment(), StatisticsView {
+    private lateinit var binding: FragmentStatisticsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

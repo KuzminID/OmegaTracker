@@ -26,7 +26,7 @@ open class BaseActivity : MvpAppCompatActivity(), BaseView {
     }
 
     override fun showMessageWithLongDuration(msg: Int) {
-        toast = Toast.makeText(this,msg,Toast.LENGTH_LONG)
+        toast = Toast.makeText(this, msg, Toast.LENGTH_LONG)
         toast.show()
     }
 
